@@ -1,58 +1,100 @@
-# Flue
+# FlueKit
 
 <p align="center">
-  **Fluent Layouts for Vue** - A comprehensive library bringing Flutter's layout paradigm to Vue 3.
+  **FlueKit** (Fluent Layouts for Vue) - A Vue 3 library bringing Flutter's layout paradigm to the web.
 </p>
 
 ---
 
 ## 📖 Introduction
 
-**Flue** allows developers to build Vue applications using the intuitive and powerful layout widgets found in Flutter. Say goodbye to complex CSS for basic layouts and hello to declarative, composable widgets like `Container`, `Row`, `Column`, `Stack`, and more.
+**FlueKit** allows developers to build Vue applications using the intuitive and powerful layout widgets found in Flutter. Say goodbye to complex CSS for basic layouts and hello to declarative, composable widgets like `Container`, `Row`, `Column`, `Stack`, and more.
 
 ## 📦 Project Structure
 
 This project is a Monorepo containing:
 
-- **`packages/lib`**: The core library (`flue`).
-- **`packages/example`**: A demonstration application showcasing the library's capabilities.
+- **`packages/fluekit`**: The core library source code.
+- **`packages/docs`**: The documentation site (VitePress).
 
-## 🚀 Quick Start
+## 🚀 Quick Start for Development
 
 ### Prerequisites
 
-- Node.js (v16+)
-- pnpm
+- Node.js (v20+)
+- pnpm (v10+)
 
 ### Installation
 
 1.  Clone the repository.
 2.  Install dependencies:
     ```bash
+    make install
+    # or
     pnpm install
     ```
 
-### Development
+### Common Commands (Makefile)
 
-- **Run Example App**:
+This project uses a `Makefile` to simplify development workflows.
+
+- **Start Documentation Dev Server**:
 
   ```bash
-  pnpm dev:example
+  make dev
   ```
 
-  Opens the demo app with hot-reload.
+  Starts the VitePress dev server for local documentation writing and component testing.
 
-- **Build Library**:
+- **Build Project**:
+
   ```bash
-  pnpm build:lib
+  make build
   ```
-  Compiles the library to `dist/` (ESM & UMD).
 
-## 🛠 Available Widgets
+  Builds both the library and the documentation.
 
-- **Layout**: `Container`, `Center`, `Row`, `Column`, `Stack`, `Positioned`, `SizedBox`, `Expanded`, `Padding`
-- **Visual**: `Opacity`, `Text`
-- **Helpers**: `EdgeInsets`, `BoxDecoration`, `TextStyle`, `BoxConstraints`
+- **Run Tests**:
+
+  ```bash
+  make test
+  ```
+
+  Runs unit tests using Vitest.
+
+- **Lint & Format**:
+  ```bash
+  make lint
+  make format
+  ```
+
+## 📦 Using FlueKit in Your Project
+
+To use `fluekit` in your own Vue 3 application:
+
+```bash
+pnpm add fluekit
+```
+
+```vue
+<script setup>
+import { Container, Center, Text, Column, SizedBox } from "fluekit";
+</script>
+
+<template>
+  <Center>
+    <Container :width="300" :height="200" color="#2196F3" alignment="center">
+      <Column mainAxisAlignment="center">
+        <Text :style="{ color: 'white', fontSize: 24, fontWeight: 'bold' }"> Hello FlueKit </Text>
+      </Column>
+    </Container>
+  </Center>
+</template>
+```
+
+## 📚 Documentation
+
+Detailed documentation and examples are available in the `packages/docs` directory or deployed via GitHub Pages.
 
 ## 📄 License
 
