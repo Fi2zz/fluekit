@@ -7,49 +7,28 @@
 <script setup lang="ts">
 import { computed, type CSSProperties } from "vue";
 import { provideStackContext } from "./useStack";
+import { Alignment, alignmentToGrid } from "./Alignment";
+import { StackFit } from "./FlexProps";
 
 defineOptions({ inheritAttrs: false });
 
 interface StackProps {
   /** 对齐方式 */
-  alignment?:
-    | "topLeft"
-    | "topCenter"
-    | "topRight"
-    | "centerLeft"
-    | "center"
-    | "centerRight"
-    | "bottomLeft"
-    | "bottomCenter"
-    | "bottomRight";
+  alignment?: Alignment;
   /** 裁剪行为 */
   clipBehavior?: "none" | "hardEdge" | "antiAlias" | "clip";
   /** 文本方向 */
   textDirection?: "ltr" | "rtl";
   /** 堆叠方式 */
-  fit?: "loose" | "expand" | "passthrough";
-
-  // 移除 width, height, zIndex, style - 这些应该由 Container 或 SizedBox 控制
+  fit?: StackFit;
 }
 
 const props = withDefaults(defineProps<StackProps>(), {
-  alignment: "topLeft",
+  alignment: Alignment.topLeft,
   clipBehavior: "none",
   textDirection: "ltr",
-  fit: "loose",
+  fit: StackFit.loose,
 });
-
-const alignmentMap = {
-  topLeft: { justifyContent: "flex-start", alignItems: "flex-start" },
-  topCenter: { justifyContent: "flex-start", alignItems: "center" },
-  topRight: { justifyContent: "flex-start", alignItems: "flex-end" },
-  centerLeft: { justifyContent: "center", alignItems: "flex-start" },
-  center: { justifyContent: "center", alignItems: "center" },
-  centerRight: { justifyContent: "center", alignItems: "flex-end" },
-  bottomLeft: { justifyContent: "flex-end", alignItems: "flex-start" },
-  bottomCenter: { justifyContent: "flex-end", alignItems: "center" },
-  bottomRight: { justifyContent: "flex-end", alignItems: "flex-end" },
-};
 
 const clipBehaviorMap = {
   clip: "hidden",
@@ -59,18 +38,20 @@ const clipBehaviorMap = {
 };
 
 const stackStyle = computed((): CSSProperties => {
-  const alignment = alignmentMap[props.alignment];
+  const gridAlignment = alignmentToGrid(props.alignment);
 
   const style: CSSProperties = {
     position: "relative",
-    display: "flex",
-    flexDirection: "column",
-    ...alignment,
+    display: "grid",
+    gridTemplateColumns: "1fr",
+    gridTemplateRows: "1fr",
+    ...gridAlignment,
     overflow: clipBehaviorMap[props.clipBehavior],
     direction: props.textDirection,
     boxSizing: "border-box",
   };
-  if (props.fit === "expand") {
+
+  if (props.fit === StackFit.expand) {
     style.width = "100%";
     style.height = "100%";
   }
@@ -79,8 +60,12 @@ const stackStyle = computed((): CSSProperties => {
 
 provideStackContext();
 </script>
+
 <style scoped>
+/* Ensure all direct children (non-positioned and positioned) occupy the same grid area */
+/* Positioned children will be absolute, so they ignore this or position relative to the grid box */
+/* Non-positioned children will overlap in the single grid cell */
 .flutter-stack > * {
-  flex-shrink: 0;
+  grid-area: 1 / 1 / 2 / 2;
 }
 </style>

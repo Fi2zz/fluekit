@@ -1,54 +1,5 @@
 import { BoxConstraintsProps } from "./BoxConstraints";
-
-// ==========================================================================================
-// Alignment
-// ==========================================================================================
-
-export type Alignment = keyof typeof Alignment;
-
-/**
- * FlexAlignment 定义
- * 对应 Flutter 的 Alignment 常量
- * 用于 Container 等组件的 alignment 属性
- */
-export const Alignment = {
-  center: { justifyContent: "center", alignItems: "center" },
-  topLeft: { justifyContent: "flex-start", alignItems: "flex-start" },
-  topCenter: { justifyContent: "center", alignItems: "flex-start" },
-  topRight: { justifyContent: "flex-end", alignItems: "flex-start" },
-  centerLeft: { justifyContent: "flex-start", alignItems: "center" },
-  centerRight: { justifyContent: "flex-end", alignItems: "center" },
-  bottomLeft: { justifyContent: "flex-start", alignItems: "flex-end" },
-  bottomCenter: { justifyContent: "center", alignItems: "flex-end" },
-  bottomRight: { justifyContent: "flex-end", alignItems: "flex-end" },
-} as const;
-
-export function alignmentToStyle(alignment: Alignment, direction: "row" | "column" = "row") {
-  const style = Alignment[alignment];
-  if (!style) return {};
-
-  if (direction === "row") return style;
-
-  return {
-    justifyContent: style.alignItems,
-    alignItems: style.justifyContent,
-  };
-}
-
-export function alignmentToOrigin(alignment: Alignment) {
-  const map: Record<string, string> = {
-    center: "center center",
-    topLeft: "left top",
-    topCenter: "center top",
-    topRight: "right top",
-    centerLeft: "left center",
-    centerRight: "right center",
-    bottomLeft: "left bottom",
-    bottomCenter: "center bottom",
-    bottomRight: "right bottom",
-  };
-  return map[alignment];
-}
+export { Alignment, alignmentToStyle, alignmentToOrigin, alignmentToFlex } from "./Alignment";
 
 // ==========================================================================================
 // Flex Logic

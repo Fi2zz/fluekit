@@ -15,6 +15,25 @@ export function Border(side: BorderSide): BorderSide {
   };
 }
 
+// Static methods for Flutter-like API
+Border.all = ({
+  color,
+  width,
+  style,
+}: {
+  color?: string;
+  width?: number | string;
+  style?: BorderStyleType;
+} = {}) => {
+  const side = Border({ color, width, style });
+  return {
+    top: side,
+    bottom: side,
+    left: side,
+    right: side,
+  };
+};
+
 function borderSideToString(side?: BorderSide) {
   if (!side) return;
   const parts = [];
@@ -25,22 +44,19 @@ function borderSideToString(side?: BorderSide) {
   return `${parts.join(" ")}`;
 }
 
-export interface Borders extends BorderSide {
-  all?: BorderSide;
+export interface Borders {
   left?: BorderSide;
   top?: BorderSide;
   right?: BorderSide;
   bottom?: BorderSide;
 }
+
 export function borderToStyle(border: Borders): CSSProperties {
-  if (!border) return {} as CSSProperties;
-  if (
-    ["width", "color", "style"].every((key) =>
-      Boolean((border as unknown as BorderSide)[key as keyof BorderSide]),
-    )
-  )
-    return { border: borderSideToString(border) };
-  if (border.all) return { border: borderSideToString(border.all) };
+  if (!border) return undefined as unknown as CSSProperties;
+
+  // Strict mode: Only accept explicit side properties.
+  // Legacy single-side usage and 'all' property are no longer supported.
+
   return {
     borderLeft: borderSideToString(border.left),
     borderTop: borderSideToString(border.top),

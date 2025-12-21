@@ -17,7 +17,7 @@ import type { BoxDecoration } from "./BoxDecoration";
 import { boxDecorationToStyle } from "./BoxDecoration";
 import type { EdgeInsets } from "./EdgeInsets";
 import { marginToStyle, paddingToStyle } from "./EdgeInsets";
-import { alignmentToStyle, alignmentToOrigin, type Alignment } from "./FlexProps";
+import { Alignment, alignmentToFlex, alignmentToOrigin } from "./Alignment";
 import { sizeToStyle } from "./Size";
 import { useGestureEvents, useGestureStyle } from "./useGesture";
 
@@ -29,10 +29,10 @@ interface Props {
   decoration?: BoxDecoration;
   foregroundDecoration?: BoxDecoration;
   color?: string;
-  alignment?: Alignment | string;
+  alignment?: Alignment;
   clipBehavior?: "none" | "hardEdge" | "antiAlias" | string;
   transform?: string;
-  transformAlignment?: Alignment | string;
+  transformAlignment?: Alignment;
   constraints?: BoxConstraints;
 }
 const safeAttrs = useSafeAttrs();
@@ -108,7 +108,7 @@ const computedStyle = computed(() => {
     backgroundColor: effectiveColor,
     transform: props.transform,
     transformOrigin: props.transformAlignment
-      ? alignmentToOrigin(props.transformAlignment as Alignment)
+      ? alignmentToOrigin(props.transformAlignment)
       : "center",
     overflow: props.clipBehavior !== "none" ? "hidden" : undefined,
     position: "relative",
@@ -118,7 +118,8 @@ const computedStyle = computed(() => {
       display: "flex",
       flexDirection: "column",
     });
-    Object.assign(style, alignmentToStyle(props.alignment as Alignment, "column"));
+    // Use alignmentToFlex instead of alignmentToStyle (deprecated)
+    Object.assign(style, alignmentToFlex(props.alignment, "column"));
   }
 
   Object.assign(style, sizeToStyle(props));

@@ -7,13 +7,17 @@ export interface SizeType {
 
 export type Size = SizeType;
 
-export function Size(value: SizeType | string | number): SizeType | undefined {
-  if (!value) return undefined;
-  if (typeof value === "number" || typeof value === "string")
-    return { width: value, height: value };
-  const { width, height } = value;
+export function Size(props: SizeType): SizeType {
+  const { width, height } = props;
   return { width, height };
 }
+
+// Static methods for Flutter-like API
+Size.square = (dimension: number | string) => Size({ width: dimension, height: dimension });
+Size.zero = Size({ width: 0, height: 0 });
+Size.infinite = Size({ width: Infinity, height: Infinity });
+Size.fromHeight = (height: number | string) => Size({ width: Infinity, height });
+Size.fromWidth = (width: number | string) => Size({ width, height: Infinity });
 
 export function sizeToStyle(size?: SizeType) {
   if (!size) return;

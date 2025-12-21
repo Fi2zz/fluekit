@@ -26,6 +26,37 @@ export function BoxConstraints(props: BoxConstraintsProps = {}): BoxConstraintsP
   };
 }
 
+// Static methods for Flutter-like API
+BoxConstraints.tight = (size: { width: number; height: number }) =>
+  BoxConstraints({
+    minWidth: size.width,
+    maxWidth: size.width,
+    minHeight: size.height,
+    maxHeight: size.height,
+  });
+
+BoxConstraints.loose = (size: { width: number; height: number }) =>
+  BoxConstraints({
+    minWidth: 0,
+    maxWidth: size.width,
+    minHeight: 0,
+    maxHeight: size.height,
+  });
+
+BoxConstraints.expand = ({
+  width,
+  height,
+}: {
+  width?: number;
+  height?: number;
+} = {}) =>
+  BoxConstraints({
+    minWidth: width ?? Infinity,
+    maxWidth: width ?? Infinity,
+    minHeight: height ?? Infinity,
+    maxHeight: height ?? Infinity,
+  });
+
 export function boxConstraintsToStyle(constraints?: BoxConstraintsProps): CSSProperties {
   const constraintsType = constraints ?? {};
 

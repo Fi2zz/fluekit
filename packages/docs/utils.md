@@ -99,6 +99,19 @@ Available values:
 - `none`: Align the source inside the target box (by default, centered) and discard any portions of the source that lie outside the box.
 - `scaleDown`: Align the source inside the target box (by default, centered) and, if necessary, scale the source down to ensure that the source fits within the box.
 
+### BoxShape
+
+Defines the shape of a box.
+
+```typescript
+import { BoxShape } from "fluekit";
+```
+
+Available values:
+
+- `rectangle`: A rectangular shape (default).
+- `circle`: A circular shape.
+
 ## Types & Helpers
 
 ### EdgeInsets
@@ -110,7 +123,7 @@ Supported object structure:
 ```typescript
 // Type Alias: type EdgeInsets = EdgeInsetsProps;
 interface EdgeInsetsProps {
-  all?: number; // Uniform value
+  // all?: number; // 'all' property is NOT supported. Use EdgeInsets.all()
   horizontal?: number; // Horizontal (left + right)
   vertical?: number; // Vertical (top + bottom)
   top?: number;
@@ -126,21 +139,19 @@ Usage examples:
 <script setup>
 import { EdgeInsets } from "fluekit";
 
-// 1. Uniform padding for all sides
-const allPadding = EdgeInsets({ all: 10 });
+// 1. Uniform padding (Flutter style)
+const allPadding = EdgeInsets.all(10); // Returns { top: 10, right: 10, ... }
 
 // 2. Symmetric padding
-// horizontal = left + right
-// vertical = top + bottom
-const symmetricPadding = EdgeInsets({ horizontal: 20, vertical: 10 });
+const symmetricPadding = EdgeInsets.symmetric({ horizontal: 20, vertical: 10 });
 
 // 3. Individual sides
-const onlyTop = EdgeInsets({ top: 15 });
-const mixed = EdgeInsets({ left: 10, right: 10, top: 20 });
+const onlyTop = EdgeInsets.only({ top: 15 });
+const mixed = EdgeInsets.only({ left: 10, right: 10, top: 20 });
 
-// 4. Override specific sides (later properties take precedence in object literal if passed raw,
-// but the helper logic handles 'all', 'horizontal', 'vertical' priority correctly)
-// Priority: all > horizontal/vertical > left/right/top/bottom
+// 4. Factory function (Acts as .only)
+const custom = EdgeInsets({ top: 10, left: 5 });
+// Note: EdgeInsets({ all: 10 }) is invalid. Use EdgeInsets.all(10).
 </script>
 
 <template>
@@ -148,8 +159,7 @@ const mixed = EdgeInsets({ left: 10, right: 10, top: 20 });
     <Text data="Content" />
   </Container>
 
-  <!-- Direct object usage is also supported -->
-  <Container :margin="{ top: 10, bottom: 20 }" />
+  <Container :margin="EdgeInsets.symmetric({ vertical: 20 })" />
 </template>
 ```
 
@@ -161,15 +171,13 @@ Supported object structure:
 
 ```typescript
 // Type Alias: type BorderRadius = BorderRadiusType;
-type BorderRadiusType =
-  | number
-  | {
-      all?: number;
-      topLeft?: number;
-      topRight?: number;
-      bottomLeft?: number;
-      bottomRight?: number;
-    };
+type BorderRadiusType = {
+  // all?: number; // 'all' property is NOT supported. Use BorderRadius.all()
+  topLeft?: number;
+  topRight?: number;
+  bottomLeft?: number;
+  bottomRight?: number;
+};
 ```
 
 Usage examples:
@@ -178,22 +186,18 @@ Usage examples:
 <script setup>
 import { BorderRadius } from "fluekit";
 
-// 1. Circular radius for all corners (shorthand)
-const circular = BorderRadius(10); // same as { all: 10 }
+// 1. Circular radius for all corners (Flutter style)
+const circular = BorderRadius.circular(10); // Returns { topLeft: 10, ... }
+const all = BorderRadius.all(10); // Alias
 
 // 2. Specific corners
-const topRounded = BorderRadius({
+const topRounded = BorderRadius.only({
   topLeft: 10,
   topRight: 10,
 });
 
-const diagonal = BorderRadius({
-  topLeft: 15,
-  bottomRight: 15,
-});
-
-// 3. Object literal with 'all'
-const allCorners = BorderRadius({ all: 8 });
+// 3. Zero radius
+const zero = BorderRadius.zero;
 </script>
 
 <template>
@@ -221,28 +225,20 @@ Usage examples:
 <script setup>
 import { BoxConstraints } from "fluekit";
 
-// 1. Loose constraints (min = 0, max = specified)
-const loose = BoxConstraints({
-  maxWidth: 200,
-  maxHeight: 100,
-});
+// 1. Loose constraints (0 to max)
+const loose = BoxConstraints.loose({ width: 200, height: 100 });
 
-// 2. Tight constraints (min = max)
-const tight = BoxConstraints({
-  minWidth: 100,
-  maxWidth: 100,
-  minHeight: 100,
-  maxHeight: 100,
-});
+// 2. Tight constraints (fixed size)
+const tight = BoxConstraints.tight({ width: 100, height: 100 });
 
-// 3. Infinite constraints (default if not specified)
-// maxWidth: Infinity
+// 3. Expand (infinity or specified)
+const expanded = BoxConstraints.expand(); // fill available space
+const expandWidth = BoxConstraints.expand({ width: 200 }); // fixed width, infinite height
 </script>
 
 <template>
-  <!-- Force child to be at least 100px wide -->
-  <Container :constraints="{ minWidth: 100 }">
-    <Text data="Small Text" />
+  <Container :constraints="tight">
+    <Text data="Fixed Size" />
   </Container>
 </template>
 ```
@@ -291,15 +287,6 @@ const linkText = TextStyle({
   color: "blue",
   decoration: TextDecoration.underline,
 });
-
-// 4. Inheriting and overriding
-const errorText = TextStyle(
-  {
-    color: "red",
-    fontWeight: FontWeight.bold,
-  },
-  bodyText,
-); // bodyText properties are defaults, overwritten by first arg
 </script>
 
 <template>
@@ -319,7 +306,7 @@ interface BorderSide {
 }
 
 interface Borders {
-  all?: BorderSide;
+  // all?: BorderSide; // 'all' property is NOT supported. Use Border.all()
   left?: BorderSide;
   top?: BorderSide;
   right?: BorderSide;
@@ -333,24 +320,24 @@ Usage examples:
 <script setup>
 import { Border } from "fluekit";
 
-// 1. Create a uniform border side
-const solidBlack = Border({ width: 1, color: "black" });
-const thickRed = Border({ width: 4, color: "red" });
+// 1. Uniform border (Flutter style)
+// Returns { top: side, bottom: side, left: side, right: side }
+const allBorder = Border.all({ color: "black", width: 1 });
 
-// 2. Dashed border
-const dashed = Border({ width: 1, color: "#999", style: "dashed" });
+// 2. Single side definition (Helper for creating a Side)
+const side = Border({ width: 2, color: "red" });
 </script>
 
 <template>
-  <!-- Uniform border -->
-  <Container :decoration="{ border: { all: solidBlack } }" />
+  <!-- Uniform border using helper -->
+  <Container :decoration="{ border: allBorder }" />
 
-  <!-- Individual sides -->
+  <!-- Manual composition -->
   <Container
     :decoration="{
       border: {
-        bottom: thickRed,
-        top: dashed,
+        bottom: side,
+        top: Border({ style: 'dashed', width: 1 }),
       },
     }"
   />
@@ -375,15 +362,15 @@ Usage examples:
 <script setup>
 import { Size } from "fluekit";
 
-// 1. Square size
-const square = Size(100); // { width: 100, height: 100 }
+// 1. Flutter-style helpers
+const zero = Size.zero;
+const infinite = Size.infinite;
+const fixedHeight = Size.fromHeight(200); // width: Infinity
+const fixedWidth = Size.fromWidth(100); // height: Infinity
+const square = Size.square(100); // width: 100, height: 100
 
-// 2. Rectangular size
+// 2. Legacy usage
 const rect = Size({ width: 200, height: 100 });
-
-// 3. Using strings (e.g. percentages)
-const full = Size("100%");
-const responsive = Size({ width: "50%", height: 200 });
 </script>
 ```
 
@@ -398,10 +385,11 @@ interface BoxDecorationProps {
   border?: Borders;
   borderRadius?: BorderRadius;
   boxShadow?: BoxShadow | BoxShadow[];
-  gradient?: string;
+  gradient?: string; // CSS string or result of LinearGradient()
   image?: DecorationImage;
   overflow?: Overflow;
   opacity?: number | string;
+  shape?: BoxShape;
 }
 ```
 
@@ -409,45 +397,91 @@ Usage examples:
 
 ```vue
 <script setup>
-import { BoxDecoration, Border, BorderRadius, BoxShadow } from "fluekit";
+import {
+  BoxDecoration,
+  Border,
+  BorderRadius,
+  BoxShadow,
+  BoxShape,
+  LinearGradient,
+  Alignment,
+} from "fluekit";
 
-// 1. Simple colored box with rounded corners
-const cardDecoration = BoxDecoration({
+// 1. Box with Shadow
+const shadowDecoration = BoxDecoration({
   color: "white",
-  borderRadius: BorderRadius(8),
-  boxShadow: {
-    color: "rgba(0,0,0,0.1)",
-    offset: { x: 0, y: 2 },
-    blurRadius: 4,
-  },
+  boxShadow: [
+    BoxShadow({
+      color: "rgba(0,0,0,0.2)",
+      offset: { x: 0, y: 4 },
+      blurRadius: 8,
+      spreadRadius: 2,
+    }),
+  ],
 });
 
-// 2. Circle with border
+// 2. Circle Shape with Border
 const circleDecoration = BoxDecoration({
   color: "red",
-  borderRadius: BorderRadius("50%"), // Fully rounded
-  border: { all: Border({ width: 2, color: "white" }) },
+  shape: BoxShape.circle,
+  border: Border.all({ width: 2, color: "white" }),
 });
 
-// 3. Gradient background
+// 3. Linear Gradient
 const gradientDecoration = BoxDecoration({
-  gradient: "linear-gradient(to right, red, blue)",
-  borderRadius: 4,
-});
-
-// 4. Background Image
-const imageDecoration = BoxDecoration({
-  image: {
-    image: "https://example.com/bg.jpg",
-    fit: "cover",
-  },
-  borderRadius: 8,
+  gradient: LinearGradient({
+    colors: ["red", "blue"],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  }),
+  borderRadius: BorderRadius.circular(4),
 });
 </script>
 
 <template>
-  <Container :decoration="cardDecoration" :width="200" :height="100" />
+  <Container :decoration="shadowDecoration" :width="100" :height="100" />
 </template>
+```
+
+### BoxShadow
+
+Defines a box shadow.
+
+```typescript
+interface BoxShadowProps {
+  color?: string;
+  offset?: { x: number; y: number };
+  blurRadius?: number;
+  spreadRadius?: number;
+  blurStyle?: "normal" | "solid" | "outer" | "inner";
+}
+```
+
+### Gradients
+
+Helper functions to create CSS gradients.
+
+#### LinearGradient
+
+```typescript
+function LinearGradient(props: {
+  colors: string[];
+  stops?: number[];
+  begin?: Alignment; // default: centerLeft
+  end?: Alignment; // default: centerRight
+  tileMode?: TileMode;
+}): string;
+```
+
+#### RadialGradient
+
+```typescript
+function RadialGradient(props: {
+  colors: string[];
+  stops?: number[];
+  center?: Alignment; // default: center
+  radius?: number; // default: 0.5
+}): string;
 ```
 
 ## Composition API (Hooks)

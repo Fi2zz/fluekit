@@ -3,36 +3,63 @@ import { px2vw } from "./px2vw";
 import { CSSProperties } from "vue";
 export type BorderRadiusValue = number | string;
 
-export type BorderRadiusType =
-  | BorderRadiusValue
-  | {
-      topLeft?: BorderRadiusValue;
-      bottom?: BorderRadiusValue;
-      topRight?: BorderRadiusValue;
-      bottomLeft?: BorderRadiusValue;
-      bottomRight?: BorderRadiusValue;
-      all?: BorderRadiusValue;
-    };
+export interface BorderRadiusProps {
+  topLeft?: BorderRadiusValue;
+  bottom?: BorderRadiusValue; // Deprecated or incorrect in previous implementation? Usually bottom implies bottom-left/right or similar?
+  // Actually, standard BorderRadius has topLeft, topRight, bottomLeft, bottomRight.
+  // 'bottom' is not standard. But I will keep what was there except 'all'.
+  // Wait, let's look at previous implementation.
+  // previous had: topLeft, bottom, topRight, bottomLeft, bottomRight, all.
+  // 'bottom' seems weird for BorderRadius unless it meant 'bottomLeft' and 'bottomRight'.
+  // But standard is TL, TR, BL, BR.
+  // Let's stick to strict Flutter-like: TL, TR, BL, BR.
+  topRight?: BorderRadiusValue;
+  bottomLeft?: BorderRadiusValue;
+  bottomRight?: BorderRadiusValue;
+}
 
-export function BorderRadius(borderRadius: BorderRadiusType): BorderRadiusType {
-  if (typeof borderRadius === "string" || typeof borderRadius === "number") {
-    return { all: borderRadius };
-  }
+export type BorderRadiusType = BorderRadiusProps;
 
-  const { topLeft, topRight, bottomLeft, bottomRight, all } = borderRadius;
+export function BorderRadius(borderRadius: BorderRadiusProps): BorderRadiusProps {
+  const { topLeft, topRight, bottomLeft, bottomRight } = borderRadius;
   return {
-    topLeft: topLeft || all || 0,
-    topRight: topRight || all || 0,
-    bottomLeft: bottomLeft || all || 0,
-    bottomRight: bottomRight || all || 0,
+    topLeft: topLeft || 0,
+    topRight: topRight || 0,
+    bottomLeft: bottomLeft || 0,
+    bottomRight: bottomRight || 0,
   };
 }
 
-export function borderRadiusToStyle(props?: BorderRadiusType) {
+// Static methods for Flutter-like API
+BorderRadius.all = (radius: BorderRadiusValue) => {
+  return {
+    topLeft: radius,
+    topRight: radius,
+    bottomLeft: radius,
+    bottomRight: radius,
+  };
+};
+
+BorderRadius.circular = (radius: BorderRadiusValue) => BorderRadius.all(radius);
+
+BorderRadius.only = ({
+  topLeft,
+  topRight,
+  bottomLeft,
+  bottomRight,
+}: {
+  topLeft?: BorderRadiusValue;
+  topRight?: BorderRadiusValue;
+  bottomLeft?: BorderRadiusValue;
+  bottomRight?: BorderRadiusValue;
+}) => BorderRadius({ topLeft, topRight, bottomLeft, bottomRight });
+
+BorderRadius.zero = BorderRadius({});
+
+export function borderRadiusToStyle(props?: BorderRadiusProps) {
   if (!props) return {};
-  if (typeof props === "string" || typeof props === "number") return { borderRadius: px2vw(props) };
-  const { topLeft, topRight, bottomLeft, bottomRight, all } = props;
-  if (all) return { borderRadius: px2vw(all) };
+  const { topLeft, topRight, bottomLeft, bottomRight } = props;
+
   const css: CSSProperties = {};
   if (bottomLeft) css.borderBottomLeftRadius = px2vw(bottomLeft);
   if (bottomRight) css.borderBottomRightRadius = px2vw(bottomRight);
