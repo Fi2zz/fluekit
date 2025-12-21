@@ -8,7 +8,7 @@
         :height="100"
         :decoration="{
           color: '#eee',
-          borderRadius: { all: 10 },
+          borderRadius: BorderRadius.all(10),
           image: {
             image: NetworkImage('https://picsum.photos/200/300'),
             fit: BoxFit.cover,
@@ -25,7 +25,7 @@
         :height="100"
         :decoration="{
           color: '#eee',
-          borderRadius: { all: 10 },
+          borderRadius: BorderRadius.all(10),
           image: {
             image: NetworkImage('https://picsum.photos/200/300'),
             fit: BoxFit.contain,
@@ -42,7 +42,7 @@
         :height="100"
         :decoration="{
           color: '#eee',
-          borderRadius: { all: 10 },
+          borderRadius: BorderRadius.all(10),
           image: {
             image: NetworkImage('https://picsum.photos/50/50'),
             fit: BoxFit.none,
@@ -60,7 +60,7 @@
         :height="100"
         :decoration="{
           color: '#eee',
-          borderRadius: { all: 10 },
+          borderRadius: BorderRadius.all(10),
           image: {
             image: NetworkImage('https://picsum.photos/20/20'),
             repeat: 'repeat',
@@ -77,7 +77,7 @@
         :height="100"
         :decoration="{
           color: '#eee',
-          borderRadius: { all: 10 },
+          borderRadius: BorderRadius.all(10),
           image: {
             image: 'linear-gradient(to right, red, blue)',
             fit: BoxFit.cover,
@@ -89,5 +89,14 @@
 </template>
 
 <script setup lang="ts">
-import { Container, NetworkImage, BoxFit, BoxAlignment, Row, Column, Text } from "fluekit";
+import {
+  Container,
+  NetworkImage,
+  BoxFit,
+  BoxAlignment,
+  Row,
+  Column,
+  Text,
+  BorderRadius,
+} from "fluekit";
 </script>

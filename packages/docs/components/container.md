@@ -93,10 +93,10 @@ Draw a decoration in front of the child.
 | `decoration`           | `BoxDecoration`                       | -        | The decoration to paint behind the child.                         |
 | `foregroundDecoration` | `BoxDecoration`                       | -        | The decoration to paint in front of the child.                    |
 | `color`                | `string`                              | -        | The color to paint behind the child.                              |
-| `alignment`            | `FlexAlignment \| string`             | -        | Align the child within the container.                             |
+| `alignment`            | `Alignment \| string`                 | -        | Align the child within the container.                             |
 | `clipBehavior`         | `'none' \| 'hardEdge' \| 'antiAlias'` | `'none'` | The clip behavior when decoration is not null.                    |
 | `transform`            | `string`                              | -        | The transformation matrix to apply before painting the container. |
-| `transformAlignment`   | `FlexAlignment \| string`             | -        | The alignment of the origin of the coordinate system.             |
+| `transformAlignment`   | `Alignment \| string`                 | -        | The alignment of the origin of the coordinate system.             |
 | `constraints`          | `BoxConstraints`                      | -        | Additional constraints to apply to the child.                     |
 
 ### Slots

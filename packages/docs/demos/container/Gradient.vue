@@ -4,7 +4,7 @@
     :height="120"
     :decoration="{
       gradient: 'linear-gradient(45deg, blue, red)',
-      borderRadius: { all: 10 },
+      borderRadius: BorderRadius.all(10),
     }"
     alignment="center"
   >
@@ -13,5 +13,5 @@
 </template>
 
 <script setup lang="ts">
-import { Container, Text } from "fluekit";
+import { Container, Text, BorderRadius } from "fluekit";
 </script>

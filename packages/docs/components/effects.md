@@ -67,11 +67,11 @@ A widget that insets its child by sufficient padding to avoid operating system i
 
 #### Props
 
-| Name        | Type            | Default    | Description                                                                              |
-| :---------- | :-------------- | :--------- | :--------------------------------------------------------------------------------------- |
-| `transform` | `string`        | -          | The transformation matrix to apply (CSS transform).                                      |
-| `alignment` | `FlexAlignment` | `'center'` | The alignment of the origin of the coordinate system in which the transform takes place. |
-| `origin`    | `string`        | -          | The origin of the coordinate system (CSS transform-origin).                              |
+| Name        | Type        | Default    | Description                                                                              |
+| :---------- | :---------- | :--------- | :--------------------------------------------------------------------------------------- |
+| `transform` | `string`    | -          | The transformation matrix to apply (CSS transform).                                      |
+| `alignment` | `Alignment` | `'center'` | The alignment of the origin of the coordinate system in which the transform takes place. |
+| `origin`    | `string`    | -          | The origin of the coordinate system (CSS transform-origin).                              |
 
 #### Slots
 

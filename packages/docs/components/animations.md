@@ -40,10 +40,10 @@ Animated version of Opacity which automatically transitions the child's opacity 
 | `decoration`           | `BoxDecoration`                       | -          | The decoration to paint behind the child.                                                |
 | `foregroundDecoration` | `BoxDecoration`                       | -          | The decoration to paint in front of the child.                                           |
 | `color`                | `string`                              | -          | The color to paint behind the child.                                                     |
-| `alignment`            | `FlexAlignment`                       | -          | The alignment of the child within the container.                                         |
+| `alignment`            | `Alignment`                           | -          | The alignment of the child within the container.                                         |
 | `clipBehavior`         | `'none' \| 'hardEdge' \| 'antiAlias'` | `'none'`   | The content will be clipped (or not) according to this option.                           |
 | `transform`            | `string`                              | -          | The transformation matrix to apply to the container.                                     |
-| `transformAlignment`   | `FlexAlignment`                       | -          | The alignment of the origin of the coordinate system in which the transform takes place. |
+| `transformAlignment`   | `Alignment`                           | -          | The alignment of the origin of the coordinate system in which the transform takes place. |
 | `constraints`          | `BoxConstraints`                      | -          | Additional constraints to apply to the child.                                            |
 | `duration`             | `number`                              | `300`      | The duration over which to animate the parameters.                                       |
 | `curve`                | `string`                              | `'linear'` | The curve to apply when animating the parameters.                                        |

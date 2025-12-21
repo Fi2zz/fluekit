@@ -1,6 +1,6 @@
 <template>
   <div class="scroll-container">
-    <ScrollView :height="300">
+    <ScrollView :height="200">
       <Column>
         <Container :height="100" color="#e0e0e0" alignment="center">
           <Text data="Scroll Down" />

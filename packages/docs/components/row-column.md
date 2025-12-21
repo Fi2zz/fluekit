@@ -9,6 +9,8 @@ import RowColumn from '@example/demos/layout/RowColumn.vue'
 import AlignCenter from '@example/demos/layout/AlignCenter.vue'
 import Fixed from '@example/demos/layout/Fixed.vue'
 import Wrap from '@example/demos/layout/Wrap.vue'
+import RowAlignment from '@example/demos/layout/RowAlignment.vue'
+import ColumnAlignment from '@example/demos/layout/ColumnAlignment.vue'
 </script>
 
 <div class="demo-box">
@@ -26,6 +28,22 @@ Control main axis and cross axis alignment.
 </div>
 
 <<< ../demos/layout/AlignCenter.vue
+
+## MainAxisAlignment Examples
+
+<div class="demo-box">
+  <RowAlignment />
+</div>
+
+<<< ../demos/layout/RowAlignment.vue
+
+## ColumnAxisAlignment Examples
+
+<div class="demo-box">
+  <ColumnAlignment />
+</div>
+
+<<< ../demos/layout/ColumnAlignment.vue
 
 ## Fixed Size Children
 

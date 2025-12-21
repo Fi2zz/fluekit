@@ -42,7 +42,14 @@ export default defineConfig({
       },
       {
         text: "API Reference",
-        items: [{ text: "Utils & Constants", link: "/utils" }],
+        items: [
+          { text: "Utils & Constants", link: "/utils" },
+          { text: "EdgeInsets", link: "/utils/edge-insets" },
+          { text: "BorderRadius", link: "/utils/border-radius" },
+          { text: "BoxDecoration", link: "/utils/box-decoration" },
+          { text: "BoxConstraints", link: "/utils/box-constraints" },
+          { text: "Size", link: "/utils/size" },
+        ],
       },
     ],
 

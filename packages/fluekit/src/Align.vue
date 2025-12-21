@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { computed, type CSSProperties } from "vue";
-import { type Alignment, alignmentToStyle } from "./FlexProps";
+import { type Alignment, alignmentToStyle } from "./Alignment";
 
 defineOptions({ inheritAttrs: false });
 

@@ -6,6 +6,8 @@ A widget that positions its children relative to the edges of its box.
 
 <script setup>
 import StackPositioned from '@example/demos/layout/StackPositioned.vue'
+import StackAlignment from '@example/demos/layout/StackAlignment.vue'
+import StackFitAndMixed from '@example/demos/layout/StackFitAndMixed.vue'
 import Sticky from '@example/demos/layout/Sticky.vue'
 </script>
 
@@ -14,6 +16,26 @@ import Sticky from '@example/demos/layout/Sticky.vue'
 </div>
 
 <<< ../demos/layout/StackPositioned.vue
+
+## Stack Alignment Examples
+
+Control how non-positioned children are aligned within the stack.
+
+<div class="demo-box">
+  <StackAlignment />
+</div>
+
+<<< ../demos/layout/StackAlignment.vue
+
+## Stack Fit & Mixed Children
+
+Control how non-positioned children are sized and mix positioned and non-positioned children.
+
+<div class="demo-box">
+  <StackFitAndMixed />
+</div>
+
+<<< ../demos/layout/StackFitAndMixed.vue
 
 ## Sticky
 
