@@ -2,7 +2,7 @@
   <Row>
     <Container color="orange">
       <Padding :all="10">
-        <Text data="Padding" :style="{ color: 'white' }" />
+        <Text data="Padding" :style="TextStyle({ color: 'white' })" />
       </Padding>
     </Container>
 
@@ -12,7 +12,7 @@
     <Container color="purple">
       <SizedBox :width="80" :height="40">
         <Center>
-          <Text data="SizedBox" :style="{ color: 'white' }" />
+          <Text data="SizedBox" :style="TextStyle({ color: 'white' })" />
         </Center>
       </SizedBox>
     </Container>
@@ -20,5 +20,5 @@
 </template>
 
 <script setup lang="ts">
-import { Container, Row, Padding, SizedBox, Center, Text } from "fluekit";
+import { Container, Row, Padding, SizedBox, Center, Text, TextStyle } from "fluekit";
 </script>

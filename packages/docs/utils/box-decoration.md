@@ -202,7 +202,7 @@ export const AssetImage = (url: string) => url;
   "
   :padding="EdgeInsets.all(16)"
 >
-  <Text data="Gradient Decoration" :style="{ color: 'white' }" />
+  <Text data="Gradient Decoration" :style="TextStyle({ color: 'white' })" />
 </Container>
 ```
 
@@ -223,7 +223,7 @@ export const AssetImage = (url: string) => url;
   :height="150"
   alignment="center"
 >
-  <Text data="Image Decoration" :style="{ color: 'white', textShadow: '0 0 5px black' }" />
+  <Text data="Image Decoration" :style="TextStyle({ color: 'white', textShadow: '0 0 5px black' })" />
 </Container>
 ```
 
@@ -247,6 +247,6 @@ export const AssetImage = (url: string) => url;
   :height="100"
   alignment="center"
 >
-  <Text data="Circle" :style="{ color: 'white' }" />
+  <Text data="Circle" :style="TextStyle({ color: 'white' })" />
 </Container>
 ```

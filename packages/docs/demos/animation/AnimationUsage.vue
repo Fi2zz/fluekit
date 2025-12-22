@@ -1,7 +1,7 @@
 <template>
   <Column :mainAxisAlignment="'center'" :crossAxisAlignment="'center'">
     <SizedBox :height="20" />
-    <Text :style="{ fontSize: 18, fontWeight: 'bold' }">AnimatedContainer</Text>
+    <Text :style="TextStyle({ fontSize: 18, fontWeight: 'bold' })">AnimatedContainer</Text>
     <SizedBox :height="20" />
 
     <GestureDetector @tap="toggleContainer">
@@ -11,20 +11,22 @@
         :alignment="selected ? 'center' : 'topCenter'"
         :duration="1000"
         curve="ease-in-out"
-        :decoration="{
-          borderRadius: { all: selected ? 20 : 0 },
-          color: selected ? 'red' : 'blue',
-          boxShadow: selected
-            ? {
-                color: 'rgba(0,0,0,0.5)',
-                blurRadius: 10,
-                spreadRadius: 2,
-                offset: { x: 0, y: 4 },
-              }
-            : undefined,
-        }"
+        :decoration="
+          BoxDecoration({
+            borderRadius: BorderRadius.all(selected ? 20 : 0),
+            color: selected ? 'red' : 'blue',
+            boxShadow: selected
+              ? BoxShadow({
+                  color: 'rgba(0,0,0,0.5)',
+                  blurRadius: 10,
+                  spreadRadius: 2,
+                  offset: { x: 0, y: 4 },
+                })
+              : undefined,
+          })
+        "
       >
-        <Text :style="{ color: 'white' }">Tap me!</Text>
+        <Text :style="TextStyle({ color: 'white' })">Tap me!</Text>
       </AnimatedContainer>
     </GestureDetector>
 
@@ -32,18 +34,21 @@
     <div style="height: 1px; width: 100%; background: #eee" />
     <SizedBox :height="40" />
 
-    <Text :style="{ fontSize: 18, fontWeight: 'bold' }">AnimatedOpacity</Text>
+    <Text :style="TextStyle({ fontSize: 18, fontWeight: 'bold' })">AnimatedOpacity</Text>
     <SizedBox :height="20" />
 
     <Column>
       <AnimatedOpacity :opacity="opacityLevel" :duration="500">
         <Container :width="100" :height="100" color="green" alignment="center">
-          <Text :style="{ color: 'white' }">Fade</Text>
+          <Text :style="TextStyle({ color: 'white' })">Fade</Text>
         </Container>
       </AnimatedOpacity>
       <SizedBox :height="20" />
       <GestureDetector @tap="toggleOpacity">
-        <Container :padding="{ all: 10 }" :decoration="{ borderRadius: { all: 4 }, color: '#EEE' }">
+        <Container
+          :padding="EdgeInsets.all(10)"
+          :decoration="BoxDecoration({ borderRadius: BorderRadius.all(4), color: '#EEE' })"
+        >
           <Text>Tap to fade</Text>
         </Container>
       </GestureDetector>
@@ -61,6 +66,11 @@ import {
   SizedBox,
   GestureDetector,
   Container,
+  BoxDecoration,
+  BorderRadius,
+  BoxShadow,
+  TextStyle,
+  EdgeInsets,
 } from "fluekit";
 
 const selected = ref(false);

@@ -18,13 +18,16 @@ yarn add fluekit
 
 ```vue
 <script setup>
-import { Container, Center, Text } from "fluekit";
+import { Container, Text, Center, BoxDecoration, TextStyle } from "fluekit";
+
+const blueDecoration = BoxDecoration({ color: "blue" });
+const whiteTextStyle = TextStyle({ color: "white" });
 </script>
 
 <template>
   <Center>
-    <Container :width="200" :height="200" color="blue" alignment="center">
-      <Text :style="{ color: 'white' }">Hello FlueKit</Text>
+    <Container :width="200" :height="200" :decoration="blueDecoration" alignment="center">
+      <Text :style="whiteTextStyle">Hello FlueKit</Text>
     </Container>
   </Center>
 </template>

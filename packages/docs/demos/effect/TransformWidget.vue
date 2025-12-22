@@ -3,13 +3,13 @@
     <Column :gap="20" alignment="center">
       <Transform transform="rotate(45deg)" alignment="center">
         <Container :width="100" :height="100" color="purple" alignment="center">
-          <Text data="Rotated" :style="{ color: 'white' }" />
+          <Text data="Rotated" :style="TextStyle({ color: 'white' })" />
         </Container>
       </Transform>
 
       <Transform transform="scale(1.2) skewX(10deg)" alignment="topLeft">
         <Container :width="100" :height="100" color="orange" alignment="center">
-          <Text data="Skew & Scale" :style="{ color: 'white' }" />
+          <Text data="Skew & Scale" :style="TextStyle({ color: 'white' })" />
         </Container>
       </Transform>
     </Column>
@@ -17,5 +17,5 @@
 </template>
 
 <script setup lang="ts">
-import { Transform, Container, Column, Text } from "fluekit";
+import { Transform, Container, Column, Text, TextStyle } from "fluekit";
 </script>

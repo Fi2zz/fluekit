@@ -12,19 +12,21 @@
             :width="80"
             :height="80"
             alignment="center"
-            :decoration="{
-              color: isPanning ? 'orange' : 'blue',
-              borderRadius: { all: 40 },
-              boxShadow: isPanning
-                ? [
-                    {
-                      color: 'rgba(0,0,0,0.2)',
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                    },
-                  ]
-                : [],
-            }"
+            :decoration="
+              BoxDecoration({
+                color: isPanning ? 'orange' : 'blue',
+                borderRadius: BorderRadius.all(40),
+                boxShadow: isPanning
+                  ? [
+                      BoxShadow({
+                        color: 'rgba(0,0,0,0.2)',
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                      }),
+                    ]
+                  : [],
+              })
+            "
           >
             <Text data="Drag" />
           </Container>
@@ -35,7 +37,16 @@
 </template>
 
 <script setup lang="ts">
-import { Container, GestureDetector, Positioned, Stack, Text } from "fluekit";
+import {
+  Container,
+  GestureDetector,
+  Positioned,
+  Stack,
+  Text,
+  BoxDecoration,
+  BorderRadius,
+  BoxShadow,
+} from "fluekit";
 import { ref } from "vue";
 
 const panPos = ref({ x: 20, y: 50 });

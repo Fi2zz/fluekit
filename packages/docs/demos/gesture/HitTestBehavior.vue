@@ -11,12 +11,12 @@
       </Container>
     </GestureDetector>
   </Row>
-  <Text :data="behaviorLog" :style="{ color: 'grey', fontSize: 12 }" />
+  <Text :data="behaviorLog" :style="TextStyle({ color: 'grey', fontSize: 12 })" />
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { Row, GestureDetector, Container, Center, Text } from "fluekit";
+import { Row, GestureDetector, Container, Center, Text, TextStyle } from "fluekit";
 
 const behaviorLog = ref("Click boxes above");
 const logBehavior = (type: string) => {

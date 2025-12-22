@@ -8,7 +8,7 @@
 
         <Sticky :top="0">
           <Container :height="50" color="blue" alignment="center" :width="Infinity">
-            <Text data="Sticky Header" :style="{ color: 'white', fontWeight: 'bold' }" />
+            <Text data="Sticky Header" :style="TextStyle({ color: 'white', fontWeight: 'bold' })" />
           </Container>
         </Sticky>
 
@@ -30,10 +30,10 @@
             :height="40"
             color="red"
             alignment="center"
-            :margin="{ left: 20, right: 20 }"
+            :margin="EdgeInsets.only({ left: 20, right: 20 })"
             :borderRadius="20"
           >
-            <Text data="Sticky Bottom" :style="{ color: 'white' }" />
+            <Text data="Sticky Bottom" :style="TextStyle({ color: 'white' })" />
           </Container>
         </Sticky>
 
@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { Sticky, ScrollView, Column, Container, Text } from "fluekit";
+import { Sticky, ScrollView, Column, Container, Text, TextStyle, EdgeInsets } from "fluekit";
 </script>
 
 <style scoped>

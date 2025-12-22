@@ -119,16 +119,18 @@ Use Size objects for programmatic calculations:
 
 ```vue
 <script setup>
-import { Size, Container } from "fluekit";
+import { Size, Container, Text, BoxDecoration, TextStyle } from "fluekit";
 
-// Calculate size dynamically
 const baseSize = 100;
 const squareSize = Size.square(baseSize * 2);
+
+const blueDecoration = BoxDecoration({ color: "blue" });
+const whiteTextStyle = TextStyle({ color: "white" });
 </script>
 
 <template>
-  <Container :width="squareSize.width" :height="squareSize.height" :decoration="{ color: 'blue' }">
-    <Text data="Dynamic Size" :style="{ color: 'white' }" />
+  <Container :width="squareSize.width" :height="squareSize.height" :decoration="blueDecoration">
+    <Text data="Dynamic Size" :style="whiteTextStyle" />
   </Container>
 </template>
 ```

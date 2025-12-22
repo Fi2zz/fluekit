@@ -1,15 +1,19 @@
 <template>
-  <Container color="#f0f0f0" :padding="{ all: 10 }" :margin="{ bottom: 20 }">
+  <Container
+    color="#f0f0f0"
+    :padding="EdgeInsets.all(10)"
+    :margin="EdgeInsets.only({ bottom: 20 })"
+  >
     <Column mainAxisSize="min">
-      <Row mainAxisAlignment="space-between" :margin="{ bottom: 10 }">
+      <Row mainAxisAlignment="space-between" :margin="EdgeInsets.only({ bottom: 10 })">
         <Container :width="50" :height="50" color="red" alignment="center"
-          ><Text data="1" :style="{ color: 'white' }"
+          ><Text data="1" :style="TextStyle({ color: 'white' })"
         /></Container>
         <Container :width="50" :height="50" color="green" alignment="center"
-          ><Text data="2" :style="{ color: 'white' }"
+          ><Text data="2" :style="TextStyle({ color: 'white' })"
         /></Container>
         <Container :width="50" :height="50" color="blue" alignment="center"
-          ><Text data="3" :style="{ color: 'white' }"
+          ><Text data="3" :style="TextStyle({ color: 'white' })"
         /></Container>
       </Row>
     </Column>
@@ -17,5 +21,5 @@
 </template>
 
 <script setup lang="ts">
-import { Container, Column, Row, Text } from "fluekit";
+import { Container, Column, Row, Text, TextStyle, EdgeInsets } from "fluekit";
 </script>

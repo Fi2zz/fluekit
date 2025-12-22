@@ -9,11 +9,11 @@
       :width="200"
       :height="100"
       alignment="center"
-      :decoration="{ borderRadius: { all: 8 }, color: boxColor }"
+      :decoration="BoxDecoration({ borderRadius: BorderRadius.all(8), color: boxColor })"
     >
       <Column mainAxisAlignment="center">
         <Text data="Tap / Double Tap / Long Press" />
-        <Text :data="statusText" :style="{ fontSize: 12 }" />
+        <Text :data="statusText" :style="TextStyle({ fontSize: 12 })" />
       </Column>
     </Container>
   </GestureDetector>
@@ -21,7 +21,15 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { GestureDetector, Container, Column, Text } from "fluekit";
+import {
+  GestureDetector,
+  Container,
+  Column,
+  Text,
+  BoxDecoration,
+  BorderRadius,
+  TextStyle,
+} from "fluekit";
 
 const boxColor = ref("teal");
 const statusText = ref("Ready");

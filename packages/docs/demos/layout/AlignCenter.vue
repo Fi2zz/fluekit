@@ -11,11 +11,11 @@
       </Center>
     </Container>
   </Row>
-  <Container :margin="{ top: 5 }">
-    <Text data="Align(bottomRight) vs Center" :style="{ fontSize: 12, color: 'grey' }" />
+  <Container :margin="EdgeInsets.only({ top: 5 })">
+    <Text data="Align(bottomRight) vs Center" :style="TextStyle({ fontSize: 12, color: 'grey' })" />
   </Container>
 </template>
 
 <script setup lang="ts">
-import { Container, Row, Align, Center, Text } from "fluekit";
+import { Container, Row, Align, Center, Text, TextStyle, EdgeInsets } from "fluekit";
 </script>

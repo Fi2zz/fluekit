@@ -6,7 +6,7 @@ Defines immutable border radii for widgets.
 
 ```vue
 <script setup>
-import { BorderRadius } from "fluekit";
+import { BorderRadius, BoxDecoration, Container, Text } from "fluekit";
 
 // 1. Circular radius for all corners
 const circular = BorderRadius.circular(10); // Returns { topLeft: 10, topRight: 10, bottomLeft: 10, bottomRight: 10 }
@@ -20,14 +20,18 @@ const topRounded = BorderRadius.only({
 
 // 3. Zero radius
 const zero = BorderRadius.zero;
+
+const blueDecoration = BoxDecoration({ color: "blue", borderRadius: circular });
+const redDecoration = BoxDecoration({ color: "red", borderRadius: topRounded });
+const whiteTextStyle = TextStyle({ color: "white" });
 </script>
 
 <template>
-  <Container :decoration="{ color: 'blue', borderRadius: circular }">
+  <Container :decoration="blueDecoration">
     <Text data="Circular Border" />
   </Container>
 
-  <Container :decoration="{ color: 'red', borderRadius: topRounded }">
+  <Container :decoration="redDecoration">
     <Text data="Top Rounded" />
   </Container>
 </template>
@@ -105,15 +109,17 @@ const zero: BorderRadiusProps;
 
 ```vue
 <Container
-  :decoration="{
-    color: 'purple',
-    borderRadius: BorderRadius.circular(20),
-  }"
+  :decoration="
+    BoxDecoration({
+      color: 'purple',
+      borderRadius: BorderRadius.circular(20),
+    })
+  "
   :width="100"
   :height="100"
   alignment="center"
 >
-  <Text data="Circle" :style="{ color: 'white' }" />
+  <Text data="Circle" :style="whiteTextStyle" />
 </Container>
 ```
 
@@ -121,15 +127,17 @@ const zero: BorderRadiusProps;
 
 ```vue
 <Container
-  :decoration="{
-    color: 'green',
-    borderRadius: BorderRadius.only({ topLeft: 15, topRight: 15 }),
-  }"
+  :decoration="
+    BoxDecoration({
+      color: 'green',
+      borderRadius: BorderRadius.only({ topLeft: 15, topRight: 15 }),
+    })
+  "
   :width="100"
   :height="100"
   alignment="center"
 >
-  <Text data="Top Rounded" :style="{ color: 'white' }" />
+  <Text data="Top Rounded" :style="whiteTextStyle" />
 </Container>
 ```
 
@@ -137,7 +145,7 @@ const zero: BorderRadiusProps;
 
 ```vue
 <Container
-  :decoration="{
+  :decoration="BoxDecoration({
     color: 'orange',
     borderRadius: BorderRadius.only({
       topLeft: 20,
@@ -150,6 +158,6 @@ const zero: BorderRadiusProps;
   :height="100"
   alignment="center"
 >
-  <Text data="Mixed" :style="{ color: 'white' }" />
+  <Text data="Mixed" :style="whiteTextStyle" />
 </Container>
 ```
