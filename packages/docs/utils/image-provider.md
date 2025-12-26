@@ -1,0 +1,62 @@
+# ImageProvider
+
+Identifies an image without committing to the precise final asset. This allows a set of images to be identified and for the precise image to be selected later based on the environment (e.g., device pixel ratio).
+
+## Usage
+
+Used in `Image` component and `BoxDecoration` (for background images).
+
+```vue
+<script setup>
+import { Image, AssetImage, NetworkImage } from "fluekit";
+</script>
+
+<template>
+  <!-- Local Asset -->
+  <Image :image="AssetImage('logo.png')" />
+
+  <!-- Network Image -->
+  <Image :image="NetworkImage('https://example.com/pic.jpg')" />
+</template>
+```
+
+## API
+
+### ImageProvider Interface
+
+```typescript
+export interface ImageProvider {
+  src: string;
+  scale?: number;
+}
+```
+
+### AssetImage
+
+Creates an object that fetches an image from an asset bundle.
+
+```typescript
+function AssetImage(name: string, options?: AssetImageOptions): ImageProvider;
+```
+
+**Options:**
+
+- `package`: (Optional) The package name the asset belongs to.
+- `bundle`: (Optional) The bundle to use.
+
+### NetworkImage
+
+Creates an object that fetches the image at the given URL.
+
+```typescript
+function NetworkImage(url: string, options?: NetworkImageOptions): ImageProvider;
+```
+
+**Options:**
+
+- `scale`: (Optional) The scale to place in the `ImageInfo` object of the image.
+- `headers`: (Optional) HTTP headers for the request (not fully supported in all environments).
+
+## Configuration
+
+For configuring base URLs for `AssetImage`, see [Global Configuration](/utils#setassetbaseurl).
