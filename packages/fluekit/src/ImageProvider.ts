@@ -2,7 +2,6 @@ const IMAGE_PROVIDER_SYMBOL = Symbol("ImageProvider");
 
 export interface ImageProvider {
   src: string;
-  scale?: number;
   [IMAGE_PROVIDER_SYMBOL]: true;
 }
 
@@ -10,15 +9,9 @@ export function isImageProvider(value: any): value is ImageProvider {
   return value && value[IMAGE_PROVIDER_SYMBOL] === true;
 }
 
-export interface NetworkImageOptions {
-  scale?: number;
-  headers?: Record<string, string>;
-}
-
-export function NetworkImage(url: string, options: NetworkImageOptions = {}): ImageProvider {
+export function NetworkImage(url: string): ImageProvider {
   return {
     src: url,
-    scale: options.scale ?? 1.0,
     [IMAGE_PROVIDER_SYMBOL]: true,
   };
 }
@@ -28,7 +21,7 @@ export interface AssetImageOptions {
   bundle?: any;
 }
 
-let _assetBaseUrl = "";
+let _assetBaseUrl = "/";
 
 /**
  * 设置 AssetImage 的基础路径
@@ -58,7 +51,6 @@ export function AssetImage(name: string, options: AssetImageOptions = {}): Image
 
   return {
     src: path,
-    scale: 1.0,
     [IMAGE_PROVIDER_SYMBOL]: true,
   };
 }

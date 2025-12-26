@@ -27,7 +27,6 @@ import { Image, AssetImage, NetworkImage } from "fluekit";
 ```typescript
 export interface ImageProvider {
   src: string;
-  scale?: number;
 }
 ```
 
@@ -49,13 +48,8 @@ function AssetImage(name: string, options?: AssetImageOptions): ImageProvider;
 Creates an object that fetches the image at the given URL.
 
 ```typescript
-function NetworkImage(url: string, options?: NetworkImageOptions): ImageProvider;
+function NetworkImage(url: string): ImageProvider;
 ```
-
-**Options:**
-
-- `scale`: (Optional) The scale to place in the `ImageInfo` object of the image.
-- `headers`: (Optional) HTTP headers for the request (not fully supported in all environments).
 
 ## Configuration
 
