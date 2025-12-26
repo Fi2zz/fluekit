@@ -38,10 +38,35 @@ setTransform(false); // Disable conversion, numbers will be treated as px
 
 ### setBaseUrl
 
-Sets the Base URL for image resources, used for automatically handling relative path images.
+Sets the Base URL for generic image resources (e.g. `BoxDecoration` images).
 
 ```typescript
 import { setBaseUrl } from "fluekit";
 
 setBaseUrl("https://cdn.example.com/assets/");
+```
+
+### setAssetBaseURL
+
+Sets the global base URL for `AssetImage`.
+
+```typescript
+import { setAssetBaseURL, AssetImage } from "fluekit";
+
+setAssetBaseURL("https://cdn.example.com/assets/");
+
+// Usage
+AssetImage("logo.png"); // -> https://cdn.example.com/assets/logo.png
+```
+
+### createAssetImage
+
+Creates a factory function for `AssetImage` with a preset package.
+
+```typescript
+import { createAssetImage } from "fluekit";
+
+const MyPackageAssets = createAssetImage({ package: "my_package" });
+const img = MyPackageAssets("logo.png");
+// -> {base_url}/my_package/logo.png
 ```
