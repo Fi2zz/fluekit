@@ -1,6 +1,7 @@
 import { defineConfig } from "vitepress";
 import path from "path";
 import { fileURLToPath } from "url";
+import fluekitPkg from "../../fluekit/package.json" assert { type: "json" };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,6 +17,10 @@ export default defineConfig({
       { text: "Home", link: "/" },
       { text: "Guide", link: "/guide/getting-started" },
       { text: "Components", link: "/components/container" },
+      {
+        text: `v${fluekitPkg.version}`,
+        link: `https://github.com/Fi2zz/fluekit/releases/tag/v${fluekitPkg.version}`,
+      },
     ],
 
     sidebar: [
