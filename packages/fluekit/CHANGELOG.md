@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.1] - 2025-12-26
+
+### Bug Fixes
+
+- **Utils**: Export `StackFit` from main entry to fix missing export.
+
 ## [1.4.0] - 2025-12-26
 
 ### Features

@@ -37,6 +37,7 @@ export * from "./BoxShadow";
 export * from "./ButtonStyle";
 export * from "./EdgeInsets";
 export { Alignment as Alignment } from "./FlexProps";
+export { StackFit } from "./FlexProps";
 export * from "./Gradient";
 export * from "./ImageProvider";
 export * from "./InputDecoration";

@@ -136,10 +136,6 @@ const onError = (e: Event) => emit("error", e);
 </script>
 
 <style scoped>
-.fluekit-image-container {
-  /* 容器基础样式 */
-}
-
 .fluekit-image {
   display: block;
 }
