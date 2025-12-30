@@ -27,6 +27,7 @@ export function alignmentToFlex(
   alignment: Alignment,
   direction: "row" | "column" = "row",
 ): CSSProperties {
+  if (!alignment) return {};
   const align = alignment as keyof typeof Alignment;
 
   // Mapping logic

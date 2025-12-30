@@ -31,29 +31,42 @@ export function BorderSide(side: Omit<BorderSide, typeof BORDER_SIDE_SYMBOL>): B
   };
 }
 
-// Alias for compatibility if needed, but BorderSide is more accurate for a single side
-export const Border = BorderSide;
+export interface BorderFunction {
+  (side: Omit<BorderSide, typeof BORDER_SIDE_SYMBOL>): BorderSide;
+  all: (options?: { color?: string; width?: number | string; style?: BorderStyleType }) => Borders;
+}
 
-// Static methods for Flutter-like API
-// @ts-ignore
-Border.all = ({
-  color,
-  width,
-  style,
-}: {
-  color?: string;
-  width?: number | string;
-  style?: BorderStyleType;
-} = {}) => {
-  const side = Border({ color, width, style });
-  return {
-    top: side,
-    bottom: side,
-    left: side,
-    right: side,
-    [BORDERS_SYMBOL]: true as const,
-  };
-};
+// Alias for compatibility if needed, but BorderSide is more accurate for a single side
+export const Border: BorderFunction = Object.assign(
+  (side: Omit<BorderSide, typeof BORDER_SIDE_SYMBOL>): BorderSide => {
+    return {
+      width: side.width ? side.width : 1,
+      color: side.color || "#000",
+      style: side.style || "solid",
+      [BORDER_SIDE_SYMBOL]: true as const,
+    };
+  },
+  {
+    all: ({
+      color,
+      width,
+      style,
+    }: {
+      color?: string;
+      width?: number | string;
+      style?: BorderStyleType;
+    } = {}) => {
+      const side = BorderSide({ color, width, style });
+      return {
+        top: side,
+        bottom: side,
+        left: side,
+        right: side,
+        [BORDERS_SYMBOL]: true as const,
+      };
+    },
+  },
+);
 
 /**
  * 类型守卫：检查对象是否通过 Border 构造函数创建（单个边框边）
