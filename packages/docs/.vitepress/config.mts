@@ -1,7 +1,7 @@
 import { defineConfig } from "vitepress";
 import path from "path";
 import { fileURLToPath } from "url";
-import fluekitPkg from "../../fluekit/package.json" assert { type: "json" };
+import fluekitPkg from "../../fluekit/package.json" with { type: "json" };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

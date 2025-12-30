@@ -5,19 +5,32 @@ It is similar to `Container` but allows passing decoration properties (border, b
 
 ## Usage
 
-<demo src="../demos/box/BasicBox.vue"></demo>
+<script setup>
+import BasicBox from '@example/demos/box/BasicBox.vue'
+</script>
 
-## Props
+<div class="demo-box">
+  <BasicBox />
+</div>
 
-| Name         | Type                      | Default       | Description                    |
-| ------------ | ------------------------- | ------------- | ------------------------------ |
-| width        | `number \| string`        | -             | Width of the box               |
-| height       | `number \| string`        | -             | Height of the box              |
-| padding      | `EdgeInsets`              | -             | Padding                        |
-| margin       | `EdgeInsets`              | -             | Margin                         |
-| color        | `string`                  | -             | Background color               |
-| border       | `Border`                  | -             | Border                         |
-| borderRadius | `BorderRadius`            | -             | Border radius                  |
-| boxShadow    | `BoxShadow[]`             | -             | Box shadows                    |
-| shape        | `'rectangle' \| 'circle'` | `'rectangle'` | Shape of the box               |
-| alignment    | `Alignment`               | -             | Align the child within the box |
+<<< ../demos/box/BasicBox.vue
+
+## API
+
+### Props
+
+| Name           | Type                      | Default       | Description                               |
+| :------------- | :------------------------ | :------------ | :---------------------------------------- |
+| `width`        | `number \| string`        | -             | Width of the box.                         |
+| `height`       | `number \| string`        | -             | Height of the box.                        |
+| `padding`      | `EdgeInsets`              | -             | Empty space to inscribe inside the box.   |
+| `margin`       | `EdgeInsets`              | -             | Empty space to surround the box.          |
+| `color`        | `string`                  | -             | Background color.                         |
+| `border`       | `Border`                  | -             | Border around the box.                    |
+| `borderRadius` | `BorderRadius`            | -             | Border radius of the box.                 |
+| `boxShadow`    | `BoxShadow[]`             | -             | Shadows to cast behind the box.           |
+| `shape`        | `'rectangle' \| 'circle'` | `'rectangle'` | Shape of the box.                         |
+| `alignment`    | `Alignment`               | -             | Align the child within the box.           |
+| `clipBehavior` | `Clip`                    | `'none'`      | The clip behavior when decoration is set. |
+| `gradient`     | `string`                  | -             | Background gradient (CSS string).         |
+| `image`        | `DecorationImage`         | -             | Background image.                         |
