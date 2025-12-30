@@ -42,8 +42,6 @@ import { BoxConstraints } from "./BoxConstraints";
 interface Props {
   content: string;
   actionLabel?: string;
-  onAction?: () => void;
-  onClose: () => void;
   duration?: number;
 }
 
@@ -51,14 +49,19 @@ const props = withDefaults(defineProps<Props>(), {
   duration: 4000,
 });
 
+const emit = defineEmits<{
+  (e: "action"): void;
+  (e: "close"): void;
+}>();
+
 const handleAction = () => {
-  if (props.onAction) props.onAction();
-  props.onClose();
+  emit("action");
+  emit("close");
 };
 
 onMounted(() => {
   setTimeout(() => {
-    props.onClose();
+    emit("close");
   }, props.duration);
 });
 

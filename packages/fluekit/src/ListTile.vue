@@ -50,8 +50,6 @@ interface Props {
   trailing?: any;
 
   // Interaction
-  onTap?: () => void;
-  onLongPress?: () => void;
   enabled?: boolean;
   selected?: boolean;
 

@@ -24,6 +24,7 @@ const props = defineProps<RadioProps<T>>();
 
 const emit = defineEmits<{
   (e: "update:groupValue", value: T): void;
+  (e: "change", value: T): void;
 }>();
 
 const isSelected = computed(() => props.value === props.groupValue);

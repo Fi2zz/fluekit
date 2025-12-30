@@ -35,9 +35,6 @@ let rippleCount = 0;
 
 const handleClick = (e: MouseEvent) => {
   emit("tap");
-  if (props.onTap) {
-    props.onTap();
-  }
 
   const el = e.currentTarget as HTMLElement;
   const rect = el.getBoundingClientRect();

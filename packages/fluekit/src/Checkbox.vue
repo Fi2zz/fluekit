@@ -33,9 +33,7 @@ const emit = defineEmits<{
 
 const toggle = () => {
   const newValue = !props.value;
-  if (props.onChanged) {
-    props.onChanged(newValue);
-  }
+  emit("change", newValue);
   emit("update:value", newValue);
 };
 

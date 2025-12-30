@@ -61,6 +61,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   (e: "update:value", value: number): void;
+  (e: "change", value: number): void;
 }>();
 
 const trackRef = ref<HTMLElement>();
