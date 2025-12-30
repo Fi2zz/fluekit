@@ -44,6 +44,7 @@ export { default as Radio } from "./Radio.vue";
 export { default as Slider } from "./Slider.vue";
 export { default as AlertDialog } from "./AlertDialog.vue";
 export { default as BottomSheet } from "./BottomSheet.vue";
+export { default as SegmentedControl } from "./SegmentedControl.vue";
 export { SnackBar } from "./SnackBar";
 
 export * from "./Border";

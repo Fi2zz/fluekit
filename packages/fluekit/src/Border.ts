@@ -34,6 +34,12 @@ export function BorderSide(side: Omit<BorderSide, typeof BORDER_SIDE_SYMBOL>): B
 export interface BorderFunction {
   (side: Omit<BorderSide, typeof BORDER_SIDE_SYMBOL>): BorderSide;
   all: (options?: { color?: string; width?: number | string; style?: BorderStyleType }) => Borders;
+  only: (options?: {
+    top?: BorderSide;
+    right?: BorderSide;
+    bottom?: BorderSide;
+    left?: BorderSide;
+  }) => Borders;
 }
 
 // Alias for compatibility if needed, but BorderSide is more accurate for a single side
@@ -62,6 +68,19 @@ export const Border: BorderFunction = Object.assign(
         bottom: side,
         left: side,
         right: side,
+        [BORDERS_SYMBOL]: true as const,
+      };
+    },
+    only: (
+      sides: {
+        top?: BorderSide;
+        right?: BorderSide;
+        bottom?: BorderSide;
+        left?: BorderSide;
+      } = {},
+    ) => {
+      return {
+        ...sides,
         [BORDERS_SYMBOL]: true as const,
       };
     },

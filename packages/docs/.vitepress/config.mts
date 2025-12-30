@@ -59,6 +59,7 @@ export default defineConfig({
           { text: "SnackBar", link: "/components/snack-bar" },
           { text: "AlertDialog", link: "/components/alert-dialog" },
           { text: "BottomSheet", link: "/components/bottom-sheet" },
+          { text: "SegmentedControl", link: "/components/segmented-control" },
         ],
       },
       {
