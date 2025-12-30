@@ -7,7 +7,9 @@
           :decoration="getItemDecoration(item.value, index)"
           alignment="center"
         >
-          <Text :style="getItemTextStyle(item.value)">{{ item.label }}</Text>
+          <slot name="label" :item="item" :selected="item.value === modelValue" :index="index">
+            <Text :style="getItemTextStyle(item.value)">{{ item.label }}</Text>
+          </slot>
         </Container>
       </GestureDetector>
     </Row>
@@ -38,6 +40,7 @@ export interface SegmentedControlProps<T> {
   unselectedColor?: string;
   borderColor?: string;
   padding?: EdgeInsets;
+  decoration?: BoxDecoration;
 }
 
 const props = withDefaults(defineProps<SegmentedControlProps<T>>(), {
@@ -60,6 +63,9 @@ const handleTap = (value: T) => {
 };
 
 const containerDecoration = computed(() => {
+  if (props.decoration) {
+    return props.decoration;
+  }
   return BoxDecoration({
     border: Border.all({
       color: props.borderColor,
