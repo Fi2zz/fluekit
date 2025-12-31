@@ -1,15 +1,15 @@
 <template>
   <Container :decoration="containerDecoration" clip-behavior="hardEdge">
     <Row>
-      <GestureDetector v-for="(item, index) in items" :key="index" @tap="handleTap(item.value)">
+      <GestureDetector v-for="(item, index) in items" :key="index" @tap="handleTap(item)">
         <Expanded>
           <Container
             :padding="padding"
-            :decoration="getItemDecoration(item.value, index)"
+            :decoration="getItemDecoration(item, index)"
             alignment="center"
           >
             <slot name="label" :item="item" :selected="item.value === modelValue" :index="index">
-              <Text :style="getItemTextStyle(item.value)">{{ item.label }}</Text>
+              <Text :style="getItemTextStyle(item)">{{ item.label }}</Text>
             </slot>
           </Container>
         </Expanded>
@@ -34,6 +34,7 @@ import { BorderRadius } from "./BorderRadius";
 export interface SegmentedControlItem<T> {
   value: T;
   label: string;
+  disabled?: boolean;
 }
 
 export interface SegmentedControlProps<T> {
@@ -41,18 +42,21 @@ export interface SegmentedControlProps<T> {
   items: SegmentedControlItem<T>[];
   selectedColor?: string;
   unselectedColor?: string;
+  disabledColor?: string;
   borderColor?: string;
   padding?: EdgeInsets;
   decoration?: BoxDecoration;
   // New customization props
   selectedTextStyle?: TextStyle;
   unselectedTextStyle?: TextStyle;
+  disabledTextStyle?: TextStyle;
   borderRadius?: BorderRadius;
 }
 
 const props = withDefaults(defineProps<SegmentedControlProps<T>>(), {
   selectedColor: "#007AFF", // iOS default blue
   unselectedColor: "transparent",
+  disabledColor: "#F5F5F5",
   borderColor: "#007AFF",
   padding: () => EdgeInsets.symmetric({ vertical: 8, horizontal: 16 }),
   borderRadius: () => BorderRadius.circular(4),
@@ -63,10 +67,11 @@ const emit = defineEmits<{
   (e: "change", value: T): void;
 }>();
 
-const handleTap = (value: T) => {
-  if (value !== props.modelValue) {
-    emit("update:modelValue", value);
-    emit("change", value);
+const handleTap = (item: SegmentedControlItem<T>) => {
+  if (item.disabled) return;
+  if (item.value !== props.modelValue) {
+    emit("update:modelValue", item.value);
+    emit("change", item.value);
   }
 };
 
@@ -83,8 +88,8 @@ const containerDecoration = computed(() => {
   });
 });
 
-const getItemDecoration = (value: T, index: number) => {
-  const isSelected = value === props.modelValue;
+const getItemDecoration = (item: SegmentedControlItem<T>, index: number) => {
+  const isSelected = item.value === props.modelValue;
   const isLast = index === props.items.length - 1;
   const isFirst = index === 0;
 
@@ -102,8 +107,13 @@ const getItemDecoration = (value: T, index: number) => {
     });
   }
 
+  let backgroundColor = isSelected ? props.selectedColor : props.unselectedColor;
+  if (item.disabled) {
+    backgroundColor = props.disabledColor;
+  }
+
   return BoxDecoration({
-    color: isSelected ? props.selectedColor : props.unselectedColor,
+    color: backgroundColor,
     borderRadius,
     border: Border.only({
       right: BorderSide({
@@ -114,12 +124,21 @@ const getItemDecoration = (value: T, index: number) => {
   });
 };
 
-const getItemTextStyle = (value: T) => {
-  const isSelected = value === props.modelValue;
+const getItemTextStyle = (item: SegmentedControlItem<T>) => {
+  const isSelected = item.value === props.modelValue;
+  const isDisabled = item.disabled;
+
   const defaultStyle = TextStyle({
     color: isSelected ? "#FFFFFF" : props.borderColor,
     fontSize: 13,
   });
+
+  if (isDisabled) {
+    if (props.disabledTextStyle) {
+      return { ...defaultStyle, ...props.disabledTextStyle, color: "#999999" };
+    }
+    return { ...defaultStyle, color: "#999999" };
+  }
 
   if (isSelected && props.selectedTextStyle) {
     return { ...defaultStyle, ...props.selectedTextStyle };
