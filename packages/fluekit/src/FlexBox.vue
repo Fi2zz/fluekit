@@ -13,6 +13,7 @@ import {
   FlexBoxJustifyMap,
   FlexBoxProps,
   MainAxisAlignment,
+  MainAxisSize,
 } from "./FlexProps";
 import { px2vw } from "./px2vw";
 import { useSafeAttrs } from "./useSafeAttrs";
@@ -25,6 +26,7 @@ defineOptions({
 const props = withDefaults(defineProps<FlexBoxProps>(), {
   direction: "row",
   mainAxisAlignment: MainAxisAlignment.start,
+  mainAxisSize: MainAxisSize.max,
   crossAxisAlignment: CrossAxisAlignment.start,
   wrap: false,
   gap: 0,
@@ -36,6 +38,7 @@ const safeAttrs = useSafeAttrs();
 const flexClasses = computed(() => {
   const classes = ["flex-box", `flex-box-${props.direction}`];
   if (props.expanded) classes.push("flex-expanded");
+  if (props.mainAxisSize === MainAxisSize.min) classes.push("main-axis-min");
   return classes.join(" ");
 });
 
@@ -52,6 +55,20 @@ const flexStyles = computed(() => {
   styles.justifyContent = FlexBoxJustifyMap[mainAxisAlignment] || mainAxisAlignment;
   styles.alignItems = FlexBoxAlignMap[crossAxisAlignment] || crossAxisAlignment;
   styles.gap = px2vw(props.gap);
+
+  const isRow = props.direction?.includes("row");
+  const isCol = props.direction?.includes("column");
+
+  // Handle MainAxisSize
+  if (props.mainAxisSize === MainAxisSize.min) {
+    if (isRow) styles.width = "fit-content";
+    if (isCol) styles.height = "fit-content";
+  } else {
+    // max (default)
+    if (isRow) styles.width = "100%";
+    if (isCol) styles.height = "100%";
+  }
+
   if (props.expanded) {
     styles.flex = "1";
     styles.width = "100%";

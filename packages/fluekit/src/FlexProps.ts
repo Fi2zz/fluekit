@@ -37,10 +37,22 @@ export const MainAxisAlignment = {
 
 export type MainAxisAlignment = Valueof<typeof MainAxisAlignment> | string;
 
+/**
+ * MainAxisSize
+ * 对应 Flutter 的 MainAxisSize
+ */
+export const MainAxisSize = {
+  min: "min",
+  max: "max",
+} as const;
+
+export type MainAxisSize = Valueof<typeof MainAxisSize> | string;
+
 export type FlexBoxProps = {
   // 主轴方向 (类似 Flutter 的 Axis)
   direction?: "row" | "column" | "row-reverse" | "column-reverse" | string;
   mainAxisAlignment?: MainAxisAlignment;
+  mainAxisSize?: MainAxisSize;
   crossAxisAlignment?: CrossAxisAlignment;
   // 是否换行
   wrap?: boolean;
