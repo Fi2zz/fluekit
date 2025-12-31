@@ -184,7 +184,11 @@ const computedStyle = computed(() => {
   Object.assign(style, gestureStyle);
 
   if (props.flex !== undefined) {
-    style.flex = props.flex;
+    if (typeof props.flex === "number") {
+      style.flex = `${props.flex} 1 0%`;
+    } else {
+      style.flex = props.flex;
+    }
   }
 
   if (props.clipBehavior === "antiAlias") {
