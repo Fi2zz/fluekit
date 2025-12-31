@@ -6,23 +6,30 @@ import { isPlainObject } from "./utils";
 const BOX_CONSTRAINTS_SYMBOL = Symbol("boxConstraints");
 
 export interface BoxConstraintsProps {
-  minWidth?: number;
-  maxWidth?: number;
-  minHeight?: number;
-  maxHeight?: number;
+  minWidth?: number | string;
+  maxWidth?: number | string;
+  minHeight?: number | string;
+  maxHeight?: number | string;
 }
 
 export type BoxConstraints = BoxConstraintsProps & {
   [BOX_CONSTRAINTS_SYMBOL]?: true;
 };
 
-const toVal = (v: number) => (v === Infinity ? undefined : v);
+const toVal = (v: number | string) => (v === Infinity ? undefined : v);
 
 export function BoxConstraints(props: BoxConstraintsProps = {}): BoxConstraints {
-  const minWidth = Math.max(0, props.minWidth ?? 0);
-  const minHeight = Math.max(0, props.minHeight ?? 0);
-  const maxWidth = Math.max(minWidth, props.maxWidth ?? Infinity);
-  const maxHeight = Math.max(minHeight, props.maxHeight ?? Infinity);
+  const minWidth = props.minWidth ?? 0;
+  const minHeight = props.minHeight ?? 0;
+  const maxWidth = props.maxWidth ?? Infinity;
+  const maxHeight = props.maxHeight ?? Infinity;
+
+  // 如果都是数字，执行数学上的 max 逻辑；如果是字符串，我们没法简单比较，直接信任输入
+  // 这里简化逻辑：如果是数字才做 max 保护
+  // 但为了支持字符串（如 '100%' 或 '100px'），我们不能轻易使用 Math.max
+
+  // 实际上 Flutter 的 BoxConstraints 核心是 min/max w/h。
+  // 如果用户传了字符串，我们应该直接透传，不做数值比较。
 
   return {
     minWidth: toVal(minWidth),

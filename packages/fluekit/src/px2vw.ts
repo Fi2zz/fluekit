@@ -15,7 +15,7 @@ export function setDefaultVW(value: number) {
 const EXCLUDED_VALUES = ["0px", "0", "+0", "-0", "0%", "+0%", "-0%", "-0px", "+0px"];
 
 const nonTransform = (px: string) =>
-  px.endsWith("vw") || px.endsWith("%") || EXCLUDED_VALUES.includes(px);
+  px.endsWith("vw") || px.endsWith("%") || px.endsWith("PX") || EXCLUDED_VALUES.includes(px);
 
 export function px2vw(px: string | number | undefined | null, designWidth = DEFAULT_VW): string {
   //@ts-ignore
