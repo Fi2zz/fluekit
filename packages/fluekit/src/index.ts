@@ -45,6 +45,7 @@ export { default as Slider } from "./Slider.vue";
 export { default as AlertDialog } from "./AlertDialog.vue";
 export { default as BottomSheet } from "./BottomSheet.vue";
 export { default as SegmentedControl } from "./SegmentedControl.vue";
+export { default as MediaQuery } from "./MediaQuery.vue";
 export { SnackBar } from "./SnackBar";
 
 export * from "./Border";
@@ -54,6 +55,7 @@ export * from "./BorderRadius";
 export * from "./BoxShadow";
 export * from "./ButtonStyle";
 export * from "./EdgeInsets";
+export * from "./MediaQuery";
 export { Alignment as Alignment } from "./FlexProps";
 export { StackFit, CrossAxisAlignment, MainAxisAlignment } from "./FlexProps";
 export * from "./Gradient";

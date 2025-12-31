@@ -82,6 +82,7 @@ export default defineConfig({
           { text: "ImageProvider", link: "/utils/image-provider" },
           { text: "InputDecoration", link: "/utils/input-decoration" },
           { text: "Matrix4", link: "/utils/matrix4" },
+          { text: "MediaQuery", link: "/utils/media-query" },
           { text: "Size", link: "/utils/size" },
           { text: "StackFit", link: "/utils/stack-fit" },
           { text: "TextStyle", link: "/utils/text-style" },
