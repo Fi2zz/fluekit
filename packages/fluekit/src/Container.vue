@@ -35,6 +35,8 @@ interface Props {
   transform?: string;
   transformAlignment?: Alignment;
   constraints?: BoxConstraints;
+  // Flex 布局属性
+  flex?: number | string;
 }
 
 const _styles = useStyles();
@@ -180,6 +182,10 @@ const computedStyle = computed(() => {
   Object.assign(style, marginToStyle(props.margin));
   Object.assign(style, boxDecorationToStyle(props.decoration));
   Object.assign(style, gestureStyle);
+
+  if (props.flex !== undefined) {
+    style.flex = props.flex;
+  }
 
   if (props.clipBehavior === "antiAlias") {
     // 简单的抗锯齿处理，实际可能需要 clip-path
