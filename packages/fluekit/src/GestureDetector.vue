@@ -10,7 +10,7 @@ export default defineComponent({
   props: {
     behavior: {
       type: String as PropType<Behavior>,
-      default: "deferToChild",
+      default: "opaque",
     },
   },
   emits: events,
