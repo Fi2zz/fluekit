@@ -1,7 +1,9 @@
 <template>
   <Column :gap="20">
     <Container color="#f5f5f5" :padding="EdgeInsets.all(20)">
-      <Text :style="{ fontSize: 20, fontWeight: 'bold' }">Global MediaQuery</Text>
+      <Text :style="TextStyle({ fontSize: 20, fontWeight: FontWeight.bold })"
+        >Global MediaQuery</Text
+      >
       <Text>Size: {{ mediaQuery.size.width }} x {{ mediaQuery.size.height }}</Text>
       <Text>Orientation: {{ mediaQuery.orientation }}</Text>
       <Text>Device Pixel Ratio: {{ mediaQuery.devicePixelRatio }}</Text>
@@ -13,12 +15,14 @@
           mediaQuery.padding.bottom
         }}</Text
       >
-      <Text :style="{ color: '#666', fontSize: 12 }">Try resizing the window!</Text>
+      <Text :style="TextStyle({ color: '#666', fontSize: 12 })">Try resizing the window!</Text>
     </Container>
 
     <MediaQuery :data="customData">
       <Container color="#e3f2fd" :padding="EdgeInsets.all(20)">
-        <Text :style="{ fontSize: 20, fontWeight: 'bold' }">Nested MediaQuery (Override)</Text>
+        <Text :style="TextStyle({ fontSize: 20, fontWeight: FontWeight.bold })"
+          >Nested MediaQuery (Override)</Text
+        >
         <Text>Simulating Landscape Tablet with Top Padding:</Text>
         <div style="margin-top: 10px; padding: 10px; border: 1px dashed #999">
           <ChildComponent />
@@ -37,6 +41,8 @@ import {
   useMediaQuery,
   MediaQuery,
   Orientation,
+  TextStyle,
+  FontWeight,
 } from "fluekit";
 import { reactive, defineComponent, h } from "vue";
 
