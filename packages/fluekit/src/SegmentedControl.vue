@@ -6,6 +6,7 @@
           :padding="padding"
           :decoration="getItemDecoration(item.value, index)"
           alignment="center"
+          :style="{ flex: 1, width: '0px' }"
         >
           <slot name="label" :item="item" :selected="item.value === modelValue" :index="index">
             <Text :style="getItemTextStyle(item.value)">{{ item.label }}</Text>
@@ -102,14 +103,12 @@ const getItemDecoration = (value: T, index: number) => {
   return BoxDecoration({
     color: isSelected ? props.selectedColor : props.unselectedColor,
     borderRadius,
-    border: !isLast
-      ? Border.only({
-          right: BorderSide({
-            color: props.borderColor,
-            width: 1,
-          }),
-        })
-      : undefined,
+    border: Border.only({
+      right: BorderSide({
+        color: !isLast ? props.borderColor : "transparent",
+        width: 1,
+      }),
+    }),
   });
 };
 
