@@ -2,17 +2,16 @@
   <Container :decoration="containerDecoration" clip-behavior="hardEdge">
     <Row>
       <GestureDetector v-for="(item, index) in items" :key="index" @tap="handleTap(item)">
-        <Expanded>
-          <Container
-            :padding="padding"
-            :decoration="getItemDecoration(item, index)"
-            alignment="center"
-          >
-            <slot name="label" :item="item" :selected="item.value === modelValue" :index="index">
-              <Text :style="getItemTextStyle(item)">{{ item.label }}</Text>
-            </slot>
-          </Container>
-        </Expanded>
+        <Container
+          style="flex: 1"
+          :padding="padding"
+          :decoration="getItemDecoration(item, index)"
+          alignment="center"
+        >
+          <slot name="label" :item="item" :selected="item.value === modelValue" :index="index">
+            <Text :style="getItemTextStyle(item)">{{ item.label }}</Text>
+          </slot>
+        </Container>
       </GestureDetector>
     </Row>
   </Container>
@@ -23,7 +22,6 @@ import { computed } from "vue";
 import Container from "./Container.vue";
 import Row from "./Row.vue";
 import Text from "./Text.vue";
-import Expanded from "./Expanded.vue";
 import GestureDetector from "./GestureDetector.vue";
 import { BoxDecoration } from "./BoxDecoration";
 import { Border, BorderSide } from "./Border";
