@@ -33,7 +33,14 @@ import LayoutBuilderDemo from '../demos/new_components/LayoutBuilderDemo.vue';
 
 ### Props
 
-None. It takes up 100% of the parent's size.
+| Name        | Type                                             | Default  | Description                                                       |
+| ----------- | ------------------------------------------------ | -------- | ----------------------------------------------------------------- |
+| `direction` | `'horizontal' \| 'vertical' \| 'both' \| 'none'` | `'both'` | Controls the sizing behavior and constraints passed to the child. |
+
+- `both`: The builder takes up 100% width and height. Constraints are tight (fixed size).
+- `horizontal`: The builder takes up 100% width. Width constraint is tight, height is loose (0 to Infinity).
+- `vertical`: The builder takes up 100% height. Height constraint is tight, width is loose (0 to Infinity).
+- `none`: The builder sizes itself to its content. Constraints are loose (0 to Infinity).
 
 ### Slots
 
@@ -52,4 +59,4 @@ interface BoxConstraints {
 }
 ```
 
-In the context of `LayoutBuilder` in this library, `minWidth` equals `maxWidth` (and same for height), representing the current measured size of the container.
+By default (`direction="both"`), `minWidth` equals `maxWidth` (and same for height), representing the current measured size of the container. If you change the `direction`, some constraints may become loose (0 to Infinity).
