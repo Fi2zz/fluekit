@@ -30,6 +30,7 @@ const myButtonStyle = ButtonStyle({
 
 ```typescript
 export interface ButtonStyle {
+  textStyle?: TextStyle;
   backgroundColor?: string;
   foregroundColor?: string; // Text color
   overlayColor?: string; // Ripple color (reserved)
@@ -49,6 +50,7 @@ export interface ButtonStyle {
 
 - **backgroundColor**: Background color of the button.
 - **foregroundColor**: Color of the text and icons within the button.
+- **textStyle**: Style to apply to text content (`TextStyle`).
 - **shadowColor**: Color of the shadow when elevation is > 0.
 - **elevation**: Z-axis elevation, controls shadow size.
 - **padding**: Internal padding (`EdgeInsets`).

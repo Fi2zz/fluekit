@@ -33,10 +33,11 @@ Use the `ButtonStyle` object to define various visual properties like background
 
 ### Props
 
-| Name       | Type          | Default | Description                                                              |
-| :--------- | :------------ | :------ | :----------------------------------------------------------------------- |
-| `disabled` | `boolean`     | `false` | Whether the button is disabled. When disabled, events are not triggered. |
-| `style`    | `ButtonStyle` | -       | The style configuration object for the button.                           |
+| Name       | Type          | Default    | Description                                                              |
+| :--------- | :------------ | :--------- | :----------------------------------------------------------------------- |
+| `disabled` | `boolean`     | `false`    | Whether the button is disabled. When disabled, events are not triggered. |
+| `behavior` | `Behavior`    | `'opaque'` | How this gesture detector should behave during hit testing.              |
+| `style`    | `ButtonStyle` | -          | The style configuration object for the button.                           |
 
 ### Events
 
@@ -53,6 +54,7 @@ Object used to configure the button's appearance.
 | :---------------- | :------------- | :----------------------------------------------- |
 | `backgroundColor` | `string`       | Background color.                                |
 | `foregroundColor` | `string`       | Foreground color (text/icon color).              |
+| `textStyle`       | `TextStyle`    | Style to apply to text content.                  |
 | `padding`         | `EdgeInsets`   | Padding inside the button.                       |
 | `side`            | `BorderSide`   | Border style.                                    |
 | `shape`           | `BorderRadius` | Shape of the button (currently supports radius). |
