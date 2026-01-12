@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.77] - 2026-01-12
+
+### Features
+
+- **Slider**:
+  - Update to iOS style by default with `variant` prop support (`ios` | `material`).
+  - Support negative values for `min`, `max` and `value`.
+  - Refactor Thumb implementation to use `Positioned` instead of style attributes.
+- **RangeSlider**:
+  - Update to iOS style by default with `variant` prop support (`ios` | `material`).
+  - Support negative values for `min`, `max` and `value`.
+  - Refactor Thumb implementation to use `Positioned` instead of style attributes.
+
+### Refactor
+
+- **Container**: Remove support for `style` attribute to enforce `Positioned` or other layout components for positioning.
+
+### Documentation
+
+- **Button**: Refine documentation structure and add detailed examples.
+- **Slider**: Add negative value usage examples.
+
 ## [1.5.0] - 2025-12-30
 
 ### Features
