@@ -8,6 +8,7 @@
         :height="18"
         :decoration="decoration"
         alignment="center"
+        flex="none"
       >
         <svg
           v-if="isChecked"

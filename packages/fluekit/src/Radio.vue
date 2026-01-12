@@ -8,6 +8,7 @@
         :height="20"
         :decoration="outerDecoration"
         alignment="center"
+        flex="none"
       >
         <Container v-if="isSelected" :width="10" :height="10" :decoration="innerDecoration" />
       </Container>
