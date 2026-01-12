@@ -1,47 +1,91 @@
 <template>
   <GestureDetector @tap="toggle">
-    <Container :width="18" :height="18" :decoration="decoration" alignment="center">
-      <Container v-if="value" :width="10" :height="10" color="white" :transform="'scale(1)'" />
-      <!-- SVG Checkmark simulation or simple square -->
-    </Container>
+    <Row main-axis-size="min" cross-axis-alignment="center" :gap="8">
+      <slot v-if="labelPosition === 'left'" />
+      <Container
+        v-if="!hideIcon"
+        :width="18"
+        :height="18"
+        :decoration="decoration"
+        alignment="center"
+      >
+        <svg
+          v-if="isChecked"
+          viewBox="0 0 24 24"
+          :width="14"
+          :height="14"
+          :fill="checkColor"
+          style="display: block"
+        >
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+        </svg>
+      </Container>
+      <slot v-if="labelPosition === 'right'" />
+    </Row>
   </GestureDetector>
 </template>
 
-<script setup lang="ts">
-import { computed } from "vue";
+<script setup lang="ts" generic="T">
+import { computed, inject } from "vue";
 import Container from "./Container.vue";
+import Row from "./Row.vue";
 import GestureDetector from "./GestureDetector.vue";
 import { BoxDecoration } from "./BoxDecoration";
 import { BorderRadius } from "./BorderRadius";
 import { Border } from "./Border";
+import { CheckboxGroupKey } from "./CheckboxTypes";
 
-interface Props {
-  value: boolean;
-  onChanged?: (value: boolean) => void;
+export interface CheckboxProps<T> {
+  value?: T;
+  onChanged?: (value: T) => void;
   activeColor?: string;
   checkColor?: string;
+  labelPosition?: "left" | "right";
+  hideIcon?: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<CheckboxProps<T>>(), {
   activeColor: "#2196F3",
   checkColor: "#FFFFFF",
+  labelPosition: "right",
+  hideIcon: false,
 });
 
 const emit = defineEmits<{
-  (e: "update:value", value: boolean): void;
-  (e: "change", value: boolean): void;
+  (e: "update:value", value: T): void;
+  (e: "change", value: T): void;
 }>();
 
+const group = inject(CheckboxGroupKey, null);
+
+const isChecked = computed(() => {
+  if (group) {
+    return (group.value.value as any[]).includes(props.value);
+  }
+  return props.value === true;
+});
+
+const isDisabled = computed(() => {
+  return group?.disabled.value;
+});
+
 const toggle = () => {
-  const newValue = !props.value;
-  emit("change", newValue);
-  emit("update:value", newValue);
+  if (isDisabled.value) return;
+
+  if (group) {
+    group.updateValue(props.value as any);
+  } else {
+    // Standalone mode: value is treated as boolean
+    const newValue = !props.value;
+    emit("change", newValue as T);
+    emit("update:value", newValue as T);
+  }
 };
 
 const decoration = computed(() => {
   return BoxDecoration({
-    color: props.value ? props.activeColor : "transparent",
-    border: props.value
+    color: isChecked.value ? props.activeColor : "transparent",
+    border: isChecked.value
       ? undefined
       : Border.all({
           color: "rgba(0,0,0,0.54)",
