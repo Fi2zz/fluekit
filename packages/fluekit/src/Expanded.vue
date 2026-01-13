@@ -1,5 +1,12 @@
 <template>
-  <FlexItem :flex="flex" expanded :align-self="alignSelf" :min-size="minSize" :max-size="maxSize">
+  <FlexItem
+    :flex="flex"
+    expanded
+    :align-self="alignSelf"
+    :min-size="minSize"
+    :max-size="maxSize"
+    v-bind="$attrs"
+  >
     <slot />
   </FlexItem>
 </template>

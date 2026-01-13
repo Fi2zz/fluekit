@@ -31,8 +31,6 @@ export { default as TextArea } from "./TextArea.vue";
 export { default as TextField } from "./TextField.vue";
 export { default as Transform } from "./Transform.vue";
 export { default as Wrap } from "./Wrap.vue";
-
-// New components
 export { default as Divider } from "./Divider.vue";
 export { default as Spacer } from "./Spacer.vue";
 export { default as ClipRRect } from "./ClipRRect.vue";
@@ -54,7 +52,13 @@ export { default as Builder } from "./Builder.vue";
 export { default as LayoutBuilder } from "./LayoutBuilder.vue";
 export { default as MediaQuery } from "./MediaQuery.vue";
 export { default as CupertinoActivityIndicator } from "./CupertinoActivityIndicator.vue";
+export { default as CupertinoPageScaffold } from "./CupertinoPageScaffold.vue";
+export { default as CupertinoNavigationBar } from "./CupertinoNavigationBar.vue";
 export { SnackBar } from "./SnackBar";
+export { default as Scaffold } from "./Scaffold.vue";
+export { default as AppBar } from "./AppBar.vue";
+export { default as BottomNavigationBar } from "./BottomNavigationBar.vue";
+export { default as CupertinoContextMenu } from "./CupertinoContextMenu.vue";
 
 export * from "./Border";
 export * from "./BoxConstraints";
