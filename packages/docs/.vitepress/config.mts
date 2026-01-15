@@ -50,6 +50,7 @@ export default defineConfig({
           { text: "Effects", link: "/components/effects" },
           { text: "Expanded", link: "/components/expanded" },
           { text: "GestureDetector", link: "/components/gesture-detector" },
+          { text: "Icon", link: "/components/icon" },
           { text: "Image", link: "/components/Image" },
           { text: "InkWell", link: "/components/ink-well" },
           { text: "LayoutBuilder", link: "/components/layout-builder" },

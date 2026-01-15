@@ -16,6 +16,7 @@ export { default as GestureDetector } from "./GestureDetector.vue";
 export { default as GridView } from "./GridView.vue";
 export { default as IgnorePointer } from "./IgnorePointer.vue";
 export { default as Image } from "./Image.vue";
+export { default as Icon } from "./Icon.vue";
 export { default as ListView } from "./ListView.vue";
 export { default as Opacity } from "./Opacity.vue";
 export { default as Padding } from "./Padding.vue";

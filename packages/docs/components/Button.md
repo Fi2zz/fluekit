@@ -59,6 +59,7 @@ If no `variant` or `style` is provided, `Button` acts as a raw container that de
 | Name       | Type             | Default    | Description                                                              |
 | :--------- | :--------------- | :--------- | :----------------------------------------------------------------------- |
 | `disabled` | `boolean`        | `false`    | Whether the button is disabled. When disabled, events are not triggered. |
+| `text`     | `string`         | -          | The text content of the button. Shorthand for default slot.              |
 | `behavior` | `Behavior`       | `'opaque'` | How this gesture detector should behave during hit testing.              |
 | `variant`  | `'raw' \| 'ios'` | `'raw'`    | The style variant of the button.                                         |
 | `style`    | `ButtonStyle`    | -          | The style configuration object for the button.                           |

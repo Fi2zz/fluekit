@@ -7,14 +7,8 @@
     @tap-up="handleTapUp"
     @tap-cancel="handleTapCancel"
   >
-    <button
-      class="fluekit-button"
-      :class="attrs.class"
-      :style="computedStyle"
-      :disabled="disabled"
-      v-bind="mixedAttrs"
-    >
-      <slot />
+    <button class="fluekit-button" :style="computedStyle" :disabled="disabled" v-bind="mixedAttrs">
+      <slot>{{ props.text }}</slot>
     </button>
   </GestureDetector>
 </template>
@@ -35,6 +29,7 @@ interface Props {
   // 交互属性
   disabled?: boolean;
   behavior?: Behavior;
+  text?: string;
   // 样式属性
   style?: ButtonStyle;
 
@@ -61,8 +56,6 @@ const emit = defineEmits<{
   (e: "tap-up", payload: any): void;
   (e: "tap-cancel", payload: any): void;
 }>();
-
-const attrs = useAttrs();
 const _styles = useStyles();
 const safeAttrs = useSafeAttrs();
 const events = useGestureEvents();
@@ -80,10 +73,7 @@ const gestureStyle = useGestureStyle(props.behavior);
 
 // 样式计算逻辑
 const computedStyle = computed(() => {
-  const css: CSSProperties = {
-    position: "relative",
-  };
-
+  const css: CSSProperties = { position: "relative" };
   // 1. 基础样式 (来自 variant)
   let variantStyle: ButtonStyle = {};
   if (props.variant === "ios") {
@@ -99,7 +89,13 @@ const computedStyle = computed(() => {
   Object.assign(css, buttonStyleToStyle(variantStyle));
   Object.assign(css, buttonStyleToStyle(props.style));
   Object.assign(css, gestureStyle);
-
+  if (props.disabled) {
+    css.pointerEvents = "none";
+    if (props.color || props.disabledColor) {
+      css.backgroundColor = props.disabledColor || props.color;
+    }
+  }
+  if (isPressed.value) css.opacity = props.pressedOpacity;
   return css;
 });
 
