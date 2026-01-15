@@ -1,71 +1,134 @@
 <template>
-  <Container :width="radius * 2" :height="radius * 2" alignment="center">
-    <div class="cupertino-activity-indicator" :style="containerStyle">
-      <div
-        v-for="i in 12"
-        :key="i"
-        class="cupertino-activity-indicator-tick"
-        :style="getTickStyle(i - 1)"
-      ></div>
-    </div>
-  </Container>
+  <div class="flue-cupertino-activity-indicator" :style="containerStyle">
+    <div
+      v-for="i in 12"
+      :key="i"
+      class="flue-cupertino-activity-indicator-blade"
+      :style="bladeStyle(i - 1)"
+    ></div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { computed, type CSSProperties } from "vue";
-import Container from "./Container.vue";
+import { CupertinoColors } from "./CupertinoColors";
+import { Color } from "./Color";
 
 interface Props {
-  radius?: number;
-  color?: string;
+  /**
+   * Whether the activity indicator is running its animation.
+   * Default: true
+   */
   animating?: boolean;
+  /**
+   * The color of the activity indicator.
+   */
+  color?: string | Color;
+  /**
+   * The radius of the activity indicator.
+   * Default: 10.0
+   */
+  radius?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  radius: 10,
-  color: "#999999",
   animating: true,
+  color: () => CupertinoColors.systemGrey, // iOS default is usually gray
+  radius: 10,
 });
 
 const containerStyle = computed<CSSProperties>(() => ({
   width: `${props.radius * 2}px`,
   height: `${props.radius * 2}px`,
   position: "relative",
-  animation: props.animating ? "cupertino-activity-indicator-rotate 1s steps(12) infinite" : "none",
+  display: "inline-block",
 }));
 
-const getTickStyle = (index: number): CSSProperties => {
-  const angle = index * 30;
+const bladeStyle = (index: number): CSSProperties => {
+  const bladeWidth = props.radius / 3.5; // Heuristic based on radius
+  const bladeHeight = props.radius / 1.2;
+  const colorStr = props.color.toString();
+
   return {
     position: "absolute",
     top: "0",
-    left: "50%",
-    width: `${props.radius * 0.25}px`, // Thickness relative to radius
-    height: `${props.radius * 0.6}px`, // Length relative to radius
-    backgroundColor: props.color,
-    borderRadius: `${props.radius * 0.125}px`,
-    transformOrigin: `center ${props.radius}px`,
-    transform: `translateX(-50%) rotate(${angle}deg)`,
-    opacity: 1 - (index / 12) * 0.7, // Fade opacity for static look (if needed) but animation handles it
-    // Actually for iOS spinner, the opacity is fixed per tick in static state,
-    // but the whole wheel rotates. Wait, CSS steps() rotation is one way.
-    // Another way is to animate opacity of each tick.
-    // Flutter implementation rotates the whole thing with steps.
+    left: `calc(50% - ${bladeWidth / 2}px)`,
+    width: `${bladeWidth}px`,
+    height: "100%",
+    transform: `rotate(${index * 30}deg)`,
   };
 };
+
+/*
+ * Note: CupertinoActivityIndicator in Flutter uses custom painting or a specific
+ * SVG-like structure. In CSS, we can simulate the "blades" using pseudo-elements
+ * or multiple divs.
+ *
+ * Actually, the standard iOS spinner is a set of lines arranged in a circle.
+ * We can use ::before on each blade div to draw the line part.
+ */
 </script>
 
-<style>
-@keyframes cupertino-activity-indicator-rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+<style scoped>
+.flue-cupertino-activity-indicator-blade::before {
+  content: "";
+  position: html;
+  display: block;
+  width: 100%;
+  height: 25%; /* Blade length relative to container diameter */
+  background-color: v-bind("props.color.toString()");
+  border-radius: 10px;
 }
 
-.cupertino-activity-indicator-tick {
-  /* Ensure ticks are centered properly before rotation */
+.flue-cupertino-activity-indicator-blade {
+  opacity: 0;
+  animation: flue-cupertino-fade 1s linear infinite;
+}
+
+/* Delay for each blade */
+.flue-cupertino-activity-indicator-blade:nth-child(1) {
+  animation-delay: -1s;
+}
+.flue-cupertino-activity-indicator-blade:nth-child(2) {
+  animation-delay: -0.9167s;
+}
+.flue-cupertino-activity-indicator-blade:nth-child(3) {
+  animation-delay: -0.8333s;
+}
+.flue-cupertino-activity-indicator-blade:nth-child(4) {
+  animation-delay: -0.75s;
+}
+.flue-cupertino-activity-indicator-blade:nth-child(5) {
+  animation-delay: -0.6667s;
+}
+.flue-cupertino-activity-indicator-blade:nth-child(6) {
+  animation-delay: -0.5833s;
+}
+.flue-cupertino-activity-indicator-blade:nth-child(7) {
+  animation-delay: -0.5s;
+}
+.flue-cupertino-activity-indicator-blade:nth-child(8) {
+  animation-delay: -0.4167s;
+}
+.flue-cupertino-activity-indicator-blade:nth-child(9) {
+  animation-delay: -0.3333s;
+}
+.flue-cupertino-activity-indicator-blade:nth-child(10) {
+  animation-delay: -0.25s;
+}
+.flue-cupertino-activity-indicator-blade:nth-child(11) {
+  animation-delay: -0.1667s;
+}
+.flue-cupertino-activity-indicator-blade:nth-child(12) {
+  animation-delay: -0.0833s;
+}
+
+@keyframes flue-cupertino-fade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.3;
+  } /* Fade out to partial opacity */
 }
 </style>

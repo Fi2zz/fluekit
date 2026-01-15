@@ -52,7 +52,7 @@ export { default as SegmentedControl } from "./SegmentedControl.vue";
 export { default as Builder } from "./Builder.vue";
 export { default as LayoutBuilder } from "./LayoutBuilder.vue";
 export { default as MediaQuery } from "./MediaQuery.vue";
-export { default as CupertinoActivityIndicator } from "./CupertinoActivityIndicator.vue";
+// export { default as CupertinoActivityIndicator } from "./CupertinoActivityIndicator.vue"; // Removed duplicate
 export { default as CupertinoPageScaffold } from "./CupertinoPageScaffold.vue";
 export { default as CupertinoNavigationBar } from "./CupertinoNavigationBar.vue";
 export { SnackBar } from "./SnackBar";
@@ -63,6 +63,9 @@ export { default as CupertinoContextMenu } from "./CupertinoContextMenu.vue";
 export { default as AspectRatio } from "./AspectRatio.vue";
 export { default as ConstrainedBox } from "./ConstrainedBox.vue";
 export { default as ImageColorBackground } from "./ImageColorBackground.vue";
+export { default as LinearProgressIndicator } from "./LinearProgressIndicator.vue";
+export { default as CircularProgressIndicator } from "./CircularProgressIndicator.vue";
+export { default as CupertinoActivityIndicator } from "./CupertinoActivityIndicator.vue";
 
 export * from "./Color";
 export * from "./ImageUtils";

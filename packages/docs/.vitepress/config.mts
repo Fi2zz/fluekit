@@ -58,6 +58,7 @@ export default defineConfig({
           { text: "LayoutBuilder", link: "/components/layout-builder" },
           { text: "ListTile", link: "/components/list-tile" },
           { text: "ListView & GridView", link: "/components/list-view" },
+          { text: "Progress Indicators", link: "/components/progress-indicators" },
           { text: "Radio", link: "/components/radio" },
           { text: "Row & Column", link: "/components/row-column" },
           { text: "Scaffold & AppBar", link: "/components/scaffold" },
