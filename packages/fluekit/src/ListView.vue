@@ -4,8 +4,7 @@
     :padding="padding"
     :physics="physics"
     :clip-behavior="clipBehavior"
-    :class="['flutter-list-view', { 'list-view-shrink-wrap': shrinkWrap }]"
-    :style="listViewStyle"
+    :shrink-wrap="shrinkWrap"
   >
     <div class="list-view-content" :style="contentStyle">
       <slot v-if="!itemCount" />
@@ -47,13 +46,6 @@ const props = withDefaults(defineProps<Props>(), {
   separator: false,
 });
 
-const listViewStyle = computed<CSSProperties>(() => {
-  return {
-    height: props.shrinkWrap ? "auto" : "100%",
-    width: props.shrinkWrap ? "auto" : "100%",
-  };
-});
-
 const contentStyle = computed<CSSProperties>(() => {
   const isVertical = props.scrollDirection === "vertical";
   return {
@@ -65,13 +57,3 @@ const contentStyle = computed<CSSProperties>(() => {
   };
 });
 </script>
-
-<style scoped>
-.flutter-list-view {
-  display: flex;
-  flex-direction: column;
-}
-.list-view-shrink-wrap {
-  flex: 0 0 auto;
-}
-</style>

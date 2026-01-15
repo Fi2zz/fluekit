@@ -60,7 +60,12 @@ export { default as Scaffold } from "./Scaffold.vue";
 export { default as AppBar } from "./AppBar.vue";
 export { default as BottomNavigationBar } from "./BottomNavigationBar.vue";
 export { default as CupertinoContextMenu } from "./CupertinoContextMenu.vue";
+export { default as AspectRatio } from "./AspectRatio.vue";
+export { default as ConstrainedBox } from "./ConstrainedBox.vue";
 
+export * from "./Color";
+export * from "./Colors";
+export * from "./CupertinoColors";
 export * from "./Border";
 export * from "./BoxConstraints";
 export * from "./BoxDecoration";

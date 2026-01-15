@@ -24,6 +24,8 @@ interface Props {
   clipBehavior?: "none" | "hardEdge" | "antiAlias";
   /** 是否反向滚动 (暂未完全实现，预留接口) */
   reverse?: boolean;
+  /** 是否根据内容收缩 */
+  shrinkWrap?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -31,6 +33,7 @@ const props = withDefaults(defineProps<Props>(), {
   physics: "bouncing",
   clipBehavior: "hardEdge",
   reverse: false,
+  shrinkWrap: false,
 });
 
 const emit = defineEmits<{
@@ -57,8 +60,8 @@ const containerStyle = computed<CSSProperties>(() => {
   const style: CSSProperties = {
     // 默认占满父容器，确保 overflow 生效 (Web 滚动容器通常需要显式尺寸或 fill)
     // 如果用户需要特定尺寸，应在外层包裹 SizedBox/Container 或直接传入 style
-    width: "100%",
-    height: "100%",
+    width: props.shrinkWrap && props.scrollDirection === "horizontal" ? "fit-content" : "100%",
+    height: props.shrinkWrap && props.scrollDirection === "vertical" ? "auto" : "100%",
     position: "relative",
     display: "block",
     // 隐藏 Firefox 滚动条

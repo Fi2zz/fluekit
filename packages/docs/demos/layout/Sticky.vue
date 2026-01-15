@@ -1,6 +1,6 @@
 <template>
-  <div class="scroll-container">
-    <ScrollView :height="200">
+  <div class="scroll-container" style="height: 200px">
+    <ScrollView>
       <Column>
         <Container :height="100" color="#e0e0e0" alignment="center">
           <Text data="Scroll Down" />
@@ -8,7 +8,10 @@
 
         <Sticky :top="0">
           <Container :height="50" color="blue" alignment="center" :width="Infinity">
-            <Text data="Sticky Header" :style="TextStyle({ color: 'white', fontWeight: 'bold' })" />
+            <Text
+              data="Sticky Header"
+              :style="TextStyle({ color: 'white', fontWeight: FontWeight.bold })"
+            />
           </Container>
         </Sticky>
 
@@ -46,7 +49,16 @@
 </template>
 
 <script setup lang="ts">
-import { Sticky, ScrollView, Column, Container, Text, TextStyle, EdgeInsets } from "fluekit";
+import {
+  Sticky,
+  ScrollView,
+  Column,
+  Container,
+  Text,
+  TextStyle,
+  EdgeInsets,
+  FontWeight,
+} from "fluekit";
 </script>
 
 <style scoped>

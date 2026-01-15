@@ -12,7 +12,10 @@
 
         <Sticky :top="0" :zIndex="100">
           <Container :height="40" color="teal" alignment="center" :width="300">
-            <Text data="Sticky Header" :style="TextStyle({ color: 'white', fontWeight: 'bold' })" />
+            <Text
+              data="Sticky Header"
+              :style="TextStyle({ color: 'white', fontWeight: FontWeight.bold })"
+            />
           </Container>
         </Sticky>
 
@@ -44,5 +47,6 @@ import {
   Border,
   EdgeInsets,
   TextStyle,
+  FontWeight,
 } from "fluekit";
 </script>

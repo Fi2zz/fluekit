@@ -4,8 +4,7 @@
     :padding="padding"
     :physics="physics"
     :clip-behavior="clipBehavior"
-    class="flutter-grid-view"
-    :style="scrollViewStyle"
+    :shrink-wrap="shrinkWrap"
   >
     <div class="grid-view-content" :style="gridStyle">
       <!-- 模式1: 静态子元素 -->
@@ -53,13 +52,6 @@ const props = withDefaults(defineProps<Props>(), {
   mainAxisSpacing: 0,
   crossAxisSpacing: 0,
   childAspectRatio: 1.0,
-});
-
-const scrollViewStyle = computed<CSSProperties>(() => {
-  return {
-    height: props.shrinkWrap ? "auto" : "100%",
-    width: props.shrinkWrap ? "auto" : "100%",
-  };
 });
 
 const gridStyle = computed<CSSProperties>(() => {
