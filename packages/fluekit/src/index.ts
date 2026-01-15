@@ -62,8 +62,10 @@ export { default as BottomNavigationBar } from "./BottomNavigationBar.vue";
 export { default as CupertinoContextMenu } from "./CupertinoContextMenu.vue";
 export { default as AspectRatio } from "./AspectRatio.vue";
 export { default as ConstrainedBox } from "./ConstrainedBox.vue";
+export { default as ImageColorBackground } from "./ImageColorBackground.vue";
 
 export * from "./Color";
+export * from "./ImageUtils";
 export * from "./Colors";
 export * from "./CupertinoColors";
 export * from "./Border";
