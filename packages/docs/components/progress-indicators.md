@@ -22,12 +22,13 @@ A material design linear progress indicator.
 
 **Props:**
 
-| Prop            | Type              | Default            | Description                                                                           |
-| --------------- | ----------------- | ------------------ | ------------------------------------------------------------------------------------- |
-| value           | `number \| null`  | `null`             | The value of the progress (0.0 to 1.0). If null, it shows an indeterminate animation. |
-| color           | `Color \| string` | `Colors.blue`      | The progress color.                                                                   |
-| backgroundColor | `Color \| string` | `Colors.blue[200]` | The background track color.                                                           |
-| minHeight       | `number`          | `4`                | The height of the bar.                                                                |
+| Prop            | Type                     | Default            | Description                                                                           |
+| --------------- | ------------------------ | ------------------ | ------------------------------------------------------------------------------------- |
+| value           | `number \| null`         | `null`             | The value of the progress (0.0 to 1.0). If null, it shows an indeterminate animation. |
+| color           | `Color \| string`        | `Colors.blue`      | The progress color.                                                                   |
+| backgroundColor | `Color \| string`        | `Colors.blue[200]` | The background track color.                                                           |
+| minHeight       | `number`                 | `4`                | The height of the bar.                                                                |
+| borderRadius    | `number \| BorderRadius` | `undefined`        | The border radius of the indicator.                                                   |
 
 ### CircularProgressIndicator
 

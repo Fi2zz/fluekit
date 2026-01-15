@@ -15,7 +15,8 @@
     "prepare": "husky",
     "build:flue": "pnpm --filter fluekit run build",
     "docs:dev": "pnpm --filter fluekit-docs run docs:dev",
-    "docs:build": "pnpm --filter fluekit-docs run docs:build"
+    "docs:build": "pnpm --filter fluekit-docs run docs:build",
+    "bump": "node scripts/bump-version.js"
   },
   "lint-staged": {
     "*.{js,ts,tsx,vue}": [

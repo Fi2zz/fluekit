@@ -25,6 +25,9 @@ help:
 	@echo "  make clean      - Clean build artifacts"
 	@echo "  make publish    - Publish package to npm (requires login)"
 	@echo "  make publish-dry - Dry run publish to check contents"
+	@echo "  make bump-patch - Bump patch version"
+	@echo "  make bump-minor - Bump minor version"
+	@echo "  make bump-major - Bump major version"
 
 # Install dependencies
 install:
@@ -60,6 +63,16 @@ clean:
 	rm -rf packages/fluekit/node_modules
 	rm -rf packages/docs/node_modules
 	rm -rf node_modules
+
+# Version Bumping
+bump-patch:
+	pnpm run bump patch
+
+bump-minor:
+	pnpm run bump minor
+
+bump-major:
+	pnpm run bump major
 
 # Publish flow
 # Note: Ensure you are logged in to npm via `npm login` or `pnpm login` before running this

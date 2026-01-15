@@ -12,6 +12,14 @@
         :color="Colors.green"
         :background-color="Colors.green100"
       />
+
+      <Text data="Rounded Corners" :style="{ fontSize: 14, color: '#666' }" />
+      <LinearProgressIndicator
+        :value="0.7"
+        :borderRadius="10"
+        :minHeight="10"
+        :color="Colors.orange"
+      />
     </Column>
 
     <!-- Circular Progress -->

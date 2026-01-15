@@ -8,6 +8,7 @@
 import { computed, type CSSProperties } from "vue";
 import { Colors } from "./Colors";
 import { Color } from "./Color";
+import { BorderRadius, borderRadiusToStyle, isBorderRadius } from "./BorderRadius";
 
 interface Props {
   /**
@@ -28,6 +29,10 @@ interface Props {
    * Default: 4.0
    */
   minHeight?: number;
+  /**
+   * The border radius of the progress indicator.
+   */
+  borderRadius?: number | BorderRadius;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -38,13 +43,23 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const containerStyle = computed<CSSProperties>(() => {
-  return {
+  const style: CSSProperties = {
     height: `${props.minHeight}px`,
     backgroundColor: props.backgroundColor.toString(),
     overflow: "hidden",
     position: "relative",
     width: "100%",
   };
+
+  if (props.borderRadius) {
+    if (typeof props.borderRadius === "number") {
+      Object.assign(style, borderRadiusToStyle(BorderRadius.circular(props.borderRadius)));
+    } else if (isBorderRadius(props.borderRadius)) {
+      Object.assign(style, borderRadiusToStyle(props.borderRadius));
+    }
+  }
+
+  return style;
 });
 
 const barStyle = computed<CSSProperties>(() => {
