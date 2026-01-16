@@ -28,11 +28,14 @@ const getCanvasContext = () => {
  * @returns A Promise that resolves to the dominant Color, or null if extraction fails.
  */
 export async function extractDominantColor(imageSrc: string): Promise<Color | null> {
+  if (typeof window === "undefined" || typeof Image === "undefined") {
+    return null;
+  }
+
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = "Anonymous";
     img.src = imageSrc;
-
     img.onload = () => {
       try {
         const ctx = getCanvasContext();
