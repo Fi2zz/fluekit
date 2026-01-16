@@ -31,9 +31,10 @@ import Stack from "./Stack.vue";
 import Column from "./Column.vue";
 import Expanded from "./Expanded.vue";
 import Positioned from "./Positioned.vue";
+import { Color } from "./Color";
 
 export interface ScaffoldProps {
-  backgroundColor?: string;
+  backgroundColor?: string | Color;
 }
 
 withDefaults(defineProps<ScaffoldProps>(), {

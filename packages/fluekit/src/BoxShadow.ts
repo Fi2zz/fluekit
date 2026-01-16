@@ -1,5 +1,6 @@
 import { px2vw } from "./px2vw";
 import { isPlainObject } from "./utils";
+import { Color, resolveColor } from "./Color";
 
 export interface Offset {
   x: number;
@@ -14,7 +15,7 @@ export enum BlurStyle {
 }
 
 export interface BoxShadowProps {
-  color?: string;
+  color?: string | Color;
   offset?: Offset;
   blurRadius?: number;
   spreadRadius?: number;
@@ -52,7 +53,7 @@ export function boxShadowToCSS(shadow: BoxShadowProps): string {
   const y = px2vw(shadow.offset?.y || 0);
   const blur = px2vw(shadow.blurRadius || 0);
   const spread = px2vw(shadow.spreadRadius || 0);
-  const color = shadow.color || "rgba(0,0,0,0.2)";
+  const color = resolveColor(shadow.color) || "rgba(0,0,0,0.2)";
 
   // CSS box-shadow doesn't fully support all Flutter BlurStyles (like solid/outer) directly in the same way.
   // 'inner' maps to 'inset'.

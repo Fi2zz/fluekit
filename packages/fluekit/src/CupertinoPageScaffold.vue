@@ -22,9 +22,10 @@ import Container from "./Container.vue";
 import Stack from "./Stack.vue";
 import Column from "./Column.vue";
 import Expanded from "./Expanded.vue";
+import { Color } from "./Color";
 
 export interface CupertinoPageScaffoldProps {
-  backgroundColor?: string;
+  backgroundColor?: string | Color;
 }
 
 withDefaults(defineProps<CupertinoPageScaffoldProps>(), {

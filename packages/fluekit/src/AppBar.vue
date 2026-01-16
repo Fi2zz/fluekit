@@ -31,10 +31,11 @@ import Text from "./Text.vue";
 import { EdgeInsets } from "./EdgeInsets";
 import { BoxDecoration } from "./BoxDecoration";
 import { TextStyle, FontWeight, TextOverflow } from "./TextStyle";
+import { Color } from "./Color";
 
 export interface AppBarProps {
   title?: string;
-  backgroundColor?: string;
+  backgroundColor?: string | Color;
   height?: number;
   centerTitle?: boolean;
   elevation?: number;

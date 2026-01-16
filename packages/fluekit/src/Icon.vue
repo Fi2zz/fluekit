@@ -14,7 +14,7 @@
         :is="icon"
         :width="size"
         :height="size"
-        :fill="color"
+        :fill="resolveColor(color)"
         class="icon-svg"
       />
 
@@ -37,6 +37,7 @@
 <script setup lang="ts">
 import { computed, type Component, type CSSProperties } from "vue";
 import { px2vw } from "./px2vw";
+import { Color, resolveColor } from "./Color";
 
 defineOptions({ inheritAttrs: false });
 
@@ -58,7 +59,7 @@ interface Props {
    * The color to use when drawing the icon.
    * Defaults to the current text color.
    */
-  color?: string;
+  color?: string | Color;
 
   /**
    * Semantic label for accessibility.
@@ -87,7 +88,7 @@ const iconStyle = computed(() => {
     width: s,
     height: s,
     fontSize: s, // For font-based icons if slot is used
-    color: props.color || "inherit",
+    color: resolveColor(props.color) || "inherit",
     lineHeight: 1,
     verticalAlign: "middle",
   };

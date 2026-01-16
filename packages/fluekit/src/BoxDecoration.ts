@@ -5,6 +5,7 @@ import { BorderRadius, borderRadiusToStyle, isBorderRadius } from "./BorderRadiu
 import { BoxShadowProps, boxShadowToCSS, isBoxShadow } from "./BoxShadow";
 import { px2vw } from "./px2vw";
 import { isPlainObject, validateInDev } from "./utils";
+import { Color, resolveColor } from "./Color";
 
 import { ImageProvider } from "./ImageProvider";
 
@@ -142,7 +143,7 @@ export function DecorationImage(props: DecorationImageProps): DecorationImagePro
 const BOX_DECORATION_SYMBOL = Symbol("boxDecoration");
 
 export type BoxDecorationProps = {
-  color?: string;
+  color?: string | Color;
   border?: Borders;
   borderRadius?: BorderRadius;
   boxShadow?: BoxShadowProps | BoxShadowProps[];
@@ -241,7 +242,7 @@ export function boxDecorationToStyle(decoration?: BoxDecorationProps): CSSProper
 
   const style: CSSProperties = {};
 
-  if (color) style.backgroundColor = color;
+  if (color) style.backgroundColor = resolveColor(color);
   if (opacity !== undefined) style.opacity = opacity;
   if (overflow) style.overflow = overflow;
 

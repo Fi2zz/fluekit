@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { computed, type CSSProperties } from "vue";
 import { Colors } from "./Colors";
-import { Color } from "./Color";
+import { Color, resolveColor } from "./Color";
 import { BorderRadius, borderRadiusToStyle, isBorderRadius } from "./BorderRadius";
 
 interface Props {
@@ -45,7 +45,7 @@ const props = withDefaults(defineProps<Props>(), {
 const containerStyle = computed<CSSProperties>(() => {
   const style: CSSProperties = {
     height: `${props.minHeight}px`,
-    backgroundColor: props.backgroundColor.toString(),
+    backgroundColor: resolveColor(props.backgroundColor),
     overflow: "hidden",
     position: "relative",
     width: "100%",
@@ -64,7 +64,7 @@ const containerStyle = computed<CSSProperties>(() => {
 
 const barStyle = computed<CSSProperties>(() => {
   const isIndeterminate = props.value === null;
-  const colorStr = props.color.toString();
+  const colorStr = resolveColor(props.color);
 
   if (!isIndeterminate) {
     // Determinate
@@ -90,16 +90,19 @@ const barStyle = computed<CSSProperties>(() => {
 
 <style scoped>
 .flue-linear-progress-indicator {
-  border-radius: 0; /* Material design is rectangular usually, but could be rounded */
+  border-radius: 0;
+  /* Material design is rectangular usually, but could be rounded */
 }
 
 @keyframes flue-linear-indeterminate {
   0% {
     transform: translateX(0) scaleX(0);
   }
+
   40% {
     transform: translateX(0) scaleX(0.4);
   }
+
   100% {
     transform: translateX(100%) scaleX(0.5);
   }

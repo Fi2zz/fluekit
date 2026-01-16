@@ -15,7 +15,7 @@
           viewBox="0 0 24 24"
           :width="14"
           :height="14"
-          :fill="checkColor"
+          :fill="resolveColor(checkColor)"
           style="display: block"
         >
           <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
@@ -35,12 +35,13 @@ import { BoxDecoration } from "./BoxDecoration";
 import { BorderRadius } from "./BorderRadius";
 import { Border } from "./Border";
 import { CheckboxGroupKey } from "./CheckboxTypes";
+import { Color, resolveColor } from "./Color";
 
 export interface CheckboxProps<T> {
   value?: T;
   onChanged?: (value: T) => void;
-  activeColor?: string;
-  checkColor?: string;
+  activeColor?: string | Color;
+  checkColor?: string | Color;
   labelPosition?: "left" | "right";
   hideIcon?: boolean;
 }

@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { computed, type CSSProperties } from "vue";
 import { CupertinoColors } from "./CupertinoColors";
-import { Color } from "./Color";
+import { Color, resolveColor } from "./Color";
 
 interface Props {
   /**
@@ -37,6 +37,8 @@ const props = withDefaults(defineProps<Props>(), {
   radius: 10,
 });
 
+const resolvedColor = computed(() => resolveColor(props.color));
+
 const containerStyle = computed<CSSProperties>(() => ({
   width: `${props.radius * 2}px`,
   height: `${props.radius * 2}px`,
@@ -47,7 +49,6 @@ const containerStyle = computed<CSSProperties>(() => ({
 const bladeStyle = (index: number): CSSProperties => {
   const bladeWidth = props.radius / 3.5; // Heuristic based on radius
   const bladeHeight = props.radius / 1.2;
-  const colorStr = props.color.toString();
 
   return {
     position: "absolute",
@@ -75,8 +76,9 @@ const bladeStyle = (index: number): CSSProperties => {
   position: html;
   display: block;
   width: 100%;
-  height: 25%; /* Blade length relative to container diameter */
-  background-color: v-bind("props.color.toString()");
+  height: 25%;
+  /* Blade length relative to container diameter */
+  background-color: v-bind("resolvedColor");
   border-radius: 10px;
 }
 
@@ -89,36 +91,47 @@ const bladeStyle = (index: number): CSSProperties => {
 .flue-cupertino-activity-indicator-blade:nth-child(1) {
   animation-delay: -1s;
 }
+
 .flue-cupertino-activity-indicator-blade:nth-child(2) {
   animation-delay: -0.9167s;
 }
+
 .flue-cupertino-activity-indicator-blade:nth-child(3) {
   animation-delay: -0.8333s;
 }
+
 .flue-cupertino-activity-indicator-blade:nth-child(4) {
   animation-delay: -0.75s;
 }
+
 .flue-cupertino-activity-indicator-blade:nth-child(5) {
   animation-delay: -0.6667s;
 }
+
 .flue-cupertino-activity-indicator-blade:nth-child(6) {
   animation-delay: -0.5833s;
 }
+
 .flue-cupertino-activity-indicator-blade:nth-child(7) {
   animation-delay: -0.5s;
 }
+
 .flue-cupertino-activity-indicator-blade:nth-child(8) {
   animation-delay: -0.4167s;
 }
+
 .flue-cupertino-activity-indicator-blade:nth-child(9) {
   animation-delay: -0.3333s;
 }
+
 .flue-cupertino-activity-indicator-blade:nth-child(10) {
   animation-delay: -0.25s;
 }
+
 .flue-cupertino-activity-indicator-blade:nth-child(11) {
   animation-delay: -0.1667s;
 }
+
 .flue-cupertino-activity-indicator-blade:nth-child(12) {
   animation-delay: -0.0833s;
 }
@@ -127,8 +140,11 @@ const bladeStyle = (index: number): CSSProperties => {
   0% {
     opacity: 1;
   }
+
   100% {
     opacity: 0.3;
-  } /* Fade out to partial opacity */
+  }
+
+  /* Fade out to partial opacity */
 }
 </style>

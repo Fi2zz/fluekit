@@ -6,6 +6,7 @@
 import { CSSProperties } from "vue";
 import { px2vw } from "./px2vw";
 import { isPlainObject, validateInDev } from "./utils";
+import { Color, resolveColor } from "./Color";
 // import { build } from "vite";
 /**
  * 字体粗细枚举，对应 Flutter 的 FontWeight
@@ -97,7 +98,7 @@ export enum TextDirection {
 
 export interface TextShadow {
   /** 阴影颜色 */
-  color?: string;
+  color?: string | Color;
   /** 水平偏移 */
   offsetX?: number;
   /** 垂直偏移 */
@@ -108,8 +109,8 @@ export interface TextShadow {
 
 export interface TextStyleProps {
   inherit?: boolean;
-  color?: string;
-  backgroundColor?: string;
+  color?: string | Color;
+  backgroundColor?: string | Color;
   fontSize?: number;
   fontWeight?: FontWeight | number;
   fontStyle?: FontStyle;
@@ -125,7 +126,7 @@ export interface TextStyleProps {
   fontFeatures?: any; // 对应 font-feature-settings
   fontVariations?: any; // 对应 font-variation-settings
   decoration?: TextDecoration;
-  decorationColor?: string;
+  decorationColor?: string | Color;
   decorationStyle?: TextDecorationStyle;
   decorationThickness?: number;
   debugLabel?: string;
@@ -204,7 +205,7 @@ export function toCSSStyle(props: TextStyleProps = {}): CSSProperties {
     // 优先使用 foreground (Paint -> CSS)
     Object.assign(cssStyle, props.foreground);
   } else if (props.color) {
-    cssStyle.color = props.color;
+    cssStyle.color = resolveColor(props.color);
   }
 
   // 2. BackgroundColor / Background
@@ -212,7 +213,7 @@ export function toCSSStyle(props: TextStyleProps = {}): CSSProperties {
     // 优先使用 background (Paint -> CSS)
     Object.assign(cssStyle, props.background);
   } else if (props.backgroundColor) {
-    cssStyle.backgroundColor = props.backgroundColor;
+    cssStyle.backgroundColor = resolveColor(props.backgroundColor);
   }
 
   // 3. Font Attributes
@@ -255,7 +256,7 @@ export function toCSSStyle(props: TextStyleProps = {}): CSSProperties {
     cssStyle.textDecoration = props.decoration;
   }
   if (props.decorationColor) {
-    cssStyle.textDecorationColor = props.decorationColor;
+    cssStyle.textDecorationColor = resolveColor(props.decorationColor);
   }
   if (props.decorationStyle) {
     cssStyle.textDecorationStyle = props.decorationStyle;
@@ -293,7 +294,7 @@ export function toCSSStyle(props: TextStyleProps = {}): CSSProperties {
       const offsetX = shadow.offsetX || 0;
       const offsetY = shadow.offsetY || 0;
       const blurRadius = shadow.blurRadius || 0;
-      const color = shadow.color || "rgba(0,0,0,0.5)";
+      const color = resolveColor(shadow.color) || "rgba(0,0,0,0.5)";
       return `${px2vw(offsetX)} ${px2vw(offsetY)} ${px2vw(blurRadius)} ${color}`;
     });
     cssStyle.textShadow = shadowStrings.join(", ");

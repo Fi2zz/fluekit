@@ -25,13 +25,14 @@ import GestureDetector from "./GestureDetector.vue";
 import { BoxDecoration, BoxShape } from "./BoxDecoration";
 import { Border } from "./Border";
 import { RadioGroupKey } from "./RadioTypes";
+import { Color } from "./Color";
 
 export interface RadioProps<T> {
   value: T;
   groupValue?: T;
   onChanged?: (value: T) => void;
-  activeColor?: string;
-  fillColor?: string;
+  activeColor?: string | Color;
+  fillColor?: string | Color;
   labelPosition?: "left" | "right";
   hideIcon?: boolean;
 }

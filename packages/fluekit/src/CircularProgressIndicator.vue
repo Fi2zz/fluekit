@@ -7,7 +7,7 @@
         cy="20"
         :r="radius"
         fill="none"
-        :stroke="backgroundColor?.toString() || 'transparent'"
+        :stroke="resolveColor(backgroundColor) || 'transparent'"
         :stroke-width="strokeWidth"
       />
       <circle
@@ -16,7 +16,7 @@
         cy="20"
         :r="radius"
         fill="none"
-        :stroke="color.toString()"
+        :stroke="resolveColor(color)"
         :stroke-width="strokeWidth"
         stroke-linecap="round"
         :stroke-dasharray="dashArray"
@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { computed, type CSSProperties } from "vue";
 import { Colors } from "./Colors";
-import { Color } from "./Color";
+import { Color, resolveColor } from "./Color";
 
 interface Props {
   /**
@@ -117,6 +117,7 @@ const circleStyle = computed<CSSProperties>(() => {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -127,10 +128,12 @@ const circleStyle = computed<CSSProperties>(() => {
     stroke-dasharray: 1, 200;
     stroke-dashoffset: 0;
   }
+
   50% {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -35px;
   }
+
   100% {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -124px;

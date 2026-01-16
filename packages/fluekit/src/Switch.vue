@@ -25,14 +25,15 @@ import GestureDetector from "./GestureDetector.vue";
 import { BoxDecoration, BoxShape } from "./BoxDecoration";
 import { BorderRadius } from "./BorderRadius";
 import { EdgeInsets } from "./EdgeInsets";
+import { Color } from "./Color";
 
 interface Props {
   value: boolean;
   onChanged?: (value: boolean) => void;
-  activeColor?: string;
-  activeTrackColor?: string;
-  inactiveThumbColor?: string;
-  inactiveTrackColor?: string;
+  activeColor?: string | Color;
+  activeTrackColor?: string | Color;
+  inactiveThumbColor?: string | Color;
+  inactiveTrackColor?: string | Color;
   variant?: "material" | "ios";
 }
 

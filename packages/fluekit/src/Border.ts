@@ -1,6 +1,7 @@
 import { px2vw } from "./px2vw";
 import { CSSProperties } from "vue";
 import { isPlainObject } from "./utils";
+import { Color, resolveColor } from "./Color";
 export type BorderStyleType = "none" | "solid" | "dashed" | "dotted" | "double";
 
 // 定义唯一符号标记
@@ -9,7 +10,7 @@ const BORDERS_SYMBOL = Symbol("borders");
 
 export type BorderSide = {
   width?: number | string;
-  color?: string;
+  color?: string | Color;
   style?: BorderStyleType;
   [BORDER_SIDE_SYMBOL]?: true;
 };
@@ -33,7 +34,11 @@ export function BorderSide(side: Omit<BorderSide, typeof BORDER_SIDE_SYMBOL>): B
 
 export interface BorderFunction {
   (side: Omit<BorderSide, typeof BORDER_SIDE_SYMBOL>): BorderSide;
-  all: (options?: { color?: string; width?: number | string; style?: BorderStyleType }) => Borders;
+  all: (options?: {
+    color?: string | Color;
+    width?: number | string;
+    style?: BorderStyleType;
+  }) => Borders;
   only: (options?: {
     top?: BorderSide;
     right?: BorderSide;
@@ -58,7 +63,7 @@ export const Border: BorderFunction = Object.assign(
       width,
       style,
     }: {
-      color?: string;
+      color?: string | Color;
       width?: number | string;
       style?: BorderStyleType;
     } = {}) => {
@@ -108,7 +113,7 @@ function borderSideToString(side?: BorderSide) {
   const parts = [];
   const { width, color, style } = side;
   if (width) parts.push((width as number) > 1 ? px2vw(width) : width + "px");
-  if (color) parts.push(color);
+  if (color) parts.push(resolveColor(color));
   if (style) parts.push(style);
   return `${parts.join(" ")}`;
 }

@@ -61,12 +61,11 @@
       v-if="decoration?.errorText || decoration?.helperText || (maxLength && maxLength > 0)"
       class="fluekit-input-footer"
     >
-      <div
-        v-if="decoration?.errorText || decoration?.helperText"
-        class="fluekit-input-helper"
-        :class="{ 'is-error': !!decoration?.errorText }"
-      >
-        {{ decoration?.errorText || decoration?.helperText }}
+      <div v-if="decoration?.errorText" class="fluekit-input-helper is-error" :style="errorStyle">
+        {{ decoration.errorText }}
+      </div>
+      <div v-else-if="decoration?.helperText" class="fluekit-input-helper" :style="helperStyle">
+        {{ decoration.helperText }}
       </div>
 
       <!-- Spacer if helper exists but we want counter on the right -->
@@ -94,6 +93,7 @@ import { type InputDecoration, type InputBorder, UnderlineInputBorder } from "./
 import { type TextStyle, toCSSStyle as textStyleToCSS } from "./TextStyle";
 import { BorderSide, borderSideToStyle } from "./Border";
 import { BorderRadius, borderRadiusToStyle } from "./BorderRadius";
+import { Color, resolveColor } from "./Color";
 
 defineOptions({ inheritAttrs: false });
 
@@ -107,7 +107,7 @@ interface Props {
   minLines?: number;
   keyboardType?: string; // 'text', 'number', 'email', 'multiline', etc.
   style?: TextStyle; // Text style
-  cursorColor?: string;
+  cursorColor?: string | Color;
   autofocus?: boolean;
   autoGrow?: boolean;
   maxLength?: number;
@@ -259,14 +259,14 @@ const containerStyle = computed<CSSProperties>(() => {
   } else {
     // Underline logic
     const side = border.borderSide || BorderSide({ width: 1, color: "#888" });
-    css.borderBottom = `${side.width}px ${side.style || "solid"} ${side.color}`;
+    css.borderBottom = `${side.width}px ${side.style || "solid"} ${resolveColor(side.color)}`;
     css.borderRadius = "0"; // No radius for underline usually
     css.padding = "4px 0";
   }
 
   // Background
   if (props.decoration?.filled) {
-    css.backgroundColor = props.decoration.fillColor || "#f0f0f0";
+    css.backgroundColor = resolveColor(props.decoration.fillColor) || "#f0f0f0";
   }
 
   return css;
@@ -277,7 +277,7 @@ const inputStyle = computed<CSSProperties>(() => {
     ...textStyleToCSS(props.style),
   };
   if (props.cursorColor) {
-    css.caretColor = props.cursorColor;
+    css.caretColor = resolveColor(props.cursorColor);
   }
   if (props.textAlign) {
     css.textAlign = props.textAlign;
@@ -309,6 +309,30 @@ const labelStyle = computed<CSSProperties>(() => {
   return css;
 });
 
+const helperStyle = computed<CSSProperties>(() => {
+  return textStyleToCSS(props.decoration?.helperStyle);
+});
+
+const errorStyle = computed<CSSProperties>(() => {
+  return textStyleToCSS(props.decoration?.errorStyle);
+});
+
+const hintColor = computed(() => {
+  if (props.decoration?.hintStyle?.color) {
+    return resolveColor(props.decoration.hintStyle.color);
+  }
+  return "#999"; // Default hint color
+});
+
+const hintFontStyle = computed(() => {
+  // We can pass font size, weight, etc. via a serialized string or individual vars
+  // For simplicity, we just use color for placeholder for now, as full style injection is complex via v-bind in scoped styles
+  // But let's try to support font size at least if provided
+  return props.decoration?.hintStyle?.fontSize
+    ? `${props.decoration.hintStyle.fontSize}px`
+    : "inherit";
+});
+
 // Events
 const handleInput = (e: Event) => {
   const target = e.target as HTMLInputElement;
@@ -332,8 +356,8 @@ const handleBlur = (e: FocusEvent) => {
   position: relative;
   margin-top: 16px; /* Space for floating label */
   font-family: inherit;
+  width: 100%;
 }
-
 .fluekit-input-container {
   /* Defined in dynamic style */
   width: 100%;
@@ -352,6 +376,12 @@ const handleBlur = (e: FocusEvent) => {
   font-size: 16px;
   color: inherit;
   resize: none; /* Handle via auto-grow or maxLines */
+}
+
+.fluekit-input-element::placeholder {
+  color: v-bind("hintColor");
+  font-size: v-bind("hintFontStyle");
+  opacity: 1; /* Firefox default is lower */
 }
 
 .fluekit-input-label {

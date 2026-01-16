@@ -1,6 +1,7 @@
 import { BorderSide } from "./Border";
 import { BorderRadius } from "./BorderRadius";
 import { TextStyle } from "./TextStyle";
+import { Color } from "./Color";
 
 export interface InputBorder {
   borderSide?: BorderSide;
@@ -55,12 +56,13 @@ export interface InputDecoration {
 
   // Style
   filled?: boolean;
-  fillColor?: string;
+  fillColor?: string | Color;
 
   contentPadding?: number | number[]; // simplistic padding
 
   // Label Style
   labelStyle?: TextStyle;
   hintStyle?: TextStyle;
+  helperStyle?: TextStyle;
   errorStyle?: TextStyle;
 }

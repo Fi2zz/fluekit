@@ -22,6 +22,7 @@ import { useGestureEvents, useGestureStyle, type Behavior } from "./useGesture";
 import { useSafeAttrs } from "./useSafeAttrs";
 import { EdgeInsets } from "./EdgeInsets";
 import { BorderRadius } from "./BorderRadius";
+import { Color, resolveColor } from "./Color";
 
 defineOptions({ inheritAttrs: false });
 
@@ -35,8 +36,8 @@ interface Props {
 
   // iOS 风格属性
   variant?: "ios" | "raw"; // 默认为 raw (无样式)
-  color?: string; // 背景色快捷方式 (仅对 variant='ios' 生效或作为默认背景)
-  disabledColor?: string;
+  color?: string | Color; // 背景色快捷方式 (仅对 variant='ios' 生效或作为默认背景)
+  disabledColor?: string | Color;
   pressedOpacity?: number;
   padding?: EdgeInsets;
   borderRadius?: BorderRadius;
@@ -92,7 +93,7 @@ const computedStyle = computed(() => {
   if (props.disabled) {
     css.pointerEvents = "none";
     if (props.color || props.disabledColor) {
-      css.backgroundColor = props.disabledColor || props.color;
+      css.backgroundColor = resolveColor(props.disabledColor || props.color);
     }
   }
   if (isPressed.value) css.opacity = props.pressedOpacity;

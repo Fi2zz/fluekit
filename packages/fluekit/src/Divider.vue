@@ -17,13 +17,14 @@ import { computed } from "vue";
 import SizedBox from "./SizedBox.vue";
 import Container from "./Container.vue";
 import { EdgeInsets } from "./EdgeInsets";
+import { Color } from "./Color";
 
 interface Props {
   height?: number; // Total height of the divider widget (including empty space) for horizontal divider
   thickness?: number; // Thickness of the line
   indent?: number; // Empty space before the line
   endIndent?: number; // Empty space after the line
-  color?: string; // Color of the line
+  color?: string | Color; // Color of the line
   vertical?: boolean; // If true, draws a vertical line (VerticalDivider)
 }
 

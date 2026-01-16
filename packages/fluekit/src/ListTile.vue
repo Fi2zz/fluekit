@@ -41,6 +41,7 @@ import Text from "./Text.vue";
 import GestureDetector from "./GestureDetector.vue";
 import { EdgeInsets } from "./EdgeInsets";
 import { TextStyle, FontWeight } from "./TextStyle";
+import { Color } from "./Color";
 
 const emit = defineEmits<{
   (e: "tap"): void;
@@ -71,10 +72,10 @@ interface Props {
   selected?: boolean;
 
   // Styling
-  tileColor?: string;
-  selectedColor?: string;
-  iconColor?: string;
-  textColor?: string;
+  tileColor?: string | Color;
+  selectedColor?: string | Color;
+  iconColor?: string | Color;
+  textColor?: string | Color;
   contentPadding?: EdgeInsets;
   dense?: boolean;
 }

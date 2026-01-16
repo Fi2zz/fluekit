@@ -1,4 +1,5 @@
 import { Alignment, alignmentToCssPosition } from "./Alignment";
+import { Color, resolveColor } from "./Color";
 
 export enum TileMode {
   clamp = "clamp",
@@ -13,7 +14,7 @@ export interface GradientTransform {
 }
 
 export interface GradientProps {
-  colors: string[];
+  colors: (string | Color)[];
   stops?: number[];
   transform?: GradientTransform;
   tileMode?: TileMode;
@@ -86,9 +87,9 @@ export function LinearGradient(props: LinearGradientProps): string {
 
   let colorStopsString = "";
   if (stops && stops.length === colors.length) {
-    colorStopsString = colors.map((c, i) => `${c} ${stops![i]! * 100}%`).join(", ");
+    colorStopsString = colors.map((c, i) => `${resolveColor(c)} ${stops![i]! * 100}%`).join(", ");
   } else {
-    colorStopsString = colors.join(", ");
+    colorStopsString = colors.map((c) => resolveColor(c)).join(", ");
   }
 
   return `linear-gradient(${direction}, ${colorStopsString})`;
@@ -109,9 +110,9 @@ export function RadialGradient(props: RadialGradientProps): string {
 
   let colorStopsString = "";
   if (stops && stops.length === colors.length) {
-    colorStopsString = colors.map((c, i) => `${c} ${stops![i]! * 100}%`).join(", ");
+    colorStopsString = colors.map((c, i) => `${resolveColor(c)} ${stops![i]! * 100}%`).join(", ");
   } else {
-    colorStopsString = colors.join(", ");
+    colorStopsString = colors.map((c) => resolveColor(c)).join(", ");
   }
 
   return `radial-gradient(circle at ${position}, ${colorStopsString})`;

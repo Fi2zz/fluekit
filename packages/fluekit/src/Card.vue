@@ -11,10 +11,11 @@ import { BoxDecoration } from "./BoxDecoration";
 import { BorderRadius } from "./BorderRadius";
 import { BoxShadow } from "./BoxShadow";
 import { EdgeInsets } from "./EdgeInsets";
+import { Color } from "./Color";
 
 interface Props {
-  color?: string;
-  shadowColor?: string;
+  color?: string | Color;
+  shadowColor?: string | Color;
   elevation?: number;
   shape?: BorderRadius;
   margin?: EdgeInsets;

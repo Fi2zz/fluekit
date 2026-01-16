@@ -7,26 +7,19 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-
+import { Color, resolveColor } from "./Color";
 defineOptions({ inheritAttrs: false });
-
 interface Props {
-  onTap?: () => void;
-  splashColor?: string;
-  highlightColor?: string;
+  splashColor?: string | Color;
+  highlightColor?: string | Color;
   borderRadius?: string; // CSS border-radius
   disabled?: boolean;
 }
-
 const props = withDefaults(defineProps<Props>(), {
   splashColor: "rgba(0, 0, 0, 0.1)",
   disabled: false,
 });
-
-const emit = defineEmits<{
-  (e: "tap"): void;
-}>();
-
+const emit = defineEmits<{ (e: "tap"): void }>();
 interface Ripple {
   id: number;
   style: Record<string, string>;
@@ -34,11 +27,9 @@ interface Ripple {
 
 const ripples = ref<Ripple[]>([]);
 let rippleCount = 0;
-
 const handleClick = (e: MouseEvent) => {
   if (props.disabled) return;
   emit("tap");
-
   const el = e.currentTarget as HTMLElement;
   const rect = el.getBoundingClientRect();
   const size = Math.max(rect.width, rect.height);
@@ -51,7 +42,7 @@ const handleClick = (e: MouseEvent) => {
     height: `${size}px`,
     top: `${y}px`,
     left: `${x}px`,
-    backgroundColor: props.splashColor,
+    backgroundColor: resolveColor(props.splashColor) || "rgba(0,0,0,0.1)",
   };
 
   ripples.value.push({ id, style });

@@ -22,6 +22,7 @@ import type { EdgeInsets } from "./EdgeInsets";
 import { isEdgeInsets, marginToStyle, paddingToStyle } from "./EdgeInsets";
 import { sizeToStyle } from "./Size";
 import { useGestureEvents, useGestureStyle } from "./useGesture";
+import { Color, resolveColor } from "./Color";
 interface Props {
   width?: number | string;
   height?: number | string;
@@ -29,7 +30,7 @@ interface Props {
   margin?: EdgeInsets;
   decoration?: BoxDecoration;
   foregroundDecoration?: BoxDecoration;
-  color?: string;
+  color?: string | Color;
   alignment?: Alignment;
   clipBehavior?: "none" | "hardEdge" | "antiAlias" | string;
   transform?: string;
@@ -143,7 +144,7 @@ const computedStyle = computed(() => {
   // 处理 color vs decoration 冲突：如果 decoration 存在，忽略 props.color
   const effectiveColor = props.decoration ? undefined : props.color;
   const style: CSSProperties = {
-    backgroundColor: effectiveColor,
+    backgroundColor: resolveColor(effectiveColor),
     transform: props.transform,
     transformOrigin: props.transformAlignment
       ? alignmentToOrigin(props.transformAlignment)

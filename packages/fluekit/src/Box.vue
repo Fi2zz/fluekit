@@ -25,6 +25,7 @@ import type { EdgeInsets } from "./EdgeInsets";
 import type { Borders } from "./Border";
 import type { BorderRadius } from "./BorderRadius";
 import type { BoxShadow } from "./BoxShadow";
+import { Color } from "./Color";
 
 interface Props {
   width?: number | string;
@@ -38,7 +39,7 @@ interface Props {
   clipBehavior?: "none" | "hardEdge" | "antiAlias" | string;
 
   // Style props that would normally go into BoxDecoration
-  color?: string;
+  color?: string | Color;
   border?: Borders;
   borderRadius?: BorderRadius;
   boxShadow?: BoxShadow[];

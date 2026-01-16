@@ -49,14 +49,15 @@ import { BorderRadius } from "./BorderRadius";
 import { BoxShadow } from "./BoxShadow";
 import { GestureDetail } from "./useGesture";
 import { StackFit } from "./FlexProps";
+import { Color } from "./Color";
 
 interface Props {
   value: number;
   min?: number;
   max?: number;
-  activeColor?: string;
-  inactiveColor?: string;
-  thumbColor?: string;
+  activeColor?: string | Color;
+  inactiveColor?: string | Color;
+  thumbColor?: string | Color;
   variant?: "material" | "ios";
 }
 

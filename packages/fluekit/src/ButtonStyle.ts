@@ -6,13 +6,14 @@ import { EdgeInsets, paddingToStyle } from "./EdgeInsets";
 import { SizeType, sizeToStyle } from "./Size";
 import { px2vw } from "./px2vw";
 import { TextStyle, toCSSStyle as textStyleToCSS } from "./TextStyle";
+import { Color, resolveColor } from "./Color";
 
 export interface ButtonStyle {
   textStyle?: TextStyle;
-  backgroundColor?: string;
-  foregroundColor?: string; // 文本颜色
-  overlayColor?: string; // 暂未实现水波纹，保留接口
-  shadowColor?: string;
+  backgroundColor?: string | Color;
+  foregroundColor?: string | Color; // 文本颜色
+  overlayColor?: string | Color; // 暂未实现水波纹，保留接口
+  shadowColor?: string | Color;
   elevation?: number;
   padding?: EdgeInsets;
   minimumSize?: SizeType;
@@ -35,8 +36,8 @@ export function buttonStyleToStyle(style?: ButtonStyle): CSSProperties {
 
   if (style.textStyle) Object.assign(css, textStyleToCSS(style.textStyle));
 
-  if (style.backgroundColor) css.backgroundColor = style.backgroundColor;
-  if (style.foregroundColor) css.color = style.foregroundColor;
+  if (style.backgroundColor) css.backgroundColor = resolveColor(style.backgroundColor);
+  if (style.foregroundColor) css.color = resolveColor(style.foregroundColor);
 
   if (style.padding) Object.assign(css, paddingToStyle(style.padding));
 
@@ -70,7 +71,7 @@ export function buttonStyleToStyle(style?: ButtonStyle): CSSProperties {
   if (style.shape) Object.assign(css, borderRadiusToStyle(style.shape));
 
   if (style.elevation) {
-    css.boxShadow = `0px ${px2vw(style.elevation)} ${px2vw(style.elevation * 2)} ${style.shadowColor || "rgba(0,0,0,0.2)"}`;
+    css.boxShadow = `0px ${px2vw(style.elevation)} ${px2vw(style.elevation * 2)} ${resolveColor(style.shadowColor) || "rgba(0,0,0,0.2)"}`;
   }
 
   if (style.alignment) {

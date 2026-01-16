@@ -55,10 +55,11 @@ import { EdgeInsets } from "./EdgeInsets";
 import { BoxDecoration } from "./BoxDecoration";
 import { Border, Borders } from "./Border";
 import { TextStyle, FontWeight, TextOverflow } from "./TextStyle";
+import { Color } from "./Color";
 
 export interface CupertinoNavigationBarProps {
   middle?: string;
-  backgroundColor?: string;
+  backgroundColor?: string | Color;
   border?: Borders | null;
   padding?: EdgeInsets;
 }
