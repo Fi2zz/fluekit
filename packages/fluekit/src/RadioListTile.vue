@@ -55,11 +55,10 @@
 </template>
 
 <script setup lang="ts" generic="T">
-import { computed } from "vue";
+import { EdgeInsets } from "./EdgeInsets";
 import ListTile from "./ListTile.vue";
 import Radio from "./Radio.vue";
 import Text from "./Text.vue";
-import { EdgeInsets } from "./EdgeInsets";
 
 export interface RadioListTileProps<T> {
   value: T;

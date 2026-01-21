@@ -1,4 +1,4 @@
-import { Color } from "./Color";
+import { Color, ColorUtils } from "./Color";
 
 export const CupertinoColors = {
   // Utility
@@ -15,11 +15,10 @@ export const CupertinoColors = {
   computeLuminance: (color: Color | string) =>
     (typeof color === "string" ? Color.fromString(color) : color).computeLuminance(),
   lighten: (color: Color | string, amount: number) => {
-    // Re-implement or use Color helper
-    return Color.fromString(typeof color === "string" ? color : color.toString()); // Placeholder logic, should use lighten/darken logic
+    return ColorUtils.lighten(color, amount);
   },
   darken: (color: Color | string, amount: number) => {
-    return Color.fromString(typeof color === "string" ? color : color.toString()); // Placeholder logic
+    return ColorUtils.darken(color, amount);
   },
 
   // Standard colors

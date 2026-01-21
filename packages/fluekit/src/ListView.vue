@@ -1,29 +1,36 @@
 <template>
-  <ScrollView
-    :scroll-direction="scrollDirection"
-    :padding="padding"
-    :physics="physics"
-    :clip-behavior="clipBehavior"
-    :shrink-wrap="shrinkWrap"
+  <component
+    :is="onRefresh ? RefreshIndicator : 'div'"
+    :onRefresh="onRefresh"
+    class="fluekit-list-view-wrapper"
   >
-    <div class="list-view-content" :style="contentStyle">
-      <slot v-if="!itemCount" />
-      <template v-else>
-        <template v-for="index in itemCount" :key="index - 1">
-          <slot name="item" :index="index - 1"></slot>
-          <div v-if="separator && index < itemCount" class="list-view-separator">
-            <slot name="separator" :index="index - 1"></slot>
-          </div>
+    <ScrollView
+      :scroll-direction="scrollDirection"
+      :padding="padding"
+      :physics="physics"
+      :clip-behavior="clipBehavior"
+      :shrink-wrap="shrinkWrap"
+    >
+      <div class="list-view-content" :style="contentStyle">
+        <slot v-if="!itemCount" />
+        <template v-else>
+          <template v-for="index in itemCount" :key="index - 1">
+            <slot name="item" :index="index - 1"></slot>
+            <div v-if="separator && index < itemCount" class="list-view-separator">
+              <slot name="separator" :index="index - 1"></slot>
+            </div>
+          </template>
         </template>
-      </template>
-    </div>
-  </ScrollView>
+      </div>
+    </ScrollView>
+  </component>
 </template>
 
 <script setup lang="ts">
 import { computed, type CSSProperties } from "vue";
 import type { EdgeInsets } from "./EdgeInsets";
 import ScrollView from "./ScrollView.vue";
+import RefreshIndicator from "./RefreshIndicator.vue";
 
 defineOptions({ inheritAttrs: false });
 
@@ -36,6 +43,7 @@ interface Props {
   itemExtent?: number;
   separator?: boolean; // 是否启用分隔符
   clipBehavior?: "none" | "hardEdge" | "antiAlias";
+  onRefresh?: () => Promise<void>;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -57,3 +65,12 @@ const contentStyle = computed<CSSProperties>(() => {
   };
 });
 </script>
+
+<style scoped>
+.fluekit-list-view-wrapper {
+  height: 100%;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+}
+</style>

@@ -1,13 +1,8 @@
-import { describe, it, expect, beforeAll } from "vitest";
-import { mount } from "@vue/test-utils";
-import Container from "../Container.vue";
-import { setTransform } from "../px2vw";
 import { EdgeInsets } from "@/EdgeInsets";
+import { mount } from "@vue/test-utils";
+import { describe, expect, it } from "vitest";
+import Container from "../Container.vue";
 describe("Container", () => {
-  beforeAll(() => {
-    setTransform(false);
-  });
-
   it("renders correctly", () => {
     const wrapper = mount(Container, {
       props: {

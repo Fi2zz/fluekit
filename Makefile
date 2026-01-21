@@ -63,6 +63,8 @@ clean:
 	rm -rf packages/fluekit/node_modules
 	rm -rf packages/docs/node_modules
 	rm -rf node_modules
+	rm -rf .vitepress/cache
+	
 
 # Version Bumping
 bump-patch:

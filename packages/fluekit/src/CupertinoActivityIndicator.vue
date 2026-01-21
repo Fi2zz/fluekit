@@ -48,8 +48,6 @@ const containerStyle = computed<CSSProperties>(() => ({
 
 const bladeStyle = (index: number): CSSProperties => {
   const bladeWidth = props.radius / 3.5; // Heuristic based on radius
-  const bladeHeight = props.radius / 1.2;
-
   return {
     position: "absolute",
     top: "0",

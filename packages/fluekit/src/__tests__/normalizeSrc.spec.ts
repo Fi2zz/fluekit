@@ -1,11 +1,7 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { normalizeSrc, setBaseUrl } from "../BoxDecoration";
+import { describe, it, expect } from "vitest";
+import { normalizeSrc } from "../BoxDecoration";
 
 describe("normalizeSrc", () => {
-  beforeEach(() => {
-    setBaseUrl("");
-  });
-
   it("should return empty string for null/undefined/empty input", () => {
     // @ts-ignore
     expect(normalizeSrc(null)).toBe("");
@@ -26,23 +22,12 @@ describe("normalizeSrc", () => {
     expect(normalizeSrc("blob:http://example.com/xxxx")).toBe("blob:http://example.com/xxxx");
   });
 
-  it("should not prepend baseUrl if not set", () => {
-    expect(normalizeSrc("assets/img.png")).toBe("assets/img.png");
-    expect(normalizeSrc("/assets/img.png")).toBe("/assets/img.png");
-  });
-
-  it("should prepend baseUrl correctly", () => {
-    setBaseUrl("/app");
-    expect(normalizeSrc("assets/img.png")).toBe("/app/assets/img.png");
-    expect(normalizeSrc("/assets/img.png")).toBe("/app/assets/img.png");
-
-    setBaseUrl("/app/");
-    expect(normalizeSrc("assets/img.png")).toBe("/app/assets/img.png");
-    expect(normalizeSrc("/assets/img.png")).toBe("/app/assets/img.png");
-  });
-
-  it("should avoid double prepending baseUrl", () => {
-    setBaseUrl("/app");
-    expect(normalizeSrc("/app/assets/img.png")).toBe("/app/assets/img.png");
+  it("should keep CSS gradients unchanged", () => {
+    expect(normalizeSrc("linear-gradient(to right, red, blue)")).toBe(
+      "linear-gradient(to right, red, blue)",
+    );
+    expect(normalizeSrc("radial-gradient(circle, red, blue)")).toBe(
+      "radial-gradient(circle, red, blue)",
+    );
   });
 });

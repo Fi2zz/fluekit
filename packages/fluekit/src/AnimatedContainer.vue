@@ -18,6 +18,7 @@ import { sizeToStyle } from "./Size";
 import { useGestureEvents, useGestureStyle } from "./useGesture";
 import { useSafeAttrs } from "./useSafeAttrs";
 import { useStyles } from "./StyleProvider";
+import { Color, resolveColor } from "./Color";
 defineOptions({ inheritAttrs: false });
 
 interface Props {
@@ -27,7 +28,7 @@ interface Props {
   margin?: EdgeInsets;
   decoration?: BoxDecoration;
   foregroundDecoration?: BoxDecoration;
-  color?: string;
+  color?: string | Color;
   alignment?: Alignment | string;
   clipBehavior?: "none" | "hardEdge" | "antiAlias" | string;
   transform?: string;
@@ -72,7 +73,7 @@ const computedStyle = computed(() => {
   };
 
   if (props.color && !props.decoration) {
-    baseStyle.backgroundColor = props.color;
+    baseStyle.backgroundColor = resolveColor(props.color);
   }
 
   if (props.transform) {

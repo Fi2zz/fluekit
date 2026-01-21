@@ -1,18 +1,23 @@
 <template>
-  <Container :height="height" :color="backgroundColor" :decoration="decoration" :padding="padding">
+  <Container :height="height" :decoration="decoration" :padding="padding" width="100%">
     <Row cross-axis-alignment="center" :gap="0" expanded>
       <div v-if="$slots.leading" class="flue-app-bar-leading">
         <slot name="leading" />
       </div>
-
+      <div v-else-if="scaffoldHasDrawer" class="flue-app-bar-leading">
+        <IconButton :icon="Icons.menu" color="blue" @pressed="scaffoldOpenDrawer" />
+      </div>
       <Expanded>
         <slot name="title">
-          <Text v-if="title" :style="titleStyle" :max-lines="1" :overflow="TextOverflow.ellipsis">
-            {{ title }}
-          </Text>
+          <Text
+            v-if="title"
+            :data="title"
+            :style="titleStyle"
+            :max-lines="1"
+            :overflow="TextOverflow.ellipsis"
+          />
         </slot>
       </Expanded>
-
       <div v-if="$slots.actions" class="flue-app-bar-actions">
         <Row main-axis-size="min" :gap="8">
           <slot name="actions" />
@@ -23,15 +28,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, inject, type Ref } from "vue";
 import Container from "./Container.vue";
 import Row from "./Row.vue";
 import Expanded from "./Expanded.vue";
 import Text from "./Text.vue";
+import IconButton from "./IconButton.vue";
 import { EdgeInsets } from "./EdgeInsets";
 import { BoxDecoration } from "./BoxDecoration";
 import { TextStyle, FontWeight, TextOverflow } from "./TextStyle";
 import { Color } from "./Color";
+import { Icons } from "./Icons";
 
 export interface AppBarProps {
   title?: string;
@@ -49,9 +56,13 @@ const props = withDefaults(defineProps<AppBarProps>(), {
   elevation: 4,
 });
 
+const scaffoldHasDrawer = inject<Ref<boolean>>("Scaffold.hasDrawer");
+const scaffoldOpenDrawer = inject<() => void>("Scaffold.openDrawer");
+
 const decoration = computed(() => {
   if (props.elevation > 0) {
     return BoxDecoration({
+      color: props.backgroundColor,
       boxShadow: [
         {
           color: "rgba(0,0,0,0.2)",
@@ -61,18 +72,15 @@ const decoration = computed(() => {
       ],
     });
   }
-  return undefined;
+  return BoxDecoration({
+    color: props.backgroundColor,
+  });
 });
 
 const padding = computed(() => {
   return props.padding || EdgeInsets.symmetric({ horizontal: 16 });
 });
-
-const titleStyle = TextStyle({
-  fontSize: 20,
-  fontWeight: FontWeight.w500,
-  color: "white",
-});
+const titleStyle = TextStyle({ fontSize: 20, fontWeight: FontWeight.w500, color: "white" });
 </script>
 
 <style scoped>

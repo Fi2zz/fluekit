@@ -1,28 +1,28 @@
 <template>
-  <div class="demo-container" style="height: 600px; border: 1px solid #eee">
+  <div class="demo-container" style="width: 375px">
     <div style="margin-bottom: 10px; text-align: center">
       <Button @click="isIOS = !isIOS">
         <Text>Switch to {{ isIOS ? "Material" : "iOS" }} Style</Text>
       </Button>
     </div>
 
-    <!-- iOS Style -->
-    <CupertinoPageScaffold v-if="isIOS">
-      <template #navigationBar>
-        <CupertinoNavigationBar middle="iOS Scaffold">
-          <template #leading>
-            <Button @click="console.log('Back')">
-              <Text :style="{ color: '#007AFF', fontSize: 17 }">Back</Text>
-            </Button>
-          </template>
-          <template #trailing>
-            <Button @click="console.log('Edit')">
-              <Text :style="{ color: '#007AFF', fontSize: 17 }">Edit</Text>
-            </Button>
-          </template>
-        </CupertinoNavigationBar>
-      </template>
-      <template #body>
+    <div style="height: 600px; width: 375px; border: 1px solid #eee">
+      <!-- iOS Style -->
+      <Scaffold v-if="isIOS">
+        <template #navigationBar>
+          <CupertinoNavigationBar middle="iOS Scaffold">
+            <template #leading>
+              <Button @click="console.log('Back')">
+                <Text :style="{ color: '#007AFF', fontSize: 17 }">Back</Text>
+              </Button>
+            </template>
+            <template #trailing>
+              <Button @click="console.log('Edit')">
+                <Text :style="{ color: '#007AFF', fontSize: 17 }">Edit</Text>
+              </Button>
+            </template>
+          </CupertinoNavigationBar>
+        </template>
         <ListView :padding="EdgeInsets.all(16)">
           <Container
             v-for="i in 20"
@@ -32,6 +32,7 @@
             :margin="EdgeInsets.only({ bottom: 1 })"
             alignment="centerLeft"
             :padding="EdgeInsets.symmetric({ horizontal: 16 })"
+            width="100%"
           >
             <Row cross-axis-alignment="center" width="100%">
               <Text>iOS Item {{ i }}</Text>
@@ -40,30 +41,51 @@
             </Row>
           </Container>
         </ListView>
-      </template>
-    </CupertinoPageScaffold>
+        <template #bottomTabBar>
+          <Container
+            :height="50"
+            width="100%"
+            color="#F9F9F9"
+            :border="{ top: { width: 0.5, color: '#CCC' } }"
+          >
+            <Row main-axis-alignment="space-around" cross-axis-alignment="center" expanded>
+              <Column main-axis-alignment="center" cross-axis-alignment="center">
+                <div class="icon" style="color: #007aff">★</div>
+                <Text :style="{ fontSize: 10, color: '#007AFF' }">Favorites</Text>
+              </Column>
+              <Column main-axis-alignment="center" cross-axis-alignment="center">
+                <div class="icon" style="color: #999">●</div>
+                <Text :style="{ fontSize: 10, color: '#999' }">Recents</Text>
+              </Column>
+              <Column main-axis-alignment="center" cross-axis-alignment="center">
+                <div class="icon" style="color: #999">👤</div>
+                <Text :style="{ fontSize: 10, color: '#999' }">Contacts</Text>
+              </Column>
+            </Row>
+          </Container>
+        </template>
+      </Scaffold>
 
-    <!-- Material Style -->
-    <Scaffold v-else background-color="#f5f5f5">
-      <template #appBar>
-        <AppBar title="Scaffold Demo" center-title :elevation="2">
-          <template #leading>
-            <Button @click="console.log('Menu')">
-              <div class="icon">☰</div>
-            </Button>
-          </template>
-          <template #actions>
-            <Button @click="console.log('Search')">
-              <div class="icon">🔍</div>
-            </Button>
-            <Button @click="console.log('More')">
-              <div class="icon">⋮</div>
-            </Button>
-          </template>
-        </AppBar>
-      </template>
+      <!-- Material Style -->
+      <Scaffold v-else background-color="#f5f5f5">
+        <template #appBar>
+          <AppBar title="Scaffold Demo" center-title :elevation="2">
+            <template #leading>
+              <Button @click="console.log('Menu')">
+                <div class="icon">☰</div>
+              </Button>
+            </template>
+            <template #actions>
+              <Button @click="console.log('Search')">
+                <div class="icon">🔍</div>
+              </Button>
+              <Button @click="console.log('More')">
+                <div class="icon">⋮</div>
+              </Button>
+            </template>
+          </AppBar>
+        </template>
 
-      <template #body>
         <ListView :padding="EdgeInsets.all(16)">
           <Container
             v-for="i in 20"
@@ -73,43 +95,44 @@
             :margin="EdgeInsets.only({ bottom: 16 })"
             :decoration="itemDecoration"
             alignment="center"
+            width="100%"
           >
             <Text>Item {{ i }}</Text>
           </Container>
         </ListView>
-      </template>
 
-      <template #floatingActionButton>
-        <Container
-          :width="56"
-          :height="56"
-          :decoration="fabDecoration"
-          alignment="center"
-          @click="console.log('FAB Clicked')"
-        >
-          <Text :style="fabTextStyle">+</Text>
-        </Container>
-      </template>
+        <template #floatingActionButton>
+          <Container
+            :width="56"
+            :height="56"
+            :decoration="fabDecoration"
+            alignment="center"
+            @click="console.log('FAB Clicked')"
+          >
+            <Text :style="fabTextStyle">+</Text>
+          </Container>
+        </template>
 
-      <template #bottomNavigationBar>
-        <Container :height="56" color="white" :decoration="bottomNavDecoration">
-          <Row main-axis-alignment="space-around" cross-axis-alignment="center" expanded>
-            <Column main-axis-alignment="center" cross-axis-alignment="center">
-              <div class="icon">🏠</div>
-              <Text :style="navLabelStyle">Home</Text>
-            </Column>
-            <Column main-axis-alignment="center" cross-axis-alignment="center">
-              <div class="icon">💼</div>
-              <Text :style="navLabelStyle">Work</Text>
-            </Column>
-            <Column main-axis-alignment="center" cross-axis-alignment="center">
-              <div class="icon">👤</div>
-              <Text :style="navLabelStyle">Profile</Text>
-            </Column>
-          </Row>
-        </Container>
-      </template>
-    </Scaffold>
+        <template #bottomNavigationBar>
+          <Container :height="56" color="white" :decoration="bottomNavDecoration" width="100%">
+            <Row main-axis-alignment="space-around" cross-axis-alignment="center" expanded>
+              <Column main-axis-alignment="center" cross-axis-alignment="center">
+                <div class="icon">🏠</div>
+                <Text :style="navLabelStyle">Home</Text>
+              </Column>
+              <Column main-axis-alignment="center" cross-axis-alignment="center">
+                <div class="icon">💼</div>
+                <Text :style="navLabelStyle">Work</Text>
+              </Column>
+              <Column main-axis-alignment="center" cross-axis-alignment="center">
+                <div class="icon">👤</div>
+                <Text :style="navLabelStyle">Profile</Text>
+              </Column>
+            </Row>
+          </Container>
+        </template>
+      </Scaffold>
+    </div>
   </div>
 </template>
 
@@ -118,7 +141,6 @@ import { ref } from "vue";
 import {
   Scaffold,
   AppBar,
-  CupertinoPageScaffold,
   CupertinoNavigationBar,
   ListView,
   Container,
@@ -136,7 +158,7 @@ import {
   Spacer,
 } from "fluekit";
 
-const isIOS = ref(false);
+const isIOS = ref(true);
 
 const itemDecoration = BoxDecoration({
   borderRadius: BorderRadius.circular(8),

@@ -10,7 +10,6 @@ import { ref } from "vue";
 import { Color, resolveColor } from "./Color";
 defineOptions({ inheritAttrs: false });
 interface Props {
-  onTap?: () => void;
   splashColor?: string | Color;
   highlightColor?: string | Color;
   borderRadius?: string; // CSS border-radius
@@ -31,7 +30,6 @@ let rippleCount = 0;
 const handleClick = (e: MouseEvent) => {
   if (props.disabled) return;
   emit("tap");
-  props.onTap?.();
   const el = e.currentTarget as HTMLElement;
   const rect = el.getBoundingClientRect();
   const size = Math.max(rect.width, rect.height);

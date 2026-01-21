@@ -1,5 +1,5 @@
 <template>
-  <div class="fluekit-context-menu-anchor" ref="anchorRef">
+  <div class="fluekit-context-menu-anchor">
     <GestureDetector @long-press="handleLongPress">
       <slot />
     </GestureDetector>
@@ -13,8 +13,7 @@
           @touchmove.prevent
         >
           <div class="fluekit-context-menu-backdrop"></div>
-
-          <div class="fluekit-context-menu-content" :style="menuStyle" @click.stop>
+          <div class="fluekit-context-menu-content" @click.stop>
             <!-- Actions List -->
             <div class="fluekit-action-group">
               <div
@@ -46,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import GestureDetector from "./GestureDetector.vue";
 
 export interface ContextMenuAction {
@@ -61,11 +60,9 @@ interface Props {
   actions: ContextMenuAction[];
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const isVisible = ref(false);
-const anchorRef = ref<HTMLElement | null>(null);
-
 const handleLongPress = () => {
   // In a real implementation, we would calculate position to animate from
   // For now, we center it like an action sheet or center modal
@@ -82,12 +79,6 @@ const handleAction = (action: ContextMenuAction) => {
   }
   close();
 };
-
-const menuStyle = computed(() => {
-  return {
-    // Basic styling for centered menu
-  };
-});
 </script>
 
 <style scoped>

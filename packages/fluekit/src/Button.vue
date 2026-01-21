@@ -7,22 +7,22 @@
     @tap-up="handleTapUp"
     @tap-cancel="handleTapCancel"
   >
-    <button class="fluekit-button" :style="computedStyle" :disabled="disabled" v-bind="mixedAttrs">
+    <button class="fluekit-button" :style="computedStyle" :disabled="disabled" v-bind="safeAttrs">
       <slot>{{ props.text }}</slot>
     </button>
   </GestureDetector>
 </template>
 
 <script setup lang="ts">
-import { computed, useAttrs, type CSSProperties, ref } from "vue";
+import { computed, ref, type CSSProperties } from "vue";
+import { BorderRadius } from "./BorderRadius";
 import { ButtonStyle, buttonStyleToStyle } from "./ButtonStyle";
+import { Color, resolveColor } from "./Color";
+import { EdgeInsets } from "./EdgeInsets";
 import GestureDetector from "./GestureDetector.vue";
 import { useStyles } from "./StyleProvider";
-import { useGestureEvents, useGestureStyle, type Behavior } from "./useGesture";
+import { useGestureStyle, type Behavior } from "./useGesture";
 import { useSafeAttrs } from "./useSafeAttrs";
-import { EdgeInsets } from "./EdgeInsets";
-import { BorderRadius } from "./BorderRadius";
-import { Color, resolveColor } from "./Color";
 
 defineOptions({ inheritAttrs: false });
 
@@ -59,17 +59,7 @@ const emit = defineEmits<{
 }>();
 const _styles = useStyles();
 const safeAttrs = useSafeAttrs();
-const events = useGestureEvents();
 const isPressed = ref(false);
-
-const mixedAttrs = computed(() => {
-  //@ts-ignore
-  if ((_styles.value as unknown as CSSProperties).pointerEvents == "none") {
-    return safeAttrs.value;
-  }
-  return { ...safeAttrs.value, ...(events || {}) };
-});
-
 const gestureStyle = useGestureStyle(props.behavior);
 
 // 样式计算逻辑

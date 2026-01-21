@@ -60,6 +60,20 @@ EdgeInsets.only = ({
 
 EdgeInsets.zero = EdgeInsets({});
 
+EdgeInsets.fromLTRB = (
+  left: number | string,
+  top: number | string,
+  right: number | string,
+  bottom: number | string,
+) => {
+  return EdgeInsets({
+    left,
+    top,
+    right,
+    bottom,
+  });
+};
+
 /**
  * 类型守卫：检查对象是否通过 EdgeInsets 创建
  */

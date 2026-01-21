@@ -9,6 +9,7 @@ import Opacity from '@example/demos/effect/Opacity.vue'
 import IgnorePointer from '@example/demos/effect/IgnorePointer.vue'
 import SafeArea from '@example/demos/effect/SafeArea.vue'
 import TransformDemo from '@example/demos/effect/TransformDemo.vue'
+import BackdropFilterDemo from '@example/demos/effect/BackdropFilterDemo.vue'
 </script>
 
 <div class="demo-box">
@@ -46,6 +47,17 @@ A widget that insets its child by sufficient padding to avoid operating system i
 </div>
 
 <<< ../demos/effect/SafeArea.vue
+
+## BackdropFilter
+
+A widget that applies a filter to the existing painted content and then paints the child.
+This effect is relatively expensive, especially if the filter is non-local, such as a blur.
+
+<div class="demo-box">
+  <BackdropFilterDemo />
+</div>
+
+<<< ../demos/effect/BackdropFilterDemo.vue
 
 ## API
 
@@ -98,14 +110,27 @@ A widget that insets its child by sufficient padding to avoid operating system i
 
 #### Props
 
-| Name                        | Type         | Default | Description                                                                            |
-| :-------------------------- | :----------- | :------ | :------------------------------------------------------------------------------------- |
-| `left`                      | `boolean`    | `true`  | Whether to avoid system intrusions on the left.                                        |
-| `top`                       | `boolean`    | `true`  | Whether to avoid system intrusions at the top of the screen.                           |
-| `right`                     | `boolean`    | `true`  | Whether to avoid system intrusions on the right.                                       |
-| `bottom`                    | `boolean`    | `true`  | Whether to avoid system intrusions on the bottom side of the screen.                   |
-| `minimum`                   | `EdgeInsets` | -       | This minimum padding to apply.                                                         |
-| `maintainBottomViewPadding` | `boolean`    | `false` | Specifies whether the safe area should maintain the bottom MediaQueryData.viewPadding. |
+| Name      | Type         | Default           | Description                                       |
+| :-------- | :----------- | :---------------- | :------------------------------------------------ |
+| `top`     | `boolean`    | `true`            | Whether to avoid system intrusions at the top.    |
+| `bottom`  | `boolean`    | `true`            | Whether to avoid system intrusions at the bottom. |
+| `left`    | `boolean`    | `true`            | Whether to avoid system intrusions on the left.   |
+| `right`   | `boolean`    | `true`            | Whether to avoid system intrusions on the right.  |
+| `minimum` | `EdgeInsets` | `EdgeInsets.zero` | The minimum padding to apply.                     |
+
+#### Slots
+
+| Name      | Description                               |
+| :-------- | :---------------------------------------- |
+| `default` | The widget below this widget in the tree. |
+
+### BackdropFilter
+
+#### Props
+
+| Name     | Type                    | Default | Description                                                |
+| :------- | :---------------------- | :------ | :--------------------------------------------------------- |
+| `filter` | `ImageFilter \| string` | -       | The image filter to apply to the existing painted content. |
 
 #### Slots
 

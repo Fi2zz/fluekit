@@ -2,26 +2,22 @@
 
 ## ListView
 
-A scrollable list of widgets arranged linearly.
+A scrollable list of widgets arranged linearly. Supports separators and pull-to-refresh.
 
 <script setup>
-import ListView from '@example/demos/scroll/ListView.vue'
+import ListViewDemo from '../demos/new_components/ListViewDemo.vue'
 import ListViewHorizontal from '@example/demos/scroll/ListViewHorizontal.vue'
 import GridView from '@example/demos/scroll/GridView.vue'
 import ScrollView from '@example/demos/scroll/ScrollView.vue'
-
-import { setTransform } from 'fluekit'
-
-setTransform(false)
 </script>
 
-###### Vertical ListView
+###### Vertical ListView (with Refresh & Separator)
 
-<div class="demo-box">
-  <ListView />
+<div class="demo-container">
+  <ListViewDemo />
 </div>
 
-<<< ../demos/scroll/ListView.vue
+<<< ../demos/new_components/ListViewDemo.vue
 
 ###### Horizontal ListView
 

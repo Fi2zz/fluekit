@@ -60,21 +60,35 @@ import { Container, Column, Row, Text, SizedBox, Alignment, MainAxisAlignment } 
 
 FlueKit automatically converts number values (e.g., `:width="100"`) to `vw` units based on a default design width of **750px**.
 
-To change the design width (e.g., to 375px):
+To enable this feature and configure the design width, wrap your application with `FlueConfigProvider`:
 
-```typescript
-import { setDefaultVW } from "fluekit";
+```vue
+<!-- App.vue -->
+<template>
+  <FlueConfigProvider
+    :transform="true"
+    :designWidth="750"
+    assetBaseURL="https://cdn.example.com/assets/"
+  >
+    <Root></Root>
+  </FlueConfigProvider>
+</template>
 
-// Call this in your main.ts or App.vue setup
-setDefaultVW(375);
+<script setup>
+import { FlueConfigProvider } from "fluekit";
+</script>
 ```
 
-To disable automatic conversion:
+#### Bypassing Conversion
 
-```typescript
-import { setTransform } from "fluekit";
+If you want to use exact pixel values without conversion, you can explicitly use the `px` unit string:
 
-setTransform(false); // Numbers will be treated as px
+```vue
+<!-- This will be converted to vw -->
+<Container :width="100" />
+
+<!-- This will remain exactly 100px -->
+<Container width="100px" />
 ```
 
 ## 🧩 Component Overview
@@ -98,6 +112,7 @@ setTransform(false); // Numbers will be treated as px
 ### Painting & Effects
 
 - **Opacity / AnimatedOpacity**: Makes its child partially transparent.
+- **BackdropFilter**: Applies a filter (e.g., blur) to the existing painted content.
 - **Transform**: Applies a transformation before painting its child.
 - **Decorations**: Rich styling support via `BoxDecoration` (borders, shadows, gradients, images).
 

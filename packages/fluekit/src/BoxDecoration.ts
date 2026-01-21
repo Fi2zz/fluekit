@@ -3,31 +3,14 @@ import { Alignment, alignmentToCssPosition } from "./Alignment";
 import { borderToStyle, isBorders, type Borders } from "./Border";
 import { BorderRadius, borderRadiusToStyle, isBorderRadius } from "./BorderRadius";
 import { BoxShadowProps, boxShadowToCSS, isBoxShadow } from "./BoxShadow";
+import { Color, resolveColor } from "./Color";
+import { ImageFilter } from "./ImageFilter";
 import { px2vw } from "./px2vw";
 import { isPlainObject, validateInDev } from "./utils";
-import { Color, resolveColor } from "./Color";
-
+import { BoxFit } from "./BoxFit";
 import { ImageProvider } from "./ImageProvider";
-
 export * from "./Gradient";
-// export { BorderRadius };
-type Valueof<T> = T[keyof T];
-
-// ==========================================================================================
-// BoxFit & ImageFit
-// ==========================================================================================
-
-export type BoxFit = Valueof<typeof BoxFit>;
-export const BoxFit = {
-  fitWidth: "fitWidth",
-  fitHeight: "fitHeight",
-  fill: "fill",
-  contain: "contain",
-  cover: "cover",
-  none: "none",
-  scaleDown: "scaleDown",
-} as const;
-
+export { Clip } from "./Clip";
 export type ImageRepeat = "repeat" | "repeat-x" | "repeat-y" | "no-repeat";
 
 // 内部使用的 CSS background-size 映射
@@ -74,23 +57,6 @@ export enum BoxShape {
 // URL Normalization
 // ==========================================================================================
 
-let _baseUrl = "";
-
-// 尝试安全地获取 VITE_BASE_URL
-try {
-  // @ts-expect-error
-  if (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.VITE_BASE_URL) {
-    // @ts-expect-error
-    _baseUrl = import.meta.env.VITE_BASE_URL;
-  }
-} catch {
-  // ignore
-}
-
-export function setBaseUrl(url: string) {
-  _baseUrl = url;
-}
-
 export function normalizeSrc(src: string) {
   if (!src) return "";
 
@@ -104,19 +70,7 @@ export function normalizeSrc(src: string) {
     return src;
   }
 
-  // 2. 如果没有 base，直接返回
-  if (!_baseUrl || _baseUrl === "/") return src;
-
-  // 3. 移除 base 结尾的 slash 和 src 开头的 slash，统一拼接
-  const cleanBase = _baseUrl.endsWith("/") ? _baseUrl.slice(0, -1) : _baseUrl;
-
-  if (src.startsWith(cleanBase)) {
-    return src;
-  }
-
-  const cleanSrc = src.startsWith("/") ? src.slice(1) : src;
-
-  return `${cleanBase}/${cleanSrc}`;
+  return src;
 }
 
 export interface DecorationImageProps {
@@ -152,18 +106,15 @@ export type BoxDecorationProps = {
   overflow?: Overflow;
   opacity?: number;
   shape?: BoxShape;
+  backdropFilter?: ImageFilter | string;
 };
 
 export type BoxDecoration = BoxDecorationProps & {
   [BOX_DECORATION_SYMBOL]?: true;
 };
 
-// Re-export BoxShadow for convenience
-// export type BoxShadow = BoxShadowProps;
-
 const isGradient = (url: string) =>
   /^(linear|radial|conic|repeating-linear|repeating-radial)-gradient\(/.test(url);
-
 export function decorationImageToStyle(di: DecorationImageProps): CSSProperties {
   if (!di) return {};
   const css: CSSProperties = {};
@@ -209,8 +160,18 @@ export function decorationImageToStyle(di: DecorationImageProps): CSSProperties 
 
 export function boxDecorationToStyle(decoration?: BoxDecorationProps): CSSProperties {
   if (!decoration) return {};
-  const { color, border, borderRadius, boxShadow, gradient, image, overflow, opacity, shape } =
-    decoration;
+  const {
+    color,
+    border,
+    borderRadius,
+    boxShadow,
+    gradient,
+    image,
+    overflow,
+    opacity,
+    shape,
+    backdropFilter,
+  } = decoration;
 
   // Validate BoxDecoration sub-properties, only in development mode
   validateInDev(() => {
@@ -267,6 +228,13 @@ export function boxDecorationToStyle(decoration?: BoxDecorationProps): CSSProper
     style.boxShadow = shadows.map(boxShadowToCSS).join(", ");
   }
 
+  if (backdropFilter) {
+    const filterValue = backdropFilter.toString();
+    style.backdropFilter = filterValue;
+    // @ts-ignore
+    style.webkitBackdropFilter = filterValue;
+  }
+
   return style;
 }
 
@@ -285,18 +253,3 @@ export function isBoxDecoration(value: any): value is BoxDecoration {
 
   return BOX_DECORATION_SYMBOL in value;
 }
-
-// 简单的辅助函数，实际使用可能更复杂
-
-/**
- * Clip
- * 对应 Flutter 的 Clip
- */
-export const Clip = {
-  none: "none",
-  hardEdge: "hardEdge",
-  antiAlias: "antiAlias",
-  antiAliasWithSaveLayer: "antiAliasWithSaveLayer",
-} as const;
-
-export type Clip = keyof typeof Clip;

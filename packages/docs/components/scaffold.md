@@ -1,6 +1,6 @@
 # Scaffold
 
-Implements the basic material design visual layout structure.
+Implements the basic visual layout structure. Supports both Material Design and iOS styles (defaulting to iOS style background).
 
 This class provides APIs for showing drawers, snack bars, and bottom sheets.
 
@@ -10,7 +10,7 @@ This class provides APIs for showing drawers, snack bars, and bottom sheets.
 import ScaffoldDemo from '@example/demos/new_components/ScaffoldDemo.vue'
 </script>
 
-<div class="demo-box">
+<div class="demo-container">
   <ScaffoldDemo />
 </div>
 
@@ -20,20 +20,22 @@ import ScaffoldDemo from '@example/demos/new_components/ScaffoldDemo.vue'
 
 ### Scaffold Props
 
-| Name              | Type     | Default     | Description                                                  |
-| :---------------- | :------- | :---------- | :----------------------------------------------------------- |
-| `backgroundColor` | `string` | `'#FFFFFF'` | The color of the material used for the body of the scaffold. |
+| Name              | Type              | Default                            | Description                                                  |
+| :---------------- | :---------------- | :--------------------------------- | :----------------------------------------------------------- |
+| `backgroundColor` | `string \| Color` | `CupertinoColors.systemBackground` | The color of the material used for the body of the scaffold. |
 
 ### Scaffold Slots
 
-| Name                   | Description                                                                                                              |
-| :--------------------- | :----------------------------------------------------------------------------------------------------------------------- |
-| `appBar`               | An app bar to display at the top of the scaffold.                                                                        |
-| `body`                 | The primary content of the scaffold.                                                                                     |
-| `floatingActionButton` | A button displayed floating above `body`, in the bottom right corner.                                                    |
-| `bottomNavigationBar`  | A bottom navigation bar to display at the bottom of the scaffold. See [BottomNavigationBar](./bottom-navigation-bar.md). |
-| `drawer`               | A panel displayed to the side of the `body`, often hidden on mobile devices. (Not fully implemented yet)                 |
-| `endDrawer`            | A panel displayed to the side of the `body`, opposite the `drawer`. (Not fully implemented yet)                          |
+| Name                   | Description                                                           |
+| :--------------------- | :-------------------------------------------------------------------- |
+| `navigationBar`        | An iOS-style navigation bar to display at the top of the scaffold.    |
+| `appBar`               | A Material Design app bar (legacy/alternative).                       |
+| `body`                 | The primary content of the scaffold.                                  |
+| `bottomTabBar`         | An iOS-style bottom tab bar.                                          |
+| `bottomNavigationBar`  | A Material Design bottom navigation bar (legacy/alternative).         |
+| `floatingActionButton` | A button displayed floating above `body`, in the bottom right corner. |
+| `drawer`               | A panel displayed to the side of the `body`.                          |
+| `endDrawer`            | A panel displayed to the side of the `body`, opposite the `drawer`.   |
 
 ## AppBar
 

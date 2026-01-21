@@ -1,5 +1,4 @@
-import { setTransform } from "./px2vw";
-
+export { default as BackdropFilter } from "./BackdropFilter.vue";
 export { default as Align } from "./Align.vue";
 export { default as AnimatedContainer } from "./AnimatedContainer.vue";
 export { default as AnimatedOpacity } from "./AnimatedOpacity.vue";
@@ -52,7 +51,6 @@ export { default as SegmentedControl } from "./SegmentedControl.vue";
 export { default as Builder } from "./Builder.vue";
 export { default as LayoutBuilder } from "./LayoutBuilder.vue";
 export { default as MediaQuery } from "./MediaQuery.vue";
-// export { default as CupertinoActivityIndicator } from "./CupertinoActivityIndicator.vue"; // Removed duplicate
 export { default as CupertinoPageScaffold } from "./CupertinoPageScaffold.vue";
 export { default as CupertinoNavigationBar } from "./CupertinoNavigationBar.vue";
 export { SnackBar } from "./SnackBar";
@@ -66,7 +64,22 @@ export { default as ImageColorBackground } from "./ImageColorBackground.vue";
 export { default as LinearProgressIndicator } from "./LinearProgressIndicator.vue";
 export { default as CircularProgressIndicator } from "./CircularProgressIndicator.vue";
 export { default as CupertinoActivityIndicator } from "./CupertinoActivityIndicator.vue";
-
+export { default as Drawer } from "./Drawer.vue";
+export { default as ElevatedButton } from "./ElevatedButton.vue";
+export { default as TextButton } from "./TextButton.vue";
+export { default as OutlinedButton } from "./OutlinedButton.vue";
+export { default as IconButton } from "./IconButton.vue";
+export { default as Overlay } from "./Overlay.vue";
+export { default as PopupMenuButton } from "./PopupMenuButton.vue";
+export { default as Chip } from "./Chip.vue";
+export { default as ActionChip } from "./ActionChip.vue";
+export { default as ChoiceChip } from "./ChoiceChip.vue";
+export { default as SlidingSegmentedControl } from "./SlidingSegmentedControl.vue";
+export { default as CircleAvatar } from "./CircleAvatar.vue";
+export { default as TabBar } from "./TabBar.vue";
+export { default as TabBarView } from "./TabBarView.vue";
+export { default as RefreshIndicator } from "./RefreshIndicator.vue";
+export { default as FlueConfigProvider } from "./FlueConfigProvider.vue";
 export * from "./Color";
 export * from "./ImageUtils";
 export * from "./Colors";
@@ -86,8 +99,30 @@ export * from "./ImageProvider";
 export * from "./InputDecoration";
 export * from "./Matrix4";
 export * from "./Size";
+export * from "./ImageFilter";
+export * from "./Icons";
+export * from "./BoxFit";
 export * from "./TextStyle";
-export { px2vw, setDefaultVW, setTransform } from "./px2vw";
-export { setAssetBaseURL, createAssetImage, MemoryImage } from "./ImageProvider";
-
-setTransform(false);
+export { keep } from "./px2vw";
+export { createAssetImageProvider, MemoryImage, createNetworkImageProvider } from "./ImageProvider";
+export function setAssetBaseURL() {
+  console.log(
+    "setAssetBaseURL is no longer available. Please use <FlueConfigProvider :assetBaseURL='assetBaseURL'/> instead.",
+  );
+}
+export function px2vw(value: string | number) {
+  console.warn("px2vw is no longer available");
+  return value;
+}
+//eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function setDefaultVW(_vw: number) {
+  console.warn(
+    "setDefaultVW is no longer available. Please use <FlueConfigProvider :designWidth='designWidth' /> instead.",
+  );
+}
+//eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function setTransform(_value: boolean) {
+  console.warn(
+    "setTransform is no longer supported. Please use <FlueConfigProvider :transform='transform'/> instead.",
+  );
+}

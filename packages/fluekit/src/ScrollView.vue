@@ -1,5 +1,5 @@
 <template>
-  <div ref="scrollRef" :style="containerStyle" @scroll="handleScroll">
+  <div ref="scrollRef" class="fluekit-scroll-view" :style="containerStyle" @scroll="handleScroll">
     <div :style="contentStyle">
       <slot />
     </div>

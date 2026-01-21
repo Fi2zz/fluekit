@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2026-01-21
+
+### Features
+
+- **BackdropFilter**:
+  - Add `BackdropFilter` widget to apply filters (e.g., blur) to existing content.
+  - Add `ImageFilter` helper class.
+- **BoxDecoration**:
+  - Support `backdropFilter` property for easier background blur effects in `Container`.
+
+### Documentation
+
+- **BackdropFilter**: Add detailed documentation and interactive demos.
+
 ## [1.6.2] - 2026-01-15
 
 ### Features

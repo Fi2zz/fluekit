@@ -89,6 +89,7 @@ export interface BoxDecorationProps {
   overflow?: Overflow;
   opacity?: number | string;
   shape?: BoxShape;
+  backdropFilter?: ImageFilter | string;
 }
 
 export type BoxDecoration = BoxDecorationProps;

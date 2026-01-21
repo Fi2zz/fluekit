@@ -1,7 +1,10 @@
 <template>
   <Column :gap="20">
     <Column :gap="10">
-      <Text data="Material Colors" :style="{ fontSize: 18, fontWeight: 'bold' }" />
+      <Text
+        data="Material Colors"
+        :style="TextStyle({ fontSize: 18, fontWeight: FontWeight.bold })"
+      />
       <Wrap :spacing="10" :run-spacing="10">
         <ColorItem name="Colors.red" :color="Colors.red" />
         <ColorItem name="Colors.pink" :color="Colors.pink" />
@@ -26,7 +29,10 @@
     </Column>
 
     <Column :gap="10">
-      <Text data="Shades Example (Blue)" :style="{ fontSize: 18, fontWeight: 'bold' }" />
+      <Text
+        data="Shades Example (Blue)"
+        :style="TextStyle({ fontSize: 18, fontWeight: FontWeight.bold })"
+      />
       <Wrap :spacing="10" :run-spacing="10">
         <ColorItem name="Colors.blue50" :color="Colors.blue50" />
         <ColorItem name="Colors.blue100" :color="Colors.blue100" />
@@ -42,7 +48,10 @@
     </Column>
 
     <Column :gap="10">
-      <Text data="Cupertino Colors" :style="{ fontSize: 18, fontWeight: 'bold' }" />
+      <Text
+        data="Cupertino Colors"
+        :style="TextStyle({ fontSize: 18, fontWeight: FontWeight.bold })"
+      />
       <Wrap :spacing="10" :run-spacing="10">
         <ColorItem name="CupertinoColors.activeBlue" :color="CupertinoColors.activeBlue" />
         <ColorItem name="CupertinoColors.activeGreen" :color="CupertinoColors.activeGreen" />
@@ -59,23 +68,26 @@
 
 <script setup lang="ts">
 import {
-  Colors,
-  CupertinoColors,
-  Column,
-  Wrap,
-  Container,
-  Text,
-  BorderRadius,
-  EdgeInsets,
-  BoxDecoration,
   Border,
+  BorderRadius,
+  BoxDecoration,
+  Color,
+  Colors,
+  Column,
+  Container,
+  CupertinoColors,
+  FontWeight,
+  Text,
+  TextAlign,
+  TextStyle,
+  Wrap,
 } from "fluekit";
 import { defineComponent, h } from "vue";
 
 const ColorItem = defineComponent({
   props: {
     name: String,
-    color: String,
+    color: Color,
   },
   setup(props) {
     return () =>
@@ -94,14 +106,26 @@ const ColorItem = defineComponent({
           },
           () =>
             h(Text, {
-              data: props.color,
-              style: { fontSize: 10, color: "#fff", textShadow: "0 0 2px rgba(0,0,0,0.5)" },
+              data: props.color?.toString() || "",
+              style: TextStyle({
+                fontSize: 10,
+                color: "#fff",
+                shadows: [
+                  {
+                    color: "rgba(0,0,0,0.5)",
+                    blurRadius: 4,
+                    offsetX: 2,
+                    offsetY: 2,
+                  },
+                ],
+              }),
             }),
         ),
         h(Container, { height: 4 }),
         h(Text, {
           data: props.name,
-          style: { fontSize: 10, color: "#666", textAlign: "center", width: 80 },
+          textAlign: TextAlign.center,
+          style: TextStyle({ fontSize: 10, color: "#666" }),
         }),
       ]);
   },

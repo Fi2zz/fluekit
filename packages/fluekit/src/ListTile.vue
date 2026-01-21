@@ -2,7 +2,7 @@
   <GestureDetector @tap="onTap" @long-press="onLongPress">
     <Container
       :color="selected ? selectedColor : tileColor || 'transparent'"
-      :padding="contentPadding || EdgeInsets.symmetric({ horizontal: 16, vertical: 12 })"
+      :padding="contentPadding"
     >
       <Row cross-axis-alignment="center" :gap="16">
         <!-- Leading -->
@@ -11,7 +11,7 @@
         </slot>
 
         <!-- Title & Subtitle -->
-        <Expanded>
+        <Expanded :flex="1">
           <Column cross-axis-alignment="start" :gap="4">
             <slot name="title">
               <Text v-if="title" :data="title" :style="titleStyle" />
@@ -21,7 +21,6 @@
             </slot>
           </Column>
         </Expanded>
-
         <!-- Trailing -->
         <slot name="trailing">
           <component :is="trailing" v-if="trailing" />
@@ -36,12 +35,12 @@ import { computed } from "vue";
 import Container from "./Container.vue";
 import Row from "./Row.vue";
 import Column from "./Column.vue";
-import Expanded from "./Expanded.vue";
 import Text from "./Text.vue";
 import GestureDetector from "./GestureDetector.vue";
 import { EdgeInsets } from "./EdgeInsets";
 import { TextStyle, FontWeight } from "./TextStyle";
 import { Color } from "./Color";
+import Expanded from "./Expanded.vue";
 
 const emit = defineEmits<{
   (e: "tap"): void;
@@ -93,6 +92,13 @@ const titleStyle = computed(() => {
     color: props.textColor || (props.enabled ? "rgba(0,0,0,0.87)" : "rgba(0,0,0,0.38)"),
     fontWeight: props.selected ? FontWeight.w600 : FontWeight.w400,
   });
+});
+
+const contentPadding = computed(() => {
+  if (props.contentPadding) return props.contentPadding;
+  return props.dense
+    ? EdgeInsets.symmetric({ horizontal: 16, vertical: 8 })
+    : EdgeInsets.symmetric({ horizontal: 16, vertical: 12 });
 });
 
 const subtitleStyle = computed(() => {

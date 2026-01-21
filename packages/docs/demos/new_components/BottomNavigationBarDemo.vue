@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { BottomNavigationBar, Container, Button, Text } from "fluekit";
+import { BottomNavigationBar, Button, Container, Text } from "fluekit";
+import { ref } from "vue";
 
 const currentIndex = ref(0);
 const variant = ref<"material" | "ios">("material");

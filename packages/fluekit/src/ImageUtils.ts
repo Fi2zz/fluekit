@@ -32,7 +32,7 @@ export async function extractDominantColor(imageSrc: string): Promise<Color | nu
     return null;
   }
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const img = new Image();
     img.crossOrigin = "Anonymous";
     img.src = imageSrc;

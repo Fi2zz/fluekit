@@ -23,6 +23,15 @@
       </template>
     </AlertDialog>
   </Column>
+  <Column>
+    <Button @click="showIOSDialog">Show iOS Style Dialog</Button>
+    <AlertDialog
+      v-model:visible="iosDialogVisible"
+      title="Confirm Delete"
+      content="Are you sure you want to delete this item? This action cannot be undone."
+      variant="ios"
+    />
+  </Column>
 </template>
 
 <script setup lang="ts">
@@ -31,10 +40,15 @@ import { Column, Button, AlertDialog, BoxConstraints } from "fluekit";
 
 const dialogVisible = ref(false);
 const defaultDialogVisible = ref(false);
+const iosDialogVisible = ref(false);
+
 const showDialog = () => {
   dialogVisible.value = true;
 };
 const showDefaultDialog = () => {
   defaultDialogVisible.value = true;
+};
+const showIOSDialog = () => {
+  iosDialogVisible.value = true;
 };
 </script>

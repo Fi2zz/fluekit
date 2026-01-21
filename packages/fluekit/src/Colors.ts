@@ -1,4 +1,4 @@
-import { Color } from "./Color";
+import { Color, ColorUtils } from "./Color";
 
 export const Colors = {
   // Utility
@@ -16,14 +16,7 @@ export const Colors = {
     (typeof color === "string" ? Color.fromString(color) : color).computeLuminance(),
   // Helper for backward compatibility with ColorUtils.lighten/darken which returned strings
   lighten: (color: Color | string, amount: number) => {
-    // For now, let's keep it returning Color or String?
-    // The previous implementation returned string.
-    // Let's return Color to be consistent with new API, but toString() makes it compatible.
-    // However, the user might expect a string if they used it before (though we just added it).
-    // Let's make Colors constants return Color objects.
-    return Color.fromString(typeof color === "string" ? color : color.toString());
-    // Wait, lighten/darken logic is not in Color class yet. We should add them to Color class or import from ColorUtils.
-    // Actually ColorUtils was deleted. I need to re-implement lighten/darken logic or put it in Color class.
+    return ColorUtils.lighten(color, amount);
   },
 
   transparent: Color.fromString("transparent"),

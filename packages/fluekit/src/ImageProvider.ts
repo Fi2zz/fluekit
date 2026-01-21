@@ -40,12 +40,17 @@ export function MemoryImage(data: string | Blob): ImageProvider {
 export interface AssetImageOptions {
   package?: string;
   bundle?: any;
+  /**
+   * Overrides the global asset base URL for this image.
+   */
+  baseUrl?: string;
 }
 
 let _assetBaseUrl = "/";
 
 /**
  * 设置 AssetImage 的基础路径
+ * @internal 此函数主要用于 FlueConfigProvider 内部调用。
  * @param url 基础路径，例如 'https://cdn.example.com/assets/' 或 '/static/'
  */
 export function setAssetBaseURL(url: string) {
@@ -72,8 +77,11 @@ export function AssetImage(name: string, options: AssetImageOptions = {}): Image
     };
   }
 
-  if (_assetBaseUrl) {
-    const base = _assetBaseUrl.endsWith("/") ? _assetBaseUrl : _assetBaseUrl + "/";
+  // 优先使用 options.baseUrl，否则使用全局 _assetBaseUrl
+  const baseUrl = options.baseUrl ?? _assetBaseUrl;
+
+  if (baseUrl) {
+    const base = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
     const cleanPath = path.startsWith("/") ? path.slice(1) : path;
     path = base + cleanPath;
   }
@@ -88,13 +96,39 @@ export function AssetImage(name: string, options: AssetImageOptions = {}): Image
  * 创建一个预设 package 的 AssetImage 工厂函数
  *
  * @example
- * const MyPkgAssets = createAssetImage({ package: 'my_pkg' });
+ * const MyPkgAssets = createAssetImageProvider({ package: 'my_pkg' });
  * const img = MyPkgAssets('icons/logo.png'); // 相当于 AssetImage('icons/logo.png', { package: 'my_pkg' })
  */
-export function createAssetImage(
+export function createAssetImageProvider(
   baseOptions: AssetImageOptions,
 ): (name: string, options?: AssetImageOptions) => ImageProvider {
   return (name: string, options: AssetImageOptions = {}) => {
     return AssetImage(name, { ...baseOptions, ...options });
   };
+}
+
+/**
+ * Creates a factory function for NetworkImage with a base URL.
+ *
+ * @example
+ * const MyRemoteImages = createNetworkImageProvider("https://api.example.com/images/");
+ * const img = MyRemoteImages("user/avatar.png"); // -> NetworkImage("https://api.example.com/images/user/avatar.png")
+ */
+export function createNetworkImageProvider(baseUrl: string): (url: string) => ImageProvider {
+  return (url: string) => {
+    if (/^(https?:|file:|blob:|data:|\/\/)/i.test(url)) {
+      return NetworkImage(url);
+    }
+    const base = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
+    const cleanUrl = url.startsWith("/") ? url.slice(1) : url;
+    return NetworkImage(base + cleanUrl);
+  };
+}
+
+export function ImageProvider(url: string) {
+  if (!url || typeof url != "string")
+    return { src: null, [IMAGE_PROVIDER_SYMBOL]: true } as unknown as ImageProvider;
+  if (url.startsWith("http")) return NetworkImage(url);
+  if (url.startsWith("data:")) return MemoryImage(url);
+  return AssetImage(url);
 }

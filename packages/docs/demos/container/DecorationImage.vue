@@ -1,5 +1,5 @@
 <template>
-  <Row wrap gap="10">
+  <Row wrap :gap="10">
     <!-- Cover -->
     <Column>
       <Text>Cover</Text>
