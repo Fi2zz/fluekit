@@ -14,6 +14,26 @@ import IconDemo from '@example/demos/new_components/IconDemo.vue'
 
 <<< ../demos/new_components/IconDemo.vue
 
+## Pre-defined Icons
+
+FlueKit provides sets of pre-defined icons that can be used directly. These are available via the `Icons` (Material Design) and `CupertinoIcons` (iOS style) exports.
+
+```vue
+<script setup>
+import { Icon, Icons, CupertinoIcons } from "fluekit";
+</script>
+
+<template>
+  <!-- Material Icons -->
+  <Icon :icon="Icons.search" color="blue" />
+  <Icon :icon="Icons.check" color="green" />
+
+  <!-- Cupertino Icons -->
+  <Icon :icon="CupertinoIcons.search" color="blue" />
+  <Icon :icon="CupertinoIcons.check" color="green" />
+</template>
+```
+
 ## API
 
 ### Props
