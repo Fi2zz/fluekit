@@ -79,6 +79,7 @@ export default defineConfig({
           { text: "Switch", link: "/components/switch" },
           { text: "Tabs", link: "/components/tabs" },
           { text: "Text", link: "/components/text" },
+          { text: "TextButtonWithIcon", link: "/components/text-button-with-icon" },
           { text: "TextField", link: "/components/TextField" },
         ],
       },

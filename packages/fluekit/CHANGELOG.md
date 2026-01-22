@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.8] - 2026-01-22
+
+### Features
+
+- **TextButtonWithIcon**: Add new component `TextButtonWithIcon` that supports icon and text layout.
+
 ## [2.2.7] - 2026-01-22
 
 ### Bug Fixes

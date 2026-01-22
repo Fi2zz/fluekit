@@ -67,6 +67,7 @@ export { default as CupertinoActivityIndicator } from "./CupertinoActivityIndica
 export { default as Drawer } from "./Drawer.vue";
 export { default as ElevatedButton } from "./ElevatedButton.vue";
 export { default as TextButton } from "./TextButton.vue";
+export { default as TextButtonWithIcon } from "./TextButtonWithIcon.vue";
 export { default as OutlinedButton } from "./OutlinedButton.vue";
 export { default as IconButton } from "./IconButton.vue";
 export { default as Overlay } from "./Overlay.vue";
