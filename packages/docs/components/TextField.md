@@ -7,7 +7,9 @@ import BasicTextField from '@example/demos/textfield/BasicTextField.vue'
 import TextAreaDemo from '@example/demos/textfield/TextAreaDemo.vue'
 import Borders from '@example/demos/textfield/Borders.vue'
 import PrefixSuffix from '@example/demos/textfield/PrefixSuffix.vue'
+import IconsDemo from '@example/demos/textfield/IconsDemo.vue'
 import Filled from '@example/demos/textfield/Filled.vue'
+
 import States from '@example/demos/textfield/States.vue'
 import AutoGrow from '@example/demos/textfield/AutoGrow.vue'
 import NoLabel from '@example/demos/textfield/NoLabel.vue'
@@ -56,6 +58,14 @@ You can use the `TextArea` component for multi-line input, or `TextField` with `
 </div>
 
 <<< ../demos/textfield/PrefixSuffix.vue
+
+## Icons
+
+<div class="demo-box">
+  <IconsDemo />
+</div>
+
+<<< ../demos/textfield/IconsDemo.vue
 
 ## Filled
 
@@ -115,18 +125,57 @@ Wrapper around TextField with default `maxLines` and `keyboardType`.
 
 ### InputDecoration
 
-| Prop       | Type          | Description                                                   |
-| ---------- | ------------- | ------------------------------------------------------------- |
-| labelText  | `string`      | Text that describes the input field.                          |
-| hintText   | `string`      | Text that suggests what sort of input the field accepts.      |
-| errorText  | `string`      | Text that appears below the field when the input is invalid.  |
-| prefixText | `string`      | Text to place before the input.                               |
-| suffixText | `string`      | Text to place after the input.                                |
-| border     | `InputBorder` | The border to draw around the field.                          |
-| filled     | `boolean`     | If true, the decoration's container is filled with fillColor. |
-| fillColor  | `string`      | The color to fill the decoration's container with.            |
+| Prop                  | Type                               | Description                                                                                             |
+| --------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| labelText             | `string`                           | Text that describes the input field.                                                                    |
+| hintText              | `string`                           | Text that suggests what sort of input the field accepts.                                                |
+| helperText            | `string`                           | Text that provides context about the input field's value, such as how the value will be used.           |
+| errorText             | `string`                           | Text that appears below the field when the input is invalid.                                            |
+| icon                  | `string \| Component`              | An icon that appears before the editable part of the text field and outside the decoration's container. |
+| prefixIcon            | `string \| Component`              | An icon that appears before the prefix or prefixText and before the editable part of the text field.    |
+| suffixIcon            | `string \| Component`              | An icon that appears after the editable part of the text field and after the suffix or suffixText.      |
+| prefixText            | `string`                           | Text to place before the input.                                                                         |
+| suffixText            | `string`                           | Text to place after the input.                                                                          |
+| border                | `InputBorder`                      | The border to draw around the field.                                                                    |
+| enabledBorder         | `InputBorder`                      | The border to display when the InputDecorator is enabled and is not showing an error.                   |
+| focusedBorder         | `InputBorder`                      | The border to display when the InputDecorator has the focus and is not showing an error.                |
+| errorBorder           | `InputBorder`                      | The border to display when the InputDecorator is showing an error.                                      |
+| focusedErrorBorder    | `InputBorder`                      | The border to display when the InputDecorator has the focus and is showing an error.                    |
+| disabledBorder        | `InputBorder`                      | The border to display when the InputDecorator is disabled and is not showing an error.                  |
+| filled                | `boolean`                          | If true, the decoration's container is filled with fillColor.                                           |
+| fillColor             | `string`                           | The color to fill the decoration's container with.                                                      |
+| contentPadding        | `number \| number[] \| EdgeInsets` | The padding for the input decoration's container.                                                       |
+| isDense               | `boolean`                          | Whether the input is part of a dense form (i.e., uses less vertical space).                             |
+| isCollapsed           | `boolean`                          | Whether the decoration is the same size as the input field.                                             |
+| floatingLabelBehavior | `FloatingLabelBehavior`            | Defines how the floating label should behave. (`always`, `auto`, `never`)                               |
+| counterText           | `string`                           | Optional text to place below the line as a character count.                                             |
+| labelStyle            | `TextStyle`                        | The style to use for the floating label.                                                                |
+| floatingLabelStyle    | `TextStyle`                        | The style to use for the floating label when it is floating.                                            |
+| hintStyle             | `TextStyle`                        | The style to use for the hintText.                                                                      |
+| helperStyle           | `TextStyle`                        | The style to use for the helperText.                                                                    |
+| errorStyle            | `TextStyle`                        | The style to use for the errorText.                                                                     |
+| counterStyle          | `TextStyle`                        | The style to use for the counterText.                                                                   |
 
 ### Helper Functions
 
-- `OutlineInputBorder({ borderSide?, borderRadius? })`
-- `UnderlineInputBorder({ borderSide?, borderRadius? })`
+#### OutlineInputBorder
+
+Creates a rounded rectangle outline border.
+
+```typescript
+function OutlineInputBorder(options?: {
+  borderSide?: BorderSide;
+  borderRadius?: BorderRadius;
+}): InputBorder;
+```
+
+#### UnderlineInputBorder
+
+Creates an underline border.
+
+```typescript
+function UnderlineInputBorder(options?: {
+  borderSide?: BorderSide;
+  borderRadius?: BorderRadius;
+}): InputBorder;
+```

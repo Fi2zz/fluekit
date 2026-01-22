@@ -33,7 +33,6 @@ interface Props {
   text?: string;
   // 样式属性
   style?: ButtonStyle;
-
   // iOS 风格属性
   variant?: "ios" | "raw"; // 默认为 raw (无样式)
   color?: string | Color; // 背景色快捷方式 (仅对 variant='ios' 生效或作为默认背景)
@@ -68,12 +67,12 @@ const computedStyle = computed(() => {
   // 1. 基础样式 (来自 variant)
   let variantStyle: ButtonStyle = {};
   if (props.variant === "ios") {
-    variantStyle = {
+    variantStyle = ButtonStyle({
       padding: props.padding || EdgeInsets.symmetric({ vertical: 14, horizontal: 16 }),
       shape: props.borderRadius || BorderRadius.all(8),
       backgroundColor: props.disabled ? props.disabledColor : props.color || "transparent",
       opacity: isPressed.value ? props.pressedOpacity : 1.0,
-    };
+    });
   }
 
   Object.assign(css, _styles.value);
@@ -82,6 +81,7 @@ const computedStyle = computed(() => {
   Object.assign(css, gestureStyle);
   if (props.disabled) {
     css.pointerEvents = "none";
+    css.cursor = "default";
     if (props.color || props.disabledColor) {
       css.backgroundColor = resolveColor(props.disabledColor || props.color);
     }
@@ -90,16 +90,17 @@ const computedStyle = computed(() => {
   return css;
 });
 
+function withDisabled(handler: (e: unknown) => void) {
+  return (e: unknown) => {
+    if (props.disabled) return;
+    handler(e);
+  };
+}
 // 事件处理
-const handleTapDown = (e: any) => {
-  if (!props.disabled) {
-    if (props.variant === "ios") {
-      isPressed.value = true;
-    }
-    emit("tap-down", e);
-  }
-};
-
+const handleTapDown = withDisabled((e: any) => {
+  isPressed.value = true;
+  emit("tap-down", e);
+});
 const handleTapUp = (e: any) => {
   isPressed.value = false;
   emit("tap-up", e);
@@ -109,18 +110,8 @@ const handleTapCancel = (e: any) => {
   isPressed.value = false;
   emit("tap-cancel", e);
 };
-
-const handleTap = () => {
-  if (!props.disabled) {
-    emit("pressed");
-  }
-};
-
-const handleLongPress = () => {
-  if (!props.disabled) {
-    emit("long-press");
-  }
-};
+const handleTap = withDisabled(() => emit("pressed"));
+const handleLongPress = withDisabled(() => emit("long-press"));
 </script>
 
 <style scoped>

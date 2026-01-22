@@ -100,7 +100,6 @@ export default defineConfig({
           { text: "ImageColorBackground", link: "/utils/image-color-background" },
           { text: "ImageProvider", link: "/utils/image-provider" },
           { text: "ImageUtils", link: "/utils/image-utils" },
-          { text: "InputDecoration", link: "/utils/input-decoration" },
           { text: "Matrix4", link: "/utils/matrix4" },
           { text: "MediaQuery", link: "/utils/media-query" },
           { text: "Size", link: "/utils/size" },

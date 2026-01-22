@@ -1,6 +1,5 @@
 <template>
   <Button
-    :text="childText"
     :style="computedStyle"
     :disabled="disabled"
     @pressed="emit('pressed')"
@@ -14,26 +13,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useSlots } from "vue";
+import { computed } from "vue";
 import Button from "./Button.vue";
 import { ButtonStyle } from "./ButtonStyle";
 import { Colors } from "./Colors";
 import { BorderRadius } from "./BorderRadius";
 import { EdgeInsets } from "./EdgeInsets";
 import { BorderSide } from "./Border";
-
 defineOptions({ inheritAttrs: false });
-
 interface Props {
   style?: ButtonStyle;
   disabled?: boolean;
   child?: any;
 }
-
-const props = withDefaults(defineProps<Props>(), {
-  disabled: false,
-});
-
+const props = withDefaults(defineProps<Props>(), { disabled: false });
 const emit = defineEmits<{
   (e: "pressed"): void;
   (e: "long-press"): void;
@@ -41,10 +34,6 @@ const emit = defineEmits<{
   (e: "tap-up", payload: any): void;
   (e: "tap-cancel", payload: any): void;
 }>();
-
-const slots = useSlots();
-const childText = computed(() => (slots.default ? undefined : props.child?.toString()));
-
 const computedStyle = computed<ButtonStyle>(() => {
   const baseStyle: ButtonStyle = {
     backgroundColor: "transparent",
@@ -62,7 +51,6 @@ const computedStyle = computed<ButtonStyle>(() => {
       color: props.disabled ? "rgba(0,0,0,0.38)" : Colors.blue,
     },
   };
-
-  return { ...baseStyle, ...props.style };
+  return ButtonStyle({ ...baseStyle, ...props.style });
 });
 </script>

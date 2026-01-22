@@ -1,79 +1,112 @@
 <template>
   <div
-    class="fluekit-text-field"
+    class="fluekit-text-field-wrapper"
     :class="{
       'is-focused': isFocused,
       'is-disabled': !enabled,
       'has-error': !!decoration?.errorText,
+      'is-collapsed': decoration?.isCollapsed,
+      'is-dense': decoration?.isDense,
     }"
   >
-    <!-- Label -->
-    <label
-      v-if="decoration?.labelText"
-      class="fluekit-input-label"
-      :class="{ 'is-floating': isFloating }"
-      :style="labelStyle"
-    >
-      {{ decoration.labelText }}
-    </label>
-
-    <!-- Input Container -->
-    <div class="fluekit-input-container" :style="containerStyle">
-      <!-- Prefix -->
-      <div
-        v-if="$slots.prefix || decoration?.prefixText"
-        class="fluekit-input-prefix"
-        ref="prefixRef"
-      >
-        <slot name="prefix">{{ decoration?.prefixText }}</slot>
-      </div>
-
-      <!-- Input Element -->
-      <component
-        :is="isMultiline ? 'textarea' : 'input'"
-        ref="inputRef"
-        class="fluekit-input-element"
-        :value="modelValue"
-        :disabled="!enabled"
-        :readonly="readOnly"
-        :type="inputType"
-        :placeholder="placeholderText"
-        :rows="minLines || 1"
-        :style="inputStyle"
-        :maxlength="maxLength"
-        :autocapitalize="textCapitalization"
-        :enterkeyhint="textInputAction"
-        :autocorrect="autocorrect ? 'on' : 'off'"
-        v-bind="$attrs"
-        @input="handleInput"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      />
-
-      <!-- Suffix -->
-      <div v-if="$slots.suffix || decoration?.suffixText" class="fluekit-input-suffix">
-        <slot name="suffix">{{ decoration?.suffixText }}</slot>
-      </div>
+    <!-- Icon (Outside Left) -->
+    <div v-if="$slots.icon || decoration?.icon" class="fluekit-input-icon">
+      <slot name="icon">
+        <Icon
+          :icon="decoration?.icon"
+          :size="decoration?.iconSize"
+          :color="decoration?.iconColor"
+        />
+      </slot>
     </div>
 
-    <!-- Helper/Error Text -->
-    <div
-      v-if="decoration?.errorText || decoration?.helperText || (maxLength && maxLength > 0)"
-      class="fluekit-input-footer"
-    >
-      <div v-if="decoration?.errorText" class="fluekit-input-helper is-error" :style="errorStyle">
-        {{ decoration.errorText }}
-      </div>
-      <div v-else-if="decoration?.helperText" class="fluekit-input-helper" :style="helperStyle">
-        {{ decoration.helperText }}
+    <div class="fluekit-text-field-content">
+      <!-- Input Container -->
+      <div class="fluekit-input-container" :style="containerStyle">
+        <!-- Label -->
+        <label
+          v-if="decoration?.labelText && shouldShowLabel"
+          class="fluekit-input-label"
+          :class="{ 'is-floating': isFloating }"
+          :style="labelStyle"
+        >
+          {{ decoration.labelText }}
+        </label>
+        <!-- Prefix Icon (Inside Left) -->
+        <div v-if="$slots.prefixIcon || decoration?.prefixIcon" class="fluekit-input-prefix-icon">
+          <slot name="prefixIcon">
+            <Icon
+              :icon="decoration?.prefixIcon"
+              :size="decoration?.prefixIconSize"
+              :color="decoration?.prefixIconColor"
+            />
+          </slot>
+        </div>
+
+        <!-- Prefix (Text/Widget) -->
+        <div
+          v-if="$slots.prefix || decoration?.prefixText"
+          class="fluekit-input-prefix"
+          ref="prefixRef"
+        >
+          <slot name="prefix">{{ decoration?.prefixText }}</slot>
+        </div>
+
+        <!-- Input Element -->
+        <component
+          :is="isMultiline ? 'textarea' : 'input'"
+          ref="inputRef"
+          class="fluekit-input-element"
+          :value="modelValue"
+          :disabled="!enabled"
+          :readonly="readOnly"
+          :type="inputType"
+          :placeholder="placeholderText"
+          :rows="minLines || 1"
+          :style="inputStyle"
+          :maxlength="maxLength"
+          :autocapitalize="textCapitalization"
+          :enterkeyhint="textInputAction"
+          :autocorrect="autocorrect ? 'on' : 'off'"
+          v-bind="$attrs"
+          @input="handleInput"
+          @focus="handleFocus"
+          @blur="handleBlur"
+        />
+
+        <!-- Suffix (Text/Widget) -->
+        <div v-if="$slots.suffix || decoration?.suffixText" class="fluekit-input-suffix">
+          <slot name="suffix">{{ decoration?.suffixText }}</slot>
+        </div>
+
+        <!-- Suffix Icon (Inside Right) -->
+        <div v-if="$slots.suffixIcon || decoration?.suffixIcon" class="fluekit-input-suffix-icon">
+          <slot name="suffixIcon">
+            <Icon
+              :icon="decoration?.suffixIcon"
+              :size="decoration?.suffixIconSize"
+              :color="decoration?.suffixIconColor"
+            ></Icon>
+          </slot>
+        </div>
       </div>
 
-      <!-- Spacer if helper exists but we want counter on the right -->
-      <div v-else class="fluekit-input-helper-spacer"></div>
+      <!-- Helper/Error Text -->
+      <div v-if="shouldShowFooter" class="fluekit-input-footer">
+        <div v-if="decoration?.errorText" class="fluekit-input-helper is-error" :style="errorStyle">
+          {{ decoration.errorText }}
+        </div>
+        <div v-else-if="decoration?.helperText" class="fluekit-input-helper" :style="helperStyle">
+          {{ decoration.helperText }}
+        </div>
 
-      <!-- Character Counter -->
-      <div v-if="maxLength && maxLength > 0" class="fluekit-input-counter">
-        {{ String(modelValue).length }} / {{ maxLength }}
+        <!-- Spacer if helper exists but we want counter on the right -->
+        <div v-else class="fluekit-input-helper-spacer"></div>
+
+        <!-- Character Counter -->
+        <div v-if="shouldShowCounter" class="fluekit-input-counter" :style="counterStyle">
+          {{ decoration?.counterText || `${String(modelValue).length} / ${maxLength}` }}
+        </div>
       </div>
     </div>
   </div>
@@ -81,19 +114,28 @@
 
 <script setup lang="ts">
 import {
+  useSlots,
   computed,
-  ref,
-  onMounted,
-  onBeforeUnmount,
-  watch,
-  nextTick,
   type CSSProperties,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
 } from "vue";
-import { type InputDecoration, type InputBorder, UnderlineInputBorder } from "./InputDecoration";
-import { type TextStyle, toCSSStyle as textStyleToCSS } from "./TextStyle";
 import { BorderSide, borderSideToStyle } from "./Border";
 import { BorderRadius, borderRadiusToStyle } from "./BorderRadius";
 import { Color, resolveColor } from "./Color";
+import { paddingToStyle } from "./EdgeInsets";
+import {
+  FloatingLabelBehavior,
+  type InputBorder,
+  type InputDecoration,
+  UnderlineInputBorder,
+} from "./InputDecoration";
+import { type TextStyle, toCSSStyle as textStyleToCSS } from "./TextStyle";
+
+import Icon from "./Icon.vue";
 
 defineOptions({ inheritAttrs: false });
 
@@ -128,12 +170,18 @@ const props = withDefaults(defineProps<Props>(), {
   autocorrect: true,
 });
 
+const slots = useSlots();
+
 const emit = defineEmits<{
   (e: "update:modelValue", value: string): void;
   (e: "focus", event: FocusEvent): void;
   (e: "blur", event: FocusEvent): void;
   (e: "submit", value: string): void;
 }>();
+
+const isComponent = (icon: InputDecoration["icon"]) => {
+  return typeof icon === "object" || typeof icon === "function";
+};
 
 const inputRef = ref<HTMLInputElement | HTMLTextAreaElement | null>(null);
 const isFocused = ref(false);
@@ -194,15 +242,46 @@ const inputType = computed(() => {
 });
 
 const isFloating = computed(() => {
+  const behavior = props.decoration?.floatingLabelBehavior || FloatingLabelBehavior.auto;
+
+  if (behavior === FloatingLabelBehavior.never) return false;
+  if (behavior === FloatingLabelBehavior.always) return true;
+
+  // Auto behavior
   return (
     isFocused.value ||
     (props.modelValue !== "" && props.modelValue !== null && props.modelValue !== undefined)
   );
 });
 
+const shouldShowLabel = computed(() => {
+  // If behavior is never, we still show label but it behaves like placeholder?
+  // No, in Flutter, if FloatingLabelBehavior.never, the label is NOT shown if there is content (it acts as hint).
+  // But our implementation of label is separate from input::placeholder.
+  // If behavior is never, we might want to hide the label element if it's not floating (i.e. use placeholder).
+  // However, for simplicity here, we assume labelText always renders the label element,
+  // and isFloating determines its position.
+  // If behavior is never, isFloating is false. So label sits inside.
+  // BUT, if input has content, the label overlaps text if it doesn't float.
+  // So if behavior is never, we should probably hide label if content exists?
+  // Flutter logic: If never, label replaces hint. When focused/has text, label disappears?
+  // Let's stick to standard behavior:
+  // If never, it stays inline. If content exists, it must disappear to avoid overlap.
+
+  if (props.decoration?.floatingLabelBehavior === FloatingLabelBehavior.never) {
+    const hasContent =
+      props.modelValue !== "" && props.modelValue !== null && props.modelValue !== undefined;
+    if (hasContent) return false;
+    // Also if focused, we usually want to type, so label should disappear?
+    // In Material 3, 'never' behaves like a placeholder.
+    if (isFocused.value) return false;
+  }
+  return true;
+});
+
 // When label is present and not floating, hide hint to avoid overlap with label.
 const placeholderText = computed(() => {
-  if (props.decoration?.labelText && !isFloating.value) return "";
+  if (props.decoration?.labelText && shouldShowLabel.value && !isFloating.value) return "";
   return props.decoration?.hintText || "";
 });
 
@@ -223,10 +302,18 @@ watch(
   () => props.autoGrow,
   () => nextTick(_autoGrow),
 );
+
 // Styles
 const currentBorder = computed<InputBorder | undefined>(() => {
-  if (props.decoration?.errorText && props.decoration.errorBorder)
-    return props.decoration.errorBorder;
+  if (props.decoration?.errorText) {
+    if (isFocused.value && props.decoration.focusedErrorBorder) {
+      return props.decoration.focusedErrorBorder;
+    }
+    if (props.decoration.errorBorder) {
+      return props.decoration.errorBorder;
+    }
+  }
+
   if (!props.enabled && props.decoration?.disabledBorder) return props.decoration.disabledBorder;
   if (isFocused.value && props.decoration?.focusedBorder) return props.decoration.focusedBorder;
   if (props.enabled && props.decoration?.enabledBorder) return props.decoration.enabledBorder;
@@ -234,11 +321,21 @@ const currentBorder = computed<InputBorder | undefined>(() => {
 });
 
 const containerStyle = computed<CSSProperties>(() => {
+  if (props.decoration?.isCollapsed) {
+    return {
+      display: "flex",
+      alignItems: isMultiline.value ? "flex-start" : "center",
+      position: "relative",
+      width: "100%",
+    };
+  }
+
   const css: CSSProperties = {
     display: "flex",
     alignItems: isMultiline.value ? "flex-start" : "center",
     position: "relative",
     transition: "all 0.2s ease",
+    width: "100%", // ensure it fills space in row
   };
 
   // Border logic
@@ -255,13 +352,46 @@ const containerStyle = computed<CSSProperties>(() => {
     // Actually borderSideToStyle returns 'border: 1px solid color'.
 
     // Padding
-    css.padding = "8px 12px";
+    const isDense = props.decoration?.isDense;
+    // Standard M3: 16px horizontal. Dense: 12px?
+    // Vertical: Standard ~16px, Dense ~12px.
+    // Let's use simple defaults.
+    const py = isDense ? 8 : 16;
+    const px = isDense ? 8 : 12;
+
+    if (props.decoration?.contentPadding) {
+      if (Array.isArray(props.decoration.contentPadding)) {
+        css.padding = props.decoration.contentPadding.map((v) => `${v}px`).join(" ");
+      } else if (typeof props.decoration.contentPadding === "number") {
+        css.padding = `${props.decoration.contentPadding}px`;
+      } else {
+        // EdgeInsets
+        Object.assign(css, paddingToStyle(props.decoration.contentPadding));
+      }
+    } else {
+      css.padding = `${py}px ${px}px`;
+    }
   } else {
     // Underline logic
     const side = border.borderSide || BorderSide({ width: 1, color: "#888" });
     css.borderBottom = `${side.width}px ${side.style || "solid"} ${resolveColor(side.color)}`;
     css.borderRadius = "0"; // No radius for underline usually
-    css.padding = "4px 0";
+
+    const isDense = props.decoration?.isDense;
+    const py = isDense ? 8 : 12; // Underline usually has less vertical padding?
+
+    if (props.decoration?.contentPadding) {
+      if (Array.isArray(props.decoration.contentPadding)) {
+        css.padding = props.decoration.contentPadding.map((v) => `${v}px`).join(" ");
+      } else if (typeof props.decoration.contentPadding === "number") {
+        css.padding = `${props.decoration.contentPadding}px`;
+      } else {
+        // EdgeInsets
+        Object.assign(css, paddingToStyle(props.decoration.contentPadding));
+      }
+    } else {
+      css.padding = `${py}px 0`;
+    }
   }
 
   // Background
@@ -288,7 +418,22 @@ const inputStyle = computed<CSSProperties>(() => {
 const labelStyle = computed<CSSProperties>(() => {
   const css: CSSProperties = {
     position: "absolute",
-    left: `${(currentBorder.value?.isOutline ? 12 : 0) + (prefixWidth.value || 0)}px`,
+    // Adjust left based on prefixIcon presence
+    // If prefixIcon exists, label should start after it?
+    // In Material, label starts at start of content area (including prefixIcon?) No, normally it overlays content.
+    // If isOutline, label is usually inside the border padding.
+    // If prefixIcon is present, label should probably be offset?
+    // This is complex in CSS. For now, we assume standard behavior where label is left-aligned.
+    // Ideally we'd measure prefixIcon width too.
+    // If prefixIcon is present, we need to add its width (usually 48px if using standard icon size + padding)
+    // Or we can rely on `prefixWidth` if we measure it?
+    // But prefixWidth only measures .fluekit-input-prefix (text).
+    // Let's assume standard behavior: if prefixIcon is present, label is offset.
+    // However, in Flutter, label floats *above* the prefixIcon usually?
+    // Actually, in Flutter, floating label is aligned with the *input content*.
+    // So if prefixIcon exists, the label (when inline) is after it.
+    // When floating, it stays aligned with the start of the input.
+    left: `${(currentBorder.value?.isOutline ? 12 : 0) + (prefixWidth.value || 0) + (props.decoration?.prefixIcon || slots.prefixIcon ? 40 : 0)}px`,
     top: currentBorder.value?.isOutline ? "50%" : "0", // Center vertically initially
     transform: "translateY(-50%)",
     pointerEvents: "none",
@@ -304,6 +449,10 @@ const labelStyle = computed<CSSProperties>(() => {
     if (isFocused.value) {
       css.color = "#2196F3"; // Active color
     }
+    // Apply floatingLabelStyle if available
+    if (props.decoration?.floatingLabelStyle) {
+      Object.assign(css, textStyleToCSS(props.decoration.floatingLabelStyle));
+    }
   }
 
   return css;
@@ -315,6 +464,10 @@ const helperStyle = computed<CSSProperties>(() => {
 
 const errorStyle = computed<CSSProperties>(() => {
   return textStyleToCSS(props.decoration?.errorStyle);
+});
+
+const counterStyle = computed<CSSProperties>(() => {
+  return textStyleToCSS(props.decoration?.counterStyle);
 });
 
 const hintColor = computed(() => {
@@ -331,6 +484,14 @@ const hintFontStyle = computed(() => {
   return props.decoration?.hintStyle?.fontSize
     ? `${props.decoration.hintStyle.fontSize}px`
     : "inherit";
+});
+
+const shouldShowCounter = computed(() => {
+  return (props.maxLength && props.maxLength > 0) || props.decoration?.counterText;
+});
+
+const shouldShowFooter = computed(() => {
+  return props.decoration?.errorText || props.decoration?.helperText || shouldShowCounter.value;
 });
 
 // Events
@@ -352,16 +513,53 @@ const handleBlur = (e: FocusEvent) => {
 </script>
 
 <style scoped>
-.fluekit-text-field {
+.fluekit-text-field-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
   position: relative;
   margin-top: 16px; /* Space for floating label */
   font-family: inherit;
   width: 100%;
 }
+
+.fluekit-input-icon {
+  margin-right: 16px;
+  margin-top: 12px; /* Align with input roughly */
+  display: flex;
+  align-items: center;
+  color: v-bind("resolveColor(decoration?.iconColor) || 'inherit'");
+}
+
+.fluekit-text-field-content {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
 .fluekit-input-container {
   /* Defined in dynamic style */
   width: 100%;
   box-sizing: border-box;
+}
+
+.fluekit-input-prefix-icon,
+.fluekit-input-suffix-icon {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  color: #666;
+}
+
+.fluekit-input-prefix-icon {
+  color: v-bind("resolveColor(decoration?.prefixIconColor) || '#666'");
+  padding-left: 0;
+}
+
+.fluekit-input-suffix-icon {
+  color: v-bind("resolveColor(decoration?.suffixIconColor) || '#666'");
+  padding-right: 0;
 }
 
 .fluekit-input-element {

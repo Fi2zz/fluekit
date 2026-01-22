@@ -1,7 +1,9 @@
+import { Component } from "vue";
 import { BorderSide } from "./Border";
 import { BorderRadius } from "./BorderRadius";
-import { TextStyle } from "./TextStyle";
 import { Color } from "./Color";
+import { EdgeInsetsProps } from "./EdgeInsets";
+import { TextStyle } from "./TextStyle";
 
 export interface InputBorder {
   borderSide?: BorderSide;
@@ -35,34 +37,84 @@ export function UnderlineInputBorder(
   };
 }
 
+/**
+ * Defines how a floating label behaves.
+ */
+export const FloatingLabelBehavior = {
+  /**
+   * The label always floats above the input field.
+   */
+  always: "always",
+  /**
+   * The label floats when the input field is focused or has content.
+   * This is the default behavior.
+   */
+  auto: "auto",
+  /**
+   * The label never floats. It behaves like a placeholder that disappears when content is entered.
+   */
+  never: "never",
+} as const;
+
 export interface InputDecoration {
+  // --- Content ---
   labelText?: string;
   hintText?: string;
   helperText?: string;
   errorText?: string;
 
-  // Icons (we'll use slots in Vue mostly, but props can accept strings or simple types)
-  // In Vue component, we will check slots 'prefix', 'suffix', 'prefixIcon', 'suffixIcon'.
-  // These props might be strings for text prefixes?
+  // --- Icons ---
+  // Note: In Vue, slots are preferred for complex content.
+  // These properties can accept strings (rendered as text) or VNodes/Components (if supported by implementation).
+  // For icons, usage of slots #icon, #prefixIcon, #suffixIcon is recommended.
+  icon?: string | Component;
+  prefixIcon?: string | Component;
+  suffixIcon?: string | Component;
+
   prefixText?: string;
   suffixText?: string;
 
-  // Borders
+  // --- Icon Styles ---
+  iconColor?: string | Color;
+  prefixIconColor?: string | Color;
+  suffixIconColor?: string | Color;
+
+  iconSize?: string | number;
+  prefixIconSize?: string | number;
+  suffixIconSize?: string | number;
+
+  // --- Borders ---
   border?: InputBorder;
   enabledBorder?: InputBorder;
   focusedBorder?: InputBorder;
   errorBorder?: InputBorder;
+  focusedErrorBorder?: InputBorder;
   disabledBorder?: InputBorder;
 
-  // Style
+  // --- Layout & Density ---
   filled?: boolean;
   fillColor?: string | Color;
+  contentPadding?: number | number[] | EdgeInsetsProps;
 
-  contentPadding?: number | number[]; // simplistic padding
+  isDense?: boolean; // Reduces vertical padding
+  isCollapsed?: boolean; // Removes all padding and borders
 
-  // Label Style
+  // --- Label Control ---
+  floatingLabelBehavior?: keyof typeof FloatingLabelBehavior;
+
+  // --- Counter ---
+  counterText?: string; // If null, hides default counter. If string, replaces it.
+
+  // --- Text Styles ---
   labelStyle?: TextStyle;
+  floatingLabelStyle?: TextStyle; // Style when label is floating
   hintStyle?: TextStyle;
   helperStyle?: TextStyle;
   errorStyle?: TextStyle;
+  counterStyle?: TextStyle;
+}
+
+export function InputDecoration(options: InputDecoration = {}): InputDecoration {
+  options.floatingLabelBehavior = options.floatingLabelBehavior || FloatingLabelBehavior.never;
+  return options;
 }
