@@ -93,8 +93,13 @@
 
       <!-- Helper/Error Text -->
       <div v-if="shouldShowFooter" class="fluekit-input-footer">
-        <div v-if="decoration?.errorText" class="fluekit-input-helper is-error" :style="errorStyle">
-          {{ decoration.errorText }}
+        <div
+          v-if="decoration?.errorText || decoration?.alwaysShowError"
+          class="fluekit-input-helper is-error"
+          :style="errorStyle"
+          :class="{ 'is-invisible': !decoration?.errorText }"
+        >
+          {{ decoration?.errorText || "&nbsp;" }}
         </div>
         <div v-else-if="decoration?.helperText" class="fluekit-input-helper" :style="helperStyle">
           {{ decoration.helperText }}
@@ -134,6 +139,8 @@ import {
   UnderlineInputBorder,
 } from "./InputDecoration";
 import { type TextStyle, toCSSStyle as textStyleToCSS } from "./TextStyle";
+
+import { boxConstraintsToStyle } from "./BoxConstraints";
 
 import Icon from "./Icon.vue";
 
@@ -336,6 +343,7 @@ const containerStyle = computed<CSSProperties>(() => {
     position: "relative",
     transition: "all 0.2s ease",
     width: "100%", // ensure it fills space in row
+    ...boxConstraintsToStyle(props.decoration?.constraints),
   };
 
   // Border logic
@@ -459,11 +467,43 @@ const labelStyle = computed<CSSProperties>(() => {
 });
 
 const helperStyle = computed<CSSProperties>(() => {
-  return textStyleToCSS(props.decoration?.helperStyle);
+  const css: CSSProperties = {
+    flex: 1, // Allow text to take available space for alignment
+    ...textStyleToCSS(props.decoration?.helperStyle),
+  };
+  if (props.decoration?.helperTextAlign) {
+    css.textAlign = props.decoration.helperTextAlign;
+  }
+  if (props.decoration?.helperMaxLines) {
+    css.display = "-webkit-box";
+    css.WebkitLineClamp = props.decoration.helperMaxLines.toString();
+    css.WebkitBoxOrient = "vertical";
+    css.overflow = "hidden";
+  }
+  if (props.decoration?.helperConstraints) {
+    Object.assign(css, boxConstraintsToStyle(props.decoration.helperConstraints));
+  }
+  return css;
 });
 
 const errorStyle = computed<CSSProperties>(() => {
-  return textStyleToCSS(props.decoration?.errorStyle);
+  const css: CSSProperties = {
+    flex: 1, // Allow text to take available space for alignment
+    ...textStyleToCSS(props.decoration?.errorStyle),
+  };
+  if (props.decoration?.errorTextAlign) {
+    css.textAlign = props.decoration.errorTextAlign;
+  }
+  if (props.decoration?.errorMaxLines) {
+    css.display = "-webkit-box";
+    css.WebkitLineClamp = props.decoration.errorMaxLines.toString();
+    css.WebkitBoxOrient = "vertical";
+    css.overflow = "hidden";
+  }
+  if (props.decoration?.errorConstraints) {
+    Object.assign(css, boxConstraintsToStyle(props.decoration.errorConstraints));
+  }
+  return css;
 });
 
 const counterStyle = computed<CSSProperties>(() => {
@@ -491,7 +531,12 @@ const shouldShowCounter = computed(() => {
 });
 
 const shouldShowFooter = computed(() => {
-  return props.decoration?.errorText || props.decoration?.helperText || shouldShowCounter.value;
+  return (
+    props.decoration?.errorText ||
+    props.decoration?.helperText ||
+    shouldShowCounter.value ||
+    props.decoration?.alwaysShowError
+  );
 });
 
 // Events
@@ -610,5 +655,9 @@ const handleBlur = (e: FocusEvent) => {
 
 .fluekit-input-helper.is-error {
   color: #f44336;
+}
+
+.is-invisible {
+  visibility: hidden;
 }
 </style>

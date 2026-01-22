@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.1] - 2026-01-22
+
+### Features
+
+- **InputDecoration**:
+  - Add `constraints` property to control the size of the input container.
+  - Add `errorMaxLines` and `helperMaxLines` to control text truncation.
+  - Add `helperConstraints` and `errorConstraints` for explicit size control of helper/error text.
+  - Add `alwaysShowError` to reserve space for error text even when empty.
+  - Add `errorTextAlign` and `helperTextAlign` for text alignment control.
+
+## [2.2.0] - 2026-01-22
+
+### Features
+
+- **TextField**:
+  - Add comprehensive icon support: `icon`, `prefixIcon`, `suffixIcon` slots and props.
+  - Enhance layout controls: `isDense`, `isCollapsed`, `contentPadding`.
+  - Add `FloatingLabelBehavior` (`always`, `auto`, `never`) for better label control.
+  - Support `EdgeInsets` in `contentPadding`.
+  - Fix label positioning when using `prefixIcon`.
+  - Add `counterText` and `helperText` support.
+  - Add styling props: `labelStyle`, `floatingLabelStyle`, `hintStyle`, `helperStyle`, `errorStyle`.
+- **InputDecoration**:
+  - Refactor to support usage as a factory function (e.g., `InputDecoration({...})`).
+  - Add missing properties for icons, borders (`enabledBorder`, `focusedBorder`, etc.), and styles.
+- **Icons**:
+  - Add `checkCircle` and `person` icons to the built-in icon set.
+
+### Documentation
+
+- **TextField**:
+  - Merge `InputDecoration` documentation into `TextField` page.
+  - Add new examples: `IconsDemo` showing various icon configurations.
+  - Update API reference with all new properties.
+
 ## [2.1.0] - 2026-01-21
 
 ### Features

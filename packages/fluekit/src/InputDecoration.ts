@@ -5,6 +5,8 @@ import { Color } from "./Color";
 import { EdgeInsetsProps } from "./EdgeInsets";
 import { TextStyle } from "./TextStyle";
 
+import { BoxConstraints } from "./BoxConstraints";
+
 export interface InputBorder {
   borderSide?: BorderSide;
   borderRadius?: BorderRadius;
@@ -99,6 +101,13 @@ export interface InputDecoration {
   isDense?: boolean; // Reduces vertical padding
   isCollapsed?: boolean; // Removes all padding and borders
 
+  // --- Constraints ---
+  constraints?: BoxConstraints;
+  helperMaxLines?: number;
+  errorMaxLines?: number;
+  helperConstraints?: BoxConstraints;
+  errorConstraints?: BoxConstraints;
+
   // --- Label Control ---
   floatingLabelBehavior?: keyof typeof FloatingLabelBehavior;
 
@@ -112,6 +121,17 @@ export interface InputDecoration {
   helperStyle?: TextStyle;
   errorStyle?: TextStyle;
   counterStyle?: TextStyle;
+
+  // --- Text Alignment ---
+  errorTextAlign?: "left" | "right" | "center" | "justify" | "start" | "end";
+  helperTextAlign?: "left" | "right" | "center" | "justify" | "start" | "end";
+
+  // --- Behavior ---
+  /**
+   * Whether the error text should always be shown (reserving space),
+   * even if [errorText] is null or empty.
+   */
+  alwaysShowError?: boolean;
 }
 
 export function InputDecoration(options: InputDecoration = {}): InputDecoration {
