@@ -8,6 +8,7 @@
 import { ref, watch, computed, type CSSProperties } from "vue";
 import { Color } from "./Color";
 import { ImageUtils } from "./ImageUtils";
+import { px2vw } from "./px2vw";
 
 interface Props {
   src: string;
@@ -29,8 +30,8 @@ const isLoading = ref(true);
 
 const containerStyle = computed<CSSProperties>(() => {
   return {
-    width: typeof props.width === "number" ? `${props.width}px` : props.width,
-    height: typeof props.height === "number" ? `${props.height}px` : props.height,
+    width: px2vw(props.width),
+    height: px2vw(props.height),
     backgroundColor: dominantColor.value
       ? dominantColor.value.withOpacity(props.opacity).toString()
       : "transparent",
