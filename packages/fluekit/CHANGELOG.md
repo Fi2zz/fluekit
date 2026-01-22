@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.9] - 2026-01-22
+
+### Features
+
+- **Icons**: Add `monitor` icon.
+
 ## [2.2.8] - 2026-01-22
 
 ### Features
