@@ -67,6 +67,7 @@ export default defineConfig({
           { text: "PopupMenuButton", link: "/components/popup-menu-button" },
           { text: "Progress Indicators", link: "/components/progress-indicators" },
           { text: "Radio", link: "/components/radio" },
+          { text: "RatingBar", link: "/components/rating-bar" },
           { text: "RefreshIndicator", link: "/components/refresh-indicator" },
           { text: "Row & Column", link: "/components/row-column" },
           { text: "Scaffold & AppBar", link: "/components/scaffold" },

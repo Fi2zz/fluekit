@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.3] - 2026-01-22
+
+### Features
+
+- **RatingBar**:
+  - Add new `RatingBar` component with support for half-stars, readonly mode, and custom styling.
+  - Implement hover preview for interactive rating.
+- **Icons**:
+  - Add rounded star icons (`star`, `starBorder`, `starHalf`).
+
 ## [2.2.2] - 2026-01-22
 
 ### Features
