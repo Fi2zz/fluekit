@@ -1,10 +1,13 @@
 <template>
   <Chip
+    :labelStyle="labelStyle"
+    :decoration="decoration"
+    :deletable="deletable"
     :label="label"
     :avatar="avatar"
     :backgroundColor="selected ? selectedColor : backgroundColor"
-    :labelColor="selected ? 'white' : labelColor"
-    @pressed="handlePress"
+    :labelColor="selected ? selectedTextColor : labelColor"
+    @pressed="() => $emit('selected', !selected)"
   >
     <template #avatar v-if="$slots.avatar">
       <slot name="avatar" />
@@ -13,33 +16,15 @@
 </template>
 
 <script setup lang="ts">
-import { type Component } from "vue";
 import Chip from "./Chip.vue";
-import { Color } from "./Color";
+import { ChoiceChipEmits, ChoiceChipProps } from "./ChipProps";
 import { Colors } from "./Colors";
-
 defineOptions({ inheritAttrs: false });
-
-interface Props {
-  label: string;
-  selected: boolean;
-  avatar?: Component;
-  backgroundColor?: string | Color;
-  selectedColor?: string | Color;
-  labelColor?: string | Color;
-}
-
-const props = withDefaults(defineProps<Props>(), {
+defineEmits<ChoiceChipEmits>();
+withDefaults(defineProps<ChoiceChipProps>(), {
   backgroundColor: "#E0E0E0",
   selectedColor: () => Colors.blue, // Primary color typically
   selected: false,
+  selectedTextColor: () => Colors.white,
 });
-
-const emit = defineEmits<{
-  (e: "selected", value: boolean): void;
-}>();
-
-const handlePress = () => {
-  emit("selected", !props.selected);
-};
 </script>

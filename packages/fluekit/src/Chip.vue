@@ -36,36 +36,24 @@ import Row from "./Row.vue";
 import Text from "./Text.vue";
 
 import { Alignment } from "./FlexProps";
-// import CircleAvatar from "./CircleAvatar.vue";
-import { BoxFit, ImageProvider, px2vw } from ".";
+import { BoxFit, ImageProvider } from ".";
 import { DecorationImage, decorationImageToStyle } from "./BoxDecoration";
-
 import Icon from "./Icon.vue";
 import { Icons } from "./Icons";
+import { px2vw } from "./px2vw";
 import { TextStyle } from "./TextStyle";
+import { ChilpProps, ChipEmits } from "./ChipProps";
 defineOptions({ inheritAttrs: false });
-interface Props {
-  label: string;
-  avatar?: Component;
-  backgroundColor?: string | Color;
-  labelColor?: string | Color;
-  deletable?: boolean;
-  size?: "small" | "medium" | "large";
-  width?: number | string;
-  height?: number | string;
-}
 const slots = useSlots();
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<ChilpProps>(), {
   backgroundColor: "#E0E0E0", // Colors.grey[300] approx
   labelColor: "rgba(0, 0, 0, 0.87)",
   size: "medium",
+  labelStyle: () => ({}),
+  decoration: () => ({}),
 });
 
-const emit = defineEmits<{
-  (e: "pressed"): void;
-  (e: "delete"): void;
-}>();
-
+const emit = defineEmits<ChipEmits>();
 const onDeleted = () => {
   if (props.deletable) emit("delete");
 };
@@ -84,6 +72,7 @@ const decoration = computed(() => {
   return BoxDecoration({
     borderRadius: BorderRadius.circular(16),
     color: props.backgroundColor,
+    ...(props.decoration ?? {}),
   });
 });
 const labelStyle = computed(() => {
@@ -91,6 +80,7 @@ const labelStyle = computed(() => {
   return TextStyle({
     color: props.labelColor,
     fontSize,
+    ...(props.labelStyle ?? {}),
   });
 });
 

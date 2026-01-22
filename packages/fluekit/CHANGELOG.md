@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.5] - 2026-01-22
+
+### Refactor
+
+- **Chip**:
+  - Extract props and emits to `ChipProps.ts` for better type reuse.
+  - Update `ActionChip` and `ChoiceChip` to use shared types.
+  - Support passing custom `decoration` and `labelStyle` to `Chip`.
+  - Add `selectedTextColor` prop to `ChoiceChip`.
+
 ## [2.2.4] - 2026-01-22
 
 ### Features

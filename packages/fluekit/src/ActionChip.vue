@@ -4,7 +4,8 @@
     :avatar="avatar"
     :backgroundColor="backgroundColor"
     :labelColor="labelColor"
-    @pressed="handlePress"
+    @pressed="() => $emit('pressed')"
+    @delete="() => $emit('delete')"
   >
     <template #avatar v-if="$slots.avatar">
       <slot name="avatar" />
@@ -13,19 +14,9 @@
 </template>
 
 <script setup lang="ts">
-import { type Component } from "vue";
 import Chip from "./Chip.vue";
-import { Color } from "./Color";
-
+import { ChilpProps, ChipEmits } from "./ChipProps";
 defineOptions({ inheritAttrs: false });
-
-interface Props {
-  label: string;
-  avatar?: Component;
-  backgroundColor?: string | Color;
-  labelColor?: string | Color;
-}
-withDefaults(defineProps<Props>(), { backgroundColor: "#E0E0E0" });
-const emit = defineEmits<{ (e: "pressed"): void }>();
-const handlePress = () => emit("pressed");
+defineProps<ChilpProps>();
+const emit = defineEmits<ChipEmits>();
 </script>
