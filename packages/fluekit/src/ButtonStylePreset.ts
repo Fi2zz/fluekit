@@ -6,6 +6,7 @@ import { BorderRadius } from "./BorderRadius";
 import { TextStylePreset } from "./TextStylePreset";
 import { BorderSide } from "./Border";
 import { Alignment } from "./Alignment";
+import { FontWeight, TextStyle } from "./TextStyle";
 
 export class ButtonStylePreset {
   // ==========================================================================
@@ -111,8 +112,9 @@ export class ButtonStylePreset {
     return ButtonStyle({
       backgroundColor: CupertinoColors.systemBlue,
       foregroundColor: CupertinoColors.white,
-      textStyle: TextStylePreset.body.copyWith({
-        fontWeight: "600", // Semibold
+      textStyle: TextStyle({
+        ...TextStylePreset.body,
+        fontWeight: FontWeight.w600, // Semibold
         fontSize: 17,
       }),
       padding: EdgeInsets.symmetric({ horizontal: 20, vertical: 12 }),
@@ -130,8 +132,9 @@ export class ButtonStylePreset {
     return ButtonStyle({
       backgroundColor: "rgba(118, 118, 128, 0.12)", // System fill
       foregroundColor: CupertinoColors.systemBlue,
-      textStyle: TextStylePreset.body.copyWith({
-        fontWeight: "600",
+      textStyle: TextStyle({
+        ...TextStylePreset.body,
+        fontWeight: FontWeight.w600, // Semibold
         fontSize: 17,
       }),
       padding: EdgeInsets.symmetric({ horizontal: 20, vertical: 12 }),
@@ -149,9 +152,10 @@ export class ButtonStylePreset {
     return ButtonStyle({
       backgroundColor: Colors.transparent,
       foregroundColor: CupertinoColors.systemBlue,
-      textStyle: TextStylePreset.body.copyWith({
+      textStyle: TextStyle({
+        ...TextStylePreset.body,
+        fontWeight: FontWeight.w400, // Semibold
         fontSize: 17,
-        fontWeight: "400", // Regular
       }),
       padding: EdgeInsets.symmetric({ horizontal: 16, vertical: 10 }),
       shape: BorderRadius.zero,
@@ -168,8 +172,9 @@ export class ButtonStylePreset {
     return ButtonStyle({
       backgroundColor: CupertinoColors.systemRed,
       foregroundColor: CupertinoColors.white,
-      textStyle: TextStylePreset.body.copyWith({
-        fontWeight: "600",
+      textStyle: TextStyle({
+        ...TextStylePreset.body,
+        fontWeight: FontWeight.w600, // Semibold
         fontSize: 17,
       }),
       padding: EdgeInsets.symmetric({ horizontal: 20, vertical: 12 }),

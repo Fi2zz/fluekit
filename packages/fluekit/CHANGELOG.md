@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.7] - 2026-01-22
+
+### Bug Fixes
+
+- **ButtonStylePreset**: Fix `copyWith` usage by replacing it with object spread for `TextStyle` merging.
+
 ## [2.2.6] - 2026-01-22
 
 ### Features
