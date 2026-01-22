@@ -86,6 +86,7 @@ export * from "./ImageUtils";
 export * from "./Colors";
 export * from "./CupertinoColors";
 export * from "./TextStylePreset";
+export * from "./ButtonStylePreset";
 export * from "./Border";
 export * from "./BoxConstraints";
 export * from "./BoxDecoration";

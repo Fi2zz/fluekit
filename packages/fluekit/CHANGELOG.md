@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.6] - 2026-01-22
+
+### Features
+
+- **Styles**:
+  - Add `TextStylePreset` for Material Design 3 and iOS typography presets.
+  - Add `ButtonStylePreset` for Material Design 3 and iOS button style presets.
+- **Documentation**:
+  - Add API reference docs for `TextStylePreset` and `ButtonStylePreset`.
+
 ## [2.2.5] - 2026-01-22
 
 ### Refactor
