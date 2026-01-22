@@ -55,6 +55,7 @@ export default defineConfig({
           { text: "Drawer", link: "/components/drawer" },
           { text: "Effects", link: "/components/effects" },
           { text: "Expanded", link: "/components/expanded" },
+          { text: "FlueConfigProvider", link: "/components/flue-config-provider" },
           { text: "GestureDetector", link: "/components/gesture-detector" },
           { text: "Icon", link: "/components/icon" },
           { text: "Image", link: "/components/Image" },
