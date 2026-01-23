@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.0] - 2026-01-22
+
+### Features
+
+- **Toast**: Add `Toast` component and utility for displaying notifications.
+- **Modal**: Add `Modal` component for generic overlays.
+
 ## [2.2.9] - 2026-01-22
 
 ### Features

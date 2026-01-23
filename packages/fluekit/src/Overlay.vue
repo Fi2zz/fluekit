@@ -18,7 +18,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  visible: true,
+  visible: false,
   color: "rgba(0, 0, 0, 0.5)",
   zIndex: 1000,
   position: "absolute",
@@ -34,6 +34,7 @@ const style = computed<CSSProperties>(() => {
     inset: 0,
     pointerEvents: "auto",
     cursor: "auto",
+    opacity: props.visible ? 1 : 0,
   };
 });
 </script>

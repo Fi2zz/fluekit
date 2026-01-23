@@ -63,6 +63,7 @@ export default defineConfig({
           { text: "LayoutBuilder", link: "/components/layout-builder" },
           { text: "ListTile", link: "/components/list-tile" },
           { text: "ListView & GridView", link: "/components/list-view" },
+          { text: "Modal", link: "/components/modal" },
           { text: "Overlay", link: "/components/overlay" },
           { text: "PopupMenuButton", link: "/components/popup-menu-button" },
           { text: "Progress Indicators", link: "/components/progress-indicators" },
@@ -81,6 +82,7 @@ export default defineConfig({
           { text: "Text", link: "/components/text" },
           { text: "TextButtonWithIcon", link: "/components/text-button-with-icon" },
           { text: "TextField", link: "/components/TextField" },
+          { text: "Toast", link: "/components/toast" },
         ],
       },
       {
