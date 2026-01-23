@@ -2,23 +2,24 @@
 
 Utilities for working with CSS animations and keyframes.
 
-## Keyframe Animation
+## AnimationWidget
 
-You can define CSS keyframes dynamically using `defineKeyframes` and apply them using `animationToStyle`.
+The `AnimationWidget` component allows you to apply CSS keyframe animations to its children.
 
 ### Usage
 
 ```vue
 <script setup>
-import { defineKeyframes, animationToStyle } from "fluekit";
+import { defineKeyframes, Animation, AnimationWidget } from "fluekit";
 
-// Define keyframes once
+// 1. Define keyframes once (globally or locally)
 defineKeyframes("bounce", {
   "0%, 100%": { transform: "translateY(0)" },
   "50%": { transform: "translateY(-20px)" },
 });
 
-const animStyle = animationToStyle({
+// 2. Create animation options
+const bounceAnim = Animation({
   name: "bounce",
   duration: 1000,
   iterationCount: "infinite",
@@ -26,7 +27,9 @@ const animStyle = animationToStyle({
 </script>
 
 <template>
-  <div :style="animStyle">Bouncing Content</div>
+  <AnimationWidget :animation="bounceAnim">
+    <div>Bouncing Content</div>
+  </AnimationWidget>
 </template>
 ```
 
@@ -45,9 +48,11 @@ import MoreAnimationsDemo from '../demos/animation/MoreAnimationsDemo.vue';
 
 <MoreAnimationsDemo />
 
-<<< ../demos/animation/KeyframeDemo.vue
-
 ## API
+
+### Animation(options)
+
+Helper function to create an `AnimationOptions` object with type checking.
 
 ### defineKeyframes(name, frames)
 
@@ -56,17 +61,21 @@ Injects a `@keyframes` style block into the document head.
 - `name`: Name of the animation.
 - `frames`: Object where keys are selectors (e.g. `'0%'`, `'from'`) and values are style objects.
 
-### animationToStyle(options)
+### AnimationWidget Props
 
-Returns a style object with the `animation` property.
+| Prop        | Type               | Description                         |
+| ----------- | ------------------ | ----------------------------------- |
+| `animation` | `AnimationOptions` | The animation configuration object. |
 
-`AnimationOptions`:
+### AnimationOptions
 
-- `name`: Keyframe name
-- `duration`: Duration in ms (default 1000)
-- `timingFunction`: Easing function (default 'ease')
-- `delay`: Delay in ms (default 0)
-- `iterationCount`: Number or 'infinite' (default 1)
-- `direction`: 'normal', 'reverse', etc.
-- `fillMode`: 'none', 'forwards', etc.
-- `playState`: 'running' or 'paused'
+| Property         | Type                   | Default     | Description          |
+| ---------------- | ---------------------- | ----------- | -------------------- |
+| `name`           | `string`               | -           | Keyframe name        |
+| `duration`       | `number`               | `1000`      | Duration in ms       |
+| `timingFunction` | `string`               | `'ease'`    | Easing function      |
+| `delay`          | `number`               | `0`         | Delay in ms          |
+| `iterationCount` | `number \| 'infinite'` | `1`         | Number of iterations |
+| `direction`      | `string`               | `'normal'`  | Animation direction  |
+| `fillMode`       | `string`               | `'none'`    | Animation fill mode  |
+| `playState`      | `string`               | `'running'` | Play state           |

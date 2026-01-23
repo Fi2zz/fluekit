@@ -18,8 +18,7 @@ export interface AnimationOptions {
   fillMode?: AnimationFillMode;
   playState?: AnimationPlayState;
 }
-
-export const Animation = (options: AnimationOptions) => options;
+export const Animator = (options: AnimationOptions) => options;
 
 export function animationToStyle(animation?: AnimationOptions): { animation?: string } {
   if (!animation) return {};

@@ -6,14 +6,11 @@
 
 <script setup lang="ts">
 import { computed, type CSSProperties } from "vue";
-import { animationToStyle, type AnimationOptions } from "./Animation";
-
+import { animationToStyle, type AnimationOptions } from "./Animator";
 interface Props {
   animation: AnimationOptions;
 }
-
 const props = defineProps<Props>();
-
 const computedStyle = computed<CSSProperties>(() => {
   return animationToStyle(props.animation) as CSSProperties;
 });

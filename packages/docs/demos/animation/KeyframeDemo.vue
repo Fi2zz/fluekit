@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { Container, Text, defineKeyframes, Animation, AnimationWidget, EdgeInsets } from "fluekit";
+import { Container, Text, defineKeyframes, Animator, AnimationWidget, EdgeInsets } from "fluekit";
 
 // 1. Define global keyframes (idempotent)
 defineKeyframes("bounce", {
@@ -37,13 +37,13 @@ defineKeyframes("spin", {
 });
 
 // 2. Use them
-const bounceAnimation = Animation({
+const bounceAnimation = Animator({
   name: "bounce",
   duration: 1000,
   iterationCount: "infinite",
 });
 
-const spinAnimation = Animation({
+const spinAnimation = Animator({
   name: "spin",
   duration: 2000,
   iterationCount: "infinite",

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.1] - 2026-01-23
+
+### Refactor
+
+- **Animation**: Renamed `Animation` component to `AnimationWidget` and helper to `Animator` (internal) / `Animation` (public). Updated exports and documentation.
+
 ## [2.3.2] - 2026-01-23
 
 ### Features

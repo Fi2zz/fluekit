@@ -86,7 +86,7 @@ export { default as RatingBar } from "./RatingBar.vue";
 export { default as FlueConfigProvider } from "./FlueConfigProvider.vue";
 export { default as AnimationWidget } from "./Animation.vue";
 export { StyleProvider } from "./StyleProvider";
-export * from "./Animation";
+export * from "./Animator";
 export * from "./Color";
 export * from "./ImageUtils";
 export * from "./Colors";

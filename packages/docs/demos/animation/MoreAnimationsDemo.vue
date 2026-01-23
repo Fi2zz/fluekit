@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { Container, Text, defineKeyframes, Animation, AnimationWidget } from "fluekit";
+import { Container, Text, defineKeyframes, Animator, AnimationWidget } from "fluekit";
 
 // Define Keyframes
 defineKeyframes("fadeIn", {
@@ -57,27 +57,27 @@ defineKeyframes("shake", {
 });
 
 // Animations
-const fadeIn = Animation({
+const fadeIn = Animator({
   name: "fadeIn",
   duration: 1500,
   iterationCount: "infinite",
   direction: "alternate",
 });
 
-const slideUp = Animation({
+const slideUp = Animator({
   name: "slideUp",
   duration: 1000,
   iterationCount: "infinite",
   direction: "alternate",
 });
 
-const pulse = Animation({
+const pulse = Animator({
   name: "pulse",
   duration: 2000,
   iterationCount: "infinite",
 });
 
-const shake = Animation({
+const shake = Animator({
   name: "shake",
   duration: 1000,
   iterationCount: "infinite",
