@@ -10,7 +10,7 @@ The `AnimationWidget` component allows you to apply CSS keyframe animations to i
 
 ```vue
 <script setup>
-import { defineKeyframes, Animation, AnimationWidget } from "fluekit";
+import { defineKeyframes, Animator, AnimationWidget } from "fluekit";
 
 // 1. Define keyframes once (globally or locally)
 defineKeyframes("bounce", {
@@ -19,7 +19,7 @@ defineKeyframes("bounce", {
 });
 
 // 2. Create animation options
-const bounceAnim = Animation({
+const bounceAnim = Animator({
   name: "bounce",
   duration: 1000,
   iterationCount: "infinite",
