@@ -77,6 +77,7 @@ export default defineConfig({
           { text: "Slider", link: "/components/slider" },
           { text: "SnackBar", link: "/components/snack-bar" },
           { text: "Stack, Positioned & Sticky", link: "/components/stack" },
+          { text: "StyleProvider", link: "/components/style-provider" },
           { text: "Switch", link: "/components/switch" },
           { text: "Tabs", link: "/components/tabs" },
           { text: "Text", link: "/components/text" },
