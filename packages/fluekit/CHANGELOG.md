@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.1] - 2026-01-23
+
+### Features
+
+- **Animation**: Add `AnimationWidget` component and `Animation` utility helper for CSS keyframe animations.
+- **Container**: Fix external style/class merging issue.
+
 ## [2.3.0] - 2026-01-22
 
 ### Features

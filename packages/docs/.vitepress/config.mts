@@ -89,6 +89,7 @@ export default defineConfig({
         text: "API Reference",
         items: [
           { text: "Alignment", link: "/utils/alignment" },
+          { text: "Animation", link: "/utils/animation" },
           { text: "Border", link: "/utils/border" },
           { text: "BorderRadius", link: "/utils/border-radius" },
           { text: "BoxConstraints", link: "/utils/box-constraints" },

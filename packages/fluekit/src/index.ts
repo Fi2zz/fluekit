@@ -84,6 +84,8 @@ export { default as TabBarView } from "./TabBarView.vue";
 export { default as RefreshIndicator } from "./RefreshIndicator.vue";
 export { default as RatingBar } from "./RatingBar.vue";
 export { default as FlueConfigProvider } from "./FlueConfigProvider.vue";
+export { default as AnimationWidget } from "./Animation.vue";
+export * from "./Animation";
 export * from "./Color";
 export * from "./ImageUtils";
 export * from "./Colors";
