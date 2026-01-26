@@ -16,10 +16,8 @@ defineOptions({ inheritAttrs: false });
 interface Props {
   // flex 值 (类似 Flutter 的 flex 属性)
   flex?: number;
-  // 是否扩展填充可用空间 (类似 Flutter 的 Expanded)
-  expanded?: boolean;
-  // 是否灵活调整大小 (类似 Flutter 的 Flexible)
-  flexible?: boolean;
+  // FlexFit.loose (默认) or FlexFit.tight
+  fit?: "loose" | "tight";
   // 对齐方式 (覆盖父容器的 crossAxisAlignment)
   alignSelf?: "auto" | "start" | "end" | "center" | "stretch" | "baseline";
   // 最小宽度/高度
@@ -30,9 +28,8 @@ interface Props {
 
 // 设置默认值
 const props = withDefaults(defineProps<Props>(), {
-  flex: 0,
-  expanded: false,
-  flexible: false,
+  flex: 1,
+  fit: "loose",
   alignSelf: "auto",
 });
 
@@ -43,16 +40,13 @@ const style = computed(() => {
   const styles: CSSProperties = {};
 
   // 设置 flex 属性
-  if (props.expanded) {
-    styles.flex = `1 1 0%`; // Expanded: flex-grow=1, flex-shrink=1, flex-basis=0%
-  } else if (props.flexible) {
-    styles.flex = `0 1 auto`; // Flexible: flex-grow=0, flex-shrink=1, flex-basis=auto
-    if (props.flex > 0) {
-      styles.flex = `${props.flex} 1 0%`; // 如果指定了 flex 值
-    }
-  } else if (props.flex > 0) {
-    // 只有 flex 值，默认为 Expanded 行为
-    styles.flex = `${props.flex} 1 0%`;
+  // Flutter Flexible: flex: flex 0 0 or flex 1 0 (if tight)
+  // Flutter Expanded: Flexible(fit: FlexFit.tight) -> flex: flex 1 0
+
+  if (props.fit === "tight") {
+    styles.flex = `${props.flex} 1 0%`; // grow shrink basis=0
+  } else {
+    styles.flex = `${props.flex} 0 auto`; // grow=flex shrink=0 basis=auto
   }
 
   // 对齐方式

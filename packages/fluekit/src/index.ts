@@ -11,6 +11,7 @@ export { default as Container } from "./Container.vue";
 export { default as Expanded } from "./Expanded.vue";
 export { default as Fixed } from "./Fixed.vue";
 export { default as FlexBox } from "./FlexBox.vue";
+export { default as FlexItem } from "./FlexItem.vue";
 export { default as GestureDetector } from "./GestureDetector.vue";
 export { default as GridView } from "./GridView.vue";
 export { default as IgnorePointer } from "./IgnorePointer.vue";

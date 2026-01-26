@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.3] - 2026-01-26
+
+### Refactor
+
+- **FlexItem**: Refactored to support `fit` ("loose" | "tight") property, aligning with Flutter's `Flexible`.
+- **Expanded**: Updated to use `FlexItem` with `fit="tight"`.
+- **Exports**: Exported `FlexItem` for public use.
+
 ## [2.5.2] - 2026-01-26
 
 ### Features

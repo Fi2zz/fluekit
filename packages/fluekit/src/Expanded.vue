@@ -1,21 +1,17 @@
 <template>
   <FlexItem
     :flex="flex"
-    expanded
+    fit="tight"
     :align-self="alignSelf"
     :min-size="minSize"
     :max-size="maxSize"
-    v-bind="$attrs"
   >
     <slot />
   </FlexItem>
 </template>
-
 <script setup lang="ts">
 import FlexItem from "./FlexItem.vue";
-
 defineOptions({ inheritAttrs: false });
-
 // 定义 Props 接口
 interface Props {
   // flex 值 (类似 Flutter 的 flex 属性)
