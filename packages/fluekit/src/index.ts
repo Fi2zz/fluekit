@@ -31,6 +31,7 @@ export { default as Text } from "./Text.vue";
 export { default as TextArea } from "./TextArea.vue";
 export { default as TextField } from "./TextField.vue";
 export { Toast } from "./Toast";
+export type { ToastType, ToastOptions, ToastPosition } from "./Toast.vue";
 export { default as Transform } from "./Transform.vue";
 export { default as Wrap } from "./Wrap.vue";
 export { default as Divider } from "./Divider.vue";

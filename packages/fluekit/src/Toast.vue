@@ -1,24 +1,26 @@
 <template>
-  <TransitionGroup name="fluekit-toast-fade" tag="div" class="fluekit-toast-container">
-    <div
-      v-for="item in activeToasts"
-      :key="item.id"
-      class="fluekit-toast"
-      :class="[`fluekit-toast--${item.options.position || 'bottom-center'}`]"
-      :style="{
-        zIndex: item.options.zIndex || 2000,
-        backgroundColor: item.options.backgroundColor || 'rgba(0, 0, 0, 0.8)',
-        color: item.options.textColor || '#ffffff',
-      }"
-    >
-      <div class="fluekit-toast-content">
+  <TransitionGroup
+    tag="div"
+    class="fluekit-toast-container"
+    :css="false"
+    @enter="onEnter"
+    @leave="onLeave"
+  >
+    <div v-for="item in activeToasts" :key="item.id" :style="getToastStyle(item)">
+      <div :style="contentStyle">
+        <CupertinoActivityIndicator
+          v-if="item.options.type === 'loading'"
+          :radius="10"
+          :color="item.options.textColor || '#ffffff'"
+          :style="iconStyle"
+        />
         <Icon
-          v-if="item.options.icon"
+          v-else-if="item.options.icon"
           :icon="item.options.icon"
           :size="20"
-          class="fluekit-toast-icon"
+          :style="iconStyle"
         />
-        <span class="fluekit-toast-message">{{ item.options.message }}</span>
+        <span>{{ item.options.message }}</span>
       </div>
     </div>
   </TransitionGroup>
@@ -27,6 +29,8 @@
 <script setup lang="ts">
 import { computed, ref, type CSSProperties } from "vue";
 import Icon from "./Icon.vue";
+import { Icons } from "./Icons";
+import CupertinoActivityIndicator from "./CupertinoActivityIndicator.vue";
 
 export type ToastPosition =
   | "center"
@@ -39,10 +43,13 @@ export type ToastPosition =
   | "center-left"
   | "center-right";
 
+export type ToastType = "success" | "failed" | "error" | "loading" | "info" | "warning";
+
 export interface ToastOptions {
   message: string;
   duration?: number;
   position?: ToastPosition;
+  type?: ToastType;
   icon?: string;
   zIndex?: number;
   backgroundColor?: string;
@@ -119,10 +126,29 @@ const add = (options: ToastOptions) => {
     clear();
   }
 
+  const resolvedOptions = { ...options };
+  if (resolvedOptions.type && !resolvedOptions.icon) {
+    switch (resolvedOptions.type) {
+      case "success":
+        resolvedOptions.icon = Icons.checkCircle;
+        break;
+      case "failed":
+      case "error":
+        resolvedOptions.icon = Icons.cancel;
+        break;
+      case "info":
+        resolvedOptions.icon = Icons.info;
+        break;
+      case "warning":
+        resolvedOptions.icon = Icons.warning;
+        break;
+    }
+  }
+
   const id = idCounter++;
   const toast: ActiveToast = {
     id,
-    options,
+    options: resolvedOptions,
   };
 
   activeToasts.value.push(toast);
@@ -166,110 +192,85 @@ defineExpose({
   removeLast,
   clear,
 });
+
+// Styles
+const baseToastStyle: CSSProperties = {
+  position: "fixed",
+  padding: "8px 16px",
+  borderRadius: "8px",
+  fontSize: "14px",
+  lineHeight: "20px",
+  maxWidth: "80vw",
+  wordBreak: "break-all",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+};
+
+const contentStyle: CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+};
+
+const iconStyle: CSSProperties = {
+  flexShrink: 0,
+};
+
+const positionStyles: Record<string, CSSProperties> = {
+  center: { top: "50%", left: "50%", transform: "translate(-50%, -50%)" },
+  "top-center": { top: "24px", left: "50%", transform: "translateX(-50%)" },
+  "bottom-center": { bottom: "48px", left: "50%", transform: "translateX(-50%)" },
+  "top-left": { top: "24px", left: "24px" },
+  "top-right": { top: "24px", right: "24px" },
+  "bottom-left": { bottom: "24px", left: "24px" },
+  "bottom-right": { bottom: "24px", right: "24px" },
+  "center-left": { top: "50%", left: "24px", transform: "translateY(-50%)" },
+  "center-right": { top: "50%", right: "24px", transform: "translateY(-50%)" },
+};
+
+const getToastStyle = (item: ActiveToast): CSSProperties => {
+  const pos = item.options.position || "bottom-center";
+  return {
+    ...baseToastStyle,
+    ...positionStyles[pos],
+    zIndex: item.options.zIndex || 2000,
+    backgroundColor: item.options.backgroundColor || "rgba(0, 0, 0, 0.8)",
+    color: item.options.textColor || "#ffffff",
+  };
+};
+
+const onEnter = (el: Element, done: () => void) => {
+  const element = el as HTMLElement;
+  const baseTransform = element.style.transform || "";
+
+  element.animate(
+    [
+      { opacity: 0, transform: `${baseTransform} scale(0.9)` },
+      { opacity: 1, transform: `${baseTransform} scale(1)` },
+    ],
+    {
+      duration: 300,
+      easing: "ease",
+    },
+  ).onfinish = done;
+};
+
+const onLeave = (el: Element, done: () => void) => {
+  const element = el as HTMLElement;
+  const baseTransform = element.style.transform || "";
+
+  element.animate(
+    [
+      { opacity: 1, transform: `${baseTransform} scale(1)` },
+      { opacity: 0, transform: `${baseTransform} scale(0.9)` },
+    ],
+    {
+      duration: 300,
+      easing: "ease",
+    },
+  ).onfinish = done;
+};
 </script>
-
-<style scoped>
-.fluekit-toast {
-  position: fixed;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  line-height: 20px;
-  max-width: 80vw;
-  word-break: break-all;
-  pointer-events: none;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.fluekit-toast-content {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.fluekit-toast-icon {
-  flex-shrink: 0;
-}
-
-/* Positions */
-.fluekit-toast--center {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.fluekit-toast--top-center {
-  top: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.fluekit-toast--bottom-center {
-  bottom: 48px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.fluekit-toast--top-left {
-  top: 24px;
-  left: 24px;
-}
-
-.fluekit-toast--top-right {
-  top: 24px;
-  right: 24px;
-}
-
-.fluekit-toast--bottom-left {
-  bottom: 24px;
-  left: 24px;
-}
-
-.fluekit-toast--bottom-right {
-  bottom: 24px;
-  right: 24px;
-}
-
-.fluekit-toast--center-left {
-  top: 50%;
-  left: 24px;
-  transform: translateY(-50%);
-}
-
-.fluekit-toast--center-right {
-  top: 50%;
-  right: 24px;
-  transform: translateY(-50%);
-}
-
-/* Transitions */
-.fluekit-toast-fade-enter-from,
-.fluekit-toast-fade-leave-to {
-  opacity: 0;
-  transform: scale(0.9);
-}
-
-/* Adjust transform for centered positions during transition */
-.fluekit-toast-fade-enter-from.fluekit-toast--center,
-.fluekit-toast-fade-leave-to.fluekit-toast--center {
-  transform: translate(-50%, -50%) scale(0.9);
-}
-
-.fluekit-toast-fade-enter-from.fluekit-toast--top-center,
-.fluekit-toast-fade-leave-to.fluekit-toast--top-center,
-.fluekit-toast-fade-enter-from.fluekit-toast--bottom-center,
-.fluekit-toast-fade-leave-to.fluekit-toast--bottom-center {
-  transform: translateX(-50%) scale(0.9);
-}
-
-.fluekit-toast-fade-enter-from.fluekit-toast--center-left,
-.fluekit-toast-fade-leave-to.fluekit-toast--center-left,
-.fluekit-toast-fade-enter-from.fluekit-toast--center-right,
-.fluekit-toast-fade-leave-to.fluekit-toast--center-right {
-  transform: translateY(-50%) scale(0.9);
-}
-</style>

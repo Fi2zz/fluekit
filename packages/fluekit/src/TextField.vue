@@ -68,8 +68,8 @@
           :autocapitalize="textCapitalization"
           :enterkeyhint="textInputAction"
           :autocorrect="autocorrect ? 'on' : 'off'"
-          v-bind="$attrs"
           @input="handleInput"
+          @change="handleChange"
           @focus="handleFocus"
           @blur="handleBlur"
         />
@@ -164,6 +164,7 @@ interface Props {
   textInputAction?: "enter" | "done" | "go" | "next" | "previous" | "search" | "send";
   textCapitalization?: "none" | "sentences" | "words" | "characters";
   autocorrect?: boolean;
+  modelModifiers?: Record<string, boolean>;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -175,12 +176,13 @@ const props = withDefaults(defineProps<Props>(), {
   autoGrow: false,
   textAlign: "start",
   autocorrect: true,
+  modelModifiers: () => ({}),
 });
 
 const slots = useSlots();
 
 const emit = defineEmits<{
-  (e: "update:modelValue", value: string): void;
+  (e: "update:modelValue", value: string | number): void;
   (e: "focus", event: FocusEvent): void;
   (e: "blur", event: FocusEvent): void;
   (e: "submit", value: string): void;
@@ -540,10 +542,33 @@ const shouldShowFooter = computed(() => {
 });
 
 // Events
+const emitValue = (value: string | number) => {
+  if (props.modelModifiers?.trim && typeof value === "string") {
+    value = value.trim();
+  }
+  if (props.modelModifiers?.number) {
+    const n = parseFloat(value as string);
+    if (!isNaN(n)) {
+      value = n;
+    }
+  }
+  emit("update:modelValue", value);
+};
+
 const handleInput = (e: Event) => {
   const target = e.target as HTMLInputElement;
-  emit("update:modelValue", target.value);
   nextTick(_autoGrow);
+
+  if (!props.modelModifiers?.lazy) {
+    emitValue(target.value);
+  }
+};
+
+const handleChange = (e: Event) => {
+  const target = e.target as HTMLInputElement;
+  if (props.modelModifiers?.lazy) {
+    emitValue(target.value);
+  }
 };
 
 const handleFocus = (e: FocusEvent) => {

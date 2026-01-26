@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0] - 2026-01-26
+
+### Features
+
+- **Toast**:
+  - Added types: `success`, `failed`, `error`, `loading`, `info`, `warning`.
+  - Added convenience methods: `Toast.success()`, `Toast.error()`, etc.
+  - Implemented iOS-style `CupertinoActivityIndicator` for loading state.
+  - Removed internal CSS dependencies in favor of inline styles and Web Animations API.
+- **SlidingSegmentedControl**:
+  - Added `decoration` and `thumbDecoration` props for custom styling.
+- **TextField**:
+  - Added support for `v-model` modifiers (`.trim`, `.number`, `.lazy`).
+  - Fixed `$attrs` fallthrough issue.
+
 ## [2.4.1] - 2026-01-23
 
 ### Refactor

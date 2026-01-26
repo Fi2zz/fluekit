@@ -23,12 +23,42 @@ export interface ToastInstance {
 export const Toast = {
   show(message: string, options: Omit<ToastOptions, "message"> = {}): ToastInstance {
     const instance = initToast();
-    const id = instance?.add({ message, ...options });
+    const id = instance?.add({
+      message,
+      ...options,
+    });
+
     return {
       hide: () => {
-        if (id !== undefined) instance?.remove(id);
+        if (id !== undefined) {
+          instance?.remove(id);
+        }
       },
     };
+  },
+
+  success(message: string, options: Omit<ToastOptions, "message" | "type"> = {}) {
+    return this.show(message, { ...options, type: "success" });
+  },
+
+  failed(message: string, options: Omit<ToastOptions, "message" | "type"> = {}) {
+    return this.show(message, { ...options, type: "failed" });
+  },
+
+  error(message: string, options: Omit<ToastOptions, "message" | "type"> = {}) {
+    return this.show(message, { ...options, type: "error" });
+  },
+
+  info(message: string, options: Omit<ToastOptions, "message" | "type"> = {}) {
+    return this.show(message, { ...options, type: "info" });
+  },
+
+  warning(message: string, options: Omit<ToastOptions, "message" | "type"> = {}) {
+    return this.show(message, { ...options, type: "warning" });
+  },
+
+  loading(message: string, options: Omit<ToastOptions, "message" | "type"> = {}) {
+    return this.show(message, { ...options, type: "loading" });
   },
 
   hide(all: boolean = false) {

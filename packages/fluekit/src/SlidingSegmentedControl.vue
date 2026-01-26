@@ -38,6 +38,8 @@ interface Props {
   disabledKeys?: (string | number)[]; // Keys that are disabled
   backgroundColor?: string | Color;
   thumbColor?: string | Color;
+  decoration?: BoxDecoration;
+  thumbDecoration?: BoxDecoration;
   padding?: EdgeInsets;
   height?: number | string;
   labelTextStyleBuilder?: (value: string | number, disabled?: boolean) => TextStyle;
@@ -60,10 +62,12 @@ const handleTap = (key: string | number) => {
 const rootContainer = computed(() => {
   return {
     padding: props.padding,
-    decoration: BoxDecoration({
-      borderRadius: BorderRadius.circular(8),
-      color: props.backgroundColor,
-    }),
+    decoration:
+      props.decoration ||
+      BoxDecoration({
+        borderRadius: BorderRadius.circular(8),
+        color: props.backgroundColor,
+      }),
     alignment: "center",
     width: "100%",
     height: props.height,
@@ -71,6 +75,8 @@ const rootContainer = computed(() => {
 });
 
 const thumbDecoration = computed(() => {
+  if (props.thumbDecoration) return props.thumbDecoration;
+
   return BoxDecoration({
     color: props.thumbColor,
     borderRadius: BorderRadius.circular(6),

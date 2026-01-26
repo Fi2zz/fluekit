@@ -3,6 +3,16 @@
     <h3>Basic Usage</h3>
     <Button @pressed="showBasicToast">Show Toast</Button>
 
+    <h3>Types</h3>
+    <div class="grid-buttons">
+      <Button @pressed="Toast.success('Operation Successful')">Success</Button>
+      <Button @pressed="Toast.error('An error occurred')">Error</Button>
+      <Button @pressed="Toast.info('New updates available')">Info</Button>
+      <Button @pressed="Toast.warning('Check your connection')">Warning</Button>
+      <Button @pressed="Toast.loading('Loading...', { duration: 0 })">Loading</Button>
+      <Button @pressed="Toast.hide(true)">Clear All</Button>
+    </div>
+
     <h3>Positions</h3>
     <div class="grid-buttons">
       <Button @pressed="showToast('top-left')">Top Left</Button>
