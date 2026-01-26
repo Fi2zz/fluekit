@@ -11,6 +11,7 @@ import {
   Positioned,
   BorderRadius,
   Border,
+  FontWeight,
 } from "fluekit";
 </script>
 
@@ -43,7 +44,7 @@ import {
       >
         <Text
           data="Glassmorphism"
-          :style="TextStyle({ color: 'white', fontSize: 20, fontWeight: 'bold' })"
+          :style="TextStyle({ color: 'white', fontSize: 20, fontWeight: FontWeight.bold })"
         />
       </Container>
     </Positioned>

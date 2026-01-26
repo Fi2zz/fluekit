@@ -49,6 +49,20 @@ BoxConstraints.tight = (size: { width: number; height: number }) =>
     maxHeight: size.height,
   });
 
+BoxConstraints.tightFor = ({
+  width,
+  height,
+}: {
+  width?: number | string;
+  height?: number | string;
+} = {}) =>
+  BoxConstraints({
+    minWidth: width,
+    maxWidth: width,
+    minHeight: height,
+    maxHeight: height,
+  });
+
 BoxConstraints.loose = (size: { width: number; height: number }) =>
   BoxConstraints({
     minWidth: 0,
