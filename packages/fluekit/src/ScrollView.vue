@@ -101,18 +101,13 @@ const containerStyle = computed<CSSProperties>(() => {
 
 const contentStyle = computed<CSSProperties>(() => {
   const style: CSSProperties = {
-    // 确保内容能够撑开容器
-    minWidth: props.scrollDirection === "horizontal" ? "max-content" : "100%",
-    minHeight: props.scrollDirection === "vertical" ? "fit-content" : "100%",
     boxSizing: "border-box",
     // 使得 padding 生效且不塌陷 (建立 BFC)
     display: "flow-root",
+    width: "100%",
+    height: "100%",
   };
-
-  if (props.padding) {
-    Object.assign(style, paddingToStyle(props.padding));
-  }
-
+  if (props.padding) Object.assign(style, paddingToStyle(props.padding));
   return style;
 });
 
@@ -141,16 +136,10 @@ const handleScroll = (event: Event) => {
 };
 
 // --- Expose ---
-
 const scrollTo = (options: ScrollToOptions) => {
   scrollRef.value?.scrollTo(options);
 };
-
-defineExpose({
-  scrollRef,
-  scrollTo,
-});
-
+defineExpose({ scrollRef, scrollTo });
 onUnmounted(() => {
   if (scrollTimer) clearTimeout(scrollTimer);
 });

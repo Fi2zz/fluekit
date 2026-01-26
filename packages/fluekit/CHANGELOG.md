@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.5] - 2026-01-26
+
+### Features
+
+- **Icons**: Added `videoPlay` icon.
+
+### Fixes
+
+- **ScrollView**: Adjusted content style to ensure proper layout sizing.
+
 ## [2.5.4] - 2026-01-26
 
 ### Features
