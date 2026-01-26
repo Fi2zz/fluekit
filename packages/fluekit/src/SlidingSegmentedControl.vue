@@ -42,7 +42,11 @@ interface Props {
   thumbDecoration?: BoxDecoration;
   padding?: EdgeInsets;
   height?: number | string;
-  labelTextStyleBuilder?: (value: string | number, disabled?: boolean) => TextStyle;
+  labelTextStyleBuilder?: (
+    value: string | number,
+    selected: boolean,
+    disabled?: boolean,
+  ) => TextStyle;
 }
 const props = withDefaults(defineProps<Props>(), {
   disabledKeys: () => [],
@@ -91,7 +95,11 @@ const thumbDecoration = computed(() => {
 });
 function buildLabelTextStyle(value: string | number) {
   const disabled = props.disabledKeys.includes(value);
-  const labelTextStyle = props.labelTextStyleBuilder?.(value, disabled) || {
+  const labelTextStyle = props.labelTextStyleBuilder?.(
+    value,
+    props.modelValue == value,
+    disabled,
+  ) || {
     color: disabled ? "rgba(0,0,0,0.38)" : "#000000",
   };
   return TextStyle({ fontSize: 12, fontWeight: FontWeight.w500, ...labelTextStyle });

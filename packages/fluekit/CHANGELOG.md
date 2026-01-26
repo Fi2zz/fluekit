@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.1] - 2026-01-26
+
+### Documentation
+
+- **BoxDecoration**: Added documentation and demo for `backdropFilter` (Glassmorphism).
+
 ## [2.5.0] - 2026-01-26
 
 ### Features
