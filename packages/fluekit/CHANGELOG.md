@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.4] - 2026-01-26
+
+### Features
+
+- **AlertDialog**: Added `showAlertDialog` helper for imperative usage.
+
 ## [2.5.3] - 2026-01-26
 
 ### Refactor

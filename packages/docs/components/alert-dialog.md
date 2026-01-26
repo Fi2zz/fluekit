@@ -51,3 +51,26 @@ import AlertDialogDemo from '@example/demos/new_components/AlertDialogDemo.vue'
 | :-------- | :---------------------------------------------------- |
 | `default` | The content of the dialog (overrides `content` prop). |
 | `actions` | The actions at the bottom of the dialog.              |
+
+## Imperative API
+
+You can also use the `showAlertDialog` function to display a dialog programmatically.
+
+```typescript
+import { showAlertDialog } from "fluekit";
+
+showAlertDialog({
+  title: "Confirmation",
+  content: "Are you sure you want to proceed?",
+  onOk: () => console.log("OK"),
+  onClose: () => console.log("Closed"),
+});
+```
+
+### showAlertDialog(options)
+
+| Option    | Type         | Default | Description                                  |
+| :-------- | :----------- | :------ | :------------------------------------------- |
+| `onOk`    | `() => void` | -       | Callback triggered when OK button is clicked |
+| `onClose` | `() => void` | -       | Callback triggered when dialog is closed     |
+| `...`     | `Props`      | -       | All other props from AlertDialog component   |

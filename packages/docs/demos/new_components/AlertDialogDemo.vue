@@ -32,11 +32,14 @@
       variant="ios"
     />
   </Column>
+  <Column>
+    <Button @click="showImperativeDialog">Imperative Dialog</Button>
+  </Column>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { Column, Button, AlertDialog, BoxConstraints } from "fluekit";
+import { Column, Button, AlertDialog, BoxConstraints, showAlertDialog } from "fluekit";
 
 const dialogVisible = ref(false);
 const defaultDialogVisible = ref(false);
@@ -50,5 +53,18 @@ const showDefaultDialog = () => {
 };
 const showIOSDialog = () => {
   iosDialogVisible.value = true;
+};
+
+const showImperativeDialog = () => {
+  showAlertDialog({
+    title: "Imperative Dialog",
+    content: "This dialog was created using showAlertDialog().",
+    onOk: () => {
+      console.log("Imperative OK");
+    },
+    onClose: () => {
+      console.log("Imperative Closed");
+    },
+  });
 };
 </script>

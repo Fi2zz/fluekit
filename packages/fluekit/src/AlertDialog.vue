@@ -108,6 +108,8 @@ interface Props {
   cancelText?: string;
 }
 
+export type AlertDialogProps = Props;
+
 const props = withDefaults(defineProps<Props>(), {
   visible: false,
   barrierDismissible: true,
