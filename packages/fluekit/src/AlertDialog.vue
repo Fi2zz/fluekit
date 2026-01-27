@@ -100,6 +100,8 @@ interface Props {
   actionsAlignment?: MainAxisAlignment;
   titleAlignment?: Alignment;
   padding?: EdgeInsets;
+  contentStyle?: TextStyle;
+  contentColor?: string;
   titleStyle?: TextStyle;
   titleColor?: string;
   titleFontSize?: number;
@@ -218,16 +220,26 @@ const dialogTitleStyle = computed(() => {
 
 const dialogContentStyle = computed(() => {
   if (isIOS.value) {
-    return TextStyle({
-      fontSize: 13,
-      color: "#000000",
-      fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
-    });
+    return TextStyle(
+      Object.assign(
+        {
+          fontSize: 13,
+          color: "#000000",
+          fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
+        },
+        props.contentStyle,
+      ),
+    );
   }
-  return TextStyle({
-    fontSize: 16,
-    color: "rgba(0,0,0,0.6)",
-  });
+  return TextStyle(
+    Object.assign(
+      {
+        fontSize: 16,
+        color: props.contentColor || "rgba(0,0,0,0.6)",
+      },
+      props.contentStyle,
+    ),
+  );
 });
 
 const iosActionsBorderDecoration = computed(() => {
