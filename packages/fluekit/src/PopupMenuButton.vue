@@ -4,7 +4,7 @@
 
     <Overlay :visible="isOpen" :color="'transparent'" :zIndex="999" @tap="closeMenu" />
 
-    <transition name="popup-scale">
+    <transition :css="false" @enter="onEnter" @leave="onLeave">
       <Container
         v-if="isOpen"
         :margin="margin"
@@ -100,20 +100,34 @@ const menuStyle = computed<CSSProperties>(() => {
     zIndex: 1000,
   };
 });
+
+const onEnter = (el: Element, done: () => void) => {
+  const element = el as HTMLElement;
+  element.style.transformOrigin = "top right";
+  element.animate(
+    [
+      { opacity: 0, transform: "scale(0.9)" },
+      { opacity: 1, transform: "scale(1)" },
+    ],
+    {
+      duration: 200,
+      easing: "ease",
+    },
+  ).onfinish = done;
+};
+
+const onLeave = (el: Element, done: () => void) => {
+  const element = el as HTMLElement;
+  element.style.transformOrigin = "top right";
+  element.animate(
+    [
+      { opacity: 1, transform: "scale(1)" },
+      { opacity: 0, transform: "scale(0.9)" },
+    ],
+    {
+      duration: 200,
+      easing: "ease",
+    },
+  ).onfinish = done;
+};
 </script>
-
-<style scoped>
-.popup-scale-enter-active,
-.popup-scale-leave-active {
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-  transform-origin: top right;
-}
-
-.popup-scale-enter-from,
-.popup-scale-leave-to {
-  opacity: 0;
-  transform: scale(0.9);
-}
-</style>

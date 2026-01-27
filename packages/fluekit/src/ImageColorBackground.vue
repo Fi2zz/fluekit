@@ -1,5 +1,5 @@
 <template>
-  <div class="flue-image-color-background" :style="containerStyle">
+  <div :style="containerStyle">
     <slot :color="dominantColor" :is-loading="isLoading" />
   </div>
 </template>
@@ -36,6 +36,9 @@ const containerStyle = computed<CSSProperties>(() => {
       ? dominantColor.value.withOpacity(props.opacity).toString()
       : "transparent",
     transition: "background-color 0.5s ease",
+    display: "flex",
+    flexDirection: "column",
+    boxSizing: "border-box",
   };
 });
 
@@ -61,11 +64,3 @@ watch(
   { immediate: true },
 );
 </script>
-
-<style scoped>
-.flue-image-color-background {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-</style>

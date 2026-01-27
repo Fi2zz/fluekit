@@ -7,7 +7,7 @@
     @tap-up="handleTapUp"
     @tap-cancel="handleTapCancel"
   >
-    <button class="fluekit-button" :style="computedStyle" :disabled="disabled" v-bind="safeAttrs">
+    <button :style="computedStyle" :disabled="disabled" v-bind="safeAttrs">
       <slot>{{ props.text }}</slot>
     </button>
   </GestureDetector>
@@ -63,7 +63,24 @@ const gestureStyle = useGestureStyle(props.behavior);
 
 // 样式计算逻辑
 const computedStyle = computed(() => {
-  const css: CSSProperties = { position: "relative" };
+  const css: CSSProperties = {
+    position: "relative",
+    appearance: "none",
+    border: "0",
+    outline: "0",
+    background: "transparent",
+    padding: "0",
+    margin: "0",
+    cursor: "pointer",
+    userSelect: "none",
+    WebkitTapHighlightColor: "transparent",
+    fontFamily: "inherit",
+    fontSize: "inherit",
+    lineHeight: "inherit",
+    color: "inherit",
+    textAlign: "inherit",
+    boxSizing: "border-box",
+  };
   // 1. 基础样式 (来自 variant)
   let variantStyle: ButtonStyle = {};
   if (props.variant === "ios") {
@@ -113,28 +130,3 @@ const handleTapCancel = (e: any) => {
 const handleTap = withDisabled(() => emit("pressed"));
 const handleLongPress = withDisabled(() => emit("long-press"));
 </script>
-
-<style scoped>
-.fluekit-button {
-  appearance: none;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  color: inherit;
-  text-align: inherit;
-  box-sizing: border-box;
-  /* 确保 padding 包含在 width/height 内 */
-}
-
-.fluekit-button:disabled {
-  cursor: default;
-}
-</style>

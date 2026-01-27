@@ -1,5 +1,5 @@
 <template>
-  <div class="slider-container" ref="trackRef">
+  <div :style="containerStyle" ref="trackRef">
     <GestureDetector @pan-start="onPanStart" @pan-update="onPanUpdate">
       <Container :height="40" alignment="centerLeft">
         <!-- Track -->
@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, type CSSProperties } from "vue";
 import Container from "./Container.vue";
 import Stack from "./Stack.vue";
 import Positioned from "./Positioned.vue";
@@ -77,6 +77,11 @@ const emit = defineEmits<{
 
 const trackRef = ref<HTMLElement>();
 const dragOffset = ref(0);
+
+const containerStyle: CSSProperties = {
+  width: "100%",
+  position: "relative",
+};
 
 const isIos = computed(() => props.variant === "ios");
 const trackHeight = computed(() => (isIos.value ? 3 : 4));
@@ -150,10 +155,3 @@ const thumbDecoration = computed(() => {
   });
 });
 </script>
-
-<style scoped>
-.slider-container {
-  width: 100%;
-  position: relative;
-}
-</style>

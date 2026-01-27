@@ -116,6 +116,7 @@ const imageStyle = computed(() => {
     objectPosition: alignmentStyle.value,
     opacity: props.opacity,
     imageRendering: props.filterQuality === "low" ? "pixelated" : "auto", // 简化映射
+    display: "block",
   };
 
   // 处理颜色混合
@@ -134,9 +135,3 @@ const imageStyle = computed(() => {
 const onLoad = (e: Event) => emit("load", e);
 const onError = (e: Event) => emit("error", e);
 </script>
-
-<style scoped>
-.fluekit-image {
-  display: block;
-}
-</style>

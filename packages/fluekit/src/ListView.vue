@@ -2,7 +2,7 @@
   <component
     :is="onRefresh ? RefreshIndicator : 'div'"
     :onRefresh="onRefresh"
-    class="fluekit-list-view-wrapper"
+    :style="wrapperStyle"
   >
     <ScrollView
       :scroll-direction="scrollDirection"
@@ -64,13 +64,11 @@ const contentStyle = computed<CSSProperties>(() => {
     minWidth: isVertical ? "100%" : "max-content",
   };
 });
-</script>
 
-<style scoped>
-.fluekit-list-view-wrapper {
-  height: 100%;
-  width: 100%;
-  display: block;
-  overflow: hidden;
-}
-</style>
+const wrapperStyle: CSSProperties = {
+  height: "100%",
+  width: "100%",
+  display: "block",
+  overflow: "hidden",
+};
+</script>

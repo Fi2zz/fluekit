@@ -1,34 +1,36 @@
 <template>
-  <div class="snackbar-overlay">
-    <Container
-      :margin="EdgeInsets.all(8)"
-      :padding="EdgeInsets.symmetric({ horizontal: 16, vertical: 14 })"
-      :decoration="decoration"
-      :width="'100%'"
-      :constraints="BoxConstraints({ maxWidth: 600 })"
-    >
-      <Row main-axis-alignment="spaceBetween" cross-axis-alignment="center">
-        <Text :style="{ color: 'white', fontSize: 14 }">{{ content }}</Text>
-        <GestureDetector v-if="actionLabel" @tap="handleAction">
-          <Container :margin="EdgeInsets.only({ left: 16 })">
-            <Text
-              :style="{
-                color: '#2196F3',
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              }"
-            >
-              {{ actionLabel.toUpperCase() }}
-            </Text>
-          </Container>
-        </GestureDetector>
-      </Row>
-    </Container>
+  <div :style="overlayStyle">
+    <StyleProvider :style="{ pointerEvents: 'auto' }">
+      <Container
+        :margin="EdgeInsets.all(8)"
+        :padding="EdgeInsets.symmetric({ horizontal: 16, vertical: 14 })"
+        :decoration="decoration"
+        :width="'100%'"
+        :constraints="BoxConstraints({ maxWidth: 600 })"
+      >
+        <Row main-axis-alignment="spaceBetween" cross-axis-alignment="center">
+          <Text :style="{ color: 'white', fontSize: 14 }">{{ content }}</Text>
+          <GestureDetector v-if="actionLabel" @tap="handleAction">
+            <Container :margin="EdgeInsets.only({ left: 16 })">
+              <Text
+                :style="{
+                  color: '#2196F3',
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                }"
+              >
+                {{ actionLabel.toUpperCase() }}
+              </Text>
+            </Container>
+          </GestureDetector>
+        </Row>
+      </Container>
+    </StyleProvider>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed } from "vue";
+import { onMounted, computed, type CSSProperties } from "vue";
 import Container from "./Container.vue";
 import { FontWeight } from "./TextStyle";
 import Row from "./Row.vue";
@@ -38,6 +40,7 @@ import { EdgeInsets } from "./EdgeInsets";
 import { BoxDecoration } from "./BoxDecoration";
 import { BorderRadius } from "./BorderRadius";
 import { BoxConstraints } from "./BoxConstraints";
+import { StyleProvider } from "./StyleProvider";
 
 interface Props {
   content: string;
@@ -78,20 +81,15 @@ const decoration = computed(() => {
     ],
   });
 });
-</script>
 
-<style scoped>
-.snackbar-overlay {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  z-index: 9999;
-  pointer-events: none;
-}
-.snackbar-overlay > * {
-  pointer-events: auto;
-}
-</style>
+const overlayStyle: CSSProperties = {
+  position: "fixed",
+  bottom: 0,
+  left: 0,
+  right: 0,
+  display: "flex",
+  justifyContent: "center",
+  zIndex: 9999,
+  pointerEvents: "none",
+};
+</script>

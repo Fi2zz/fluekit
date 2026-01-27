@@ -1,14 +1,6 @@
 <template>
-  <Transition :name="transition">
-    <Fixed
-      v-if="visible"
-      :z-index="zIndex"
-      :top="0"
-      :left="0"
-      :right="0"
-      :bottom="0"
-      class="fluekit-modal"
-    >
+  <Transition :css="false" @enter="onEnter" @leave="onLeave">
+    <Fixed v-if="visible" :z-index="zIndex" :top="0" :left="0" :right="0" :bottom="0">
       <Container width="100%" height="100%" :alignment="alignment">
         <slot />
       </Container>
@@ -59,16 +51,20 @@ const onBarrierDismiss = () => {
     close();
   }
 };
+
+const onEnter = (el: Element, done: () => void) => {
+  const element = el as HTMLElement;
+  element.animate([{ opacity: 0 }, { opacity: 1 }], {
+    duration: 300,
+    easing: "ease",
+  }).onfinish = done;
+};
+
+const onLeave = (el: Element, done: () => void) => {
+  const element = el as HTMLElement;
+  element.animate([{ opacity: 1 }, { opacity: 0 }], {
+    duration: 300,
+    easing: "ease",
+  }).onfinish = done;
+};
 </script>
-
-<style>
-.fluekit-modal-fade-enter-active,
-.fluekit-modal-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fluekit-modal-fade-enter-from,
-.fluekit-modal-fade-leave-to {
-  opacity: 0;
-}
-</style>

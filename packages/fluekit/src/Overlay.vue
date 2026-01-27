@@ -1,5 +1,5 @@
 <template>
-  <transition name="fluekit-overlay-fade">
+  <transition :css="false" @enter="onEnter" @leave="onLeave">
     <div v-if="visible" :style="style" @click="handleClick">
       <slot />
     </div>
@@ -26,6 +26,22 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{ (e: "tap"): void }>();
 const handleClick = () => emit("tap");
 
+const onEnter = (el: Element, done: () => void) => {
+  const element = el as HTMLElement;
+  element.animate([{ opacity: 0 }, { opacity: 1 }], {
+    duration: 250,
+    easing: "ease",
+  }).onfinish = done;
+};
+
+const onLeave = (el: Element, done: () => void) => {
+  const element = el as HTMLElement;
+  element.animate([{ opacity: 1 }, { opacity: 0 }], {
+    duration: 250,
+    easing: "ease",
+  }).onfinish = done;
+};
+
 const style = computed<CSSProperties>(() => {
   return {
     backgroundColor: resolveColor(props.color),
@@ -34,18 +50,6 @@ const style = computed<CSSProperties>(() => {
     inset: 0,
     pointerEvents: "auto",
     cursor: "auto",
-    opacity: props.visible ? 1 : 0,
   };
 });
 </script>
-
-<style scoped>
-.fluekit-overlay-fade-enter-active,
-.fluekit-overlay-fade-leave-active {
-  transition: opacity 0.25s ease;
-}
-.fluekit-overlay-fade-enter-from,
-.fluekit-overlay-fade-leave-to {
-  opacity: 0;
-}
-</style>

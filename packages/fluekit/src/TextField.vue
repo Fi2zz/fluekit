@@ -1,16 +1,7 @@
 <template>
-  <div
-    class="fluekit-text-field-wrapper"
-    :class="{
-      'is-focused': isFocused,
-      'is-disabled': !enabled,
-      'has-error': !!decoration?.errorText,
-      'is-collapsed': decoration?.isCollapsed,
-      'is-dense': decoration?.isDense,
-    }"
-  >
+  <div :style="wrapperStyle">
     <!-- Icon (Outside Left) -->
-    <div v-if="$slots.icon || decoration?.icon" class="fluekit-input-icon">
+    <div v-if="$slots.icon || decoration?.icon" :style="iconStyle">
       <slot name="icon">
         <Icon
           :icon="decoration?.icon"
@@ -20,20 +11,15 @@
       </slot>
     </div>
 
-    <div class="fluekit-text-field-content">
+    <div :style="contentWrapperStyle">
       <!-- Input Container -->
-      <div class="fluekit-input-container" :style="containerStyle">
+      <div :style="containerStyle">
         <!-- Label -->
-        <label
-          v-if="decoration?.labelText && shouldShowLabel"
-          class="fluekit-input-label"
-          :class="{ 'is-floating': isFloating }"
-          :style="labelStyle"
-        >
+        <label v-if="decoration?.labelText && shouldShowLabel" :style="labelStyle">
           {{ decoration.labelText }}
         </label>
         <!-- Prefix Icon (Inside Left) -->
-        <div v-if="$slots.prefixIcon || decoration?.prefixIcon" class="fluekit-input-prefix-icon">
+        <div v-if="$slots.prefixIcon || decoration?.prefixIcon" :style="prefixIconStyle">
           <slot name="prefixIcon">
             <Icon
               :icon="decoration?.prefixIcon"
@@ -44,43 +30,45 @@
         </div>
 
         <!-- Prefix (Text/Widget) -->
-        <div
-          v-if="$slots.prefix || decoration?.prefixText"
-          class="fluekit-input-prefix"
-          ref="prefixRef"
-        >
+        <div v-if="$slots.prefix || decoration?.prefixText" ref="prefixRef">
           <slot name="prefix">{{ decoration?.prefixText }}</slot>
         </div>
 
-        <!-- Input Element -->
-        <component
-          :is="isMultiline ? 'textarea' : 'input'"
-          ref="inputRef"
-          class="fluekit-input-element"
-          :value="modelValue"
-          :disabled="!enabled"
-          :readonly="readOnly"
-          :type="inputType"
-          :placeholder="placeholderText"
-          :rows="minLines || 1"
-          :style="inputStyle"
-          :maxlength="maxLength"
-          :autocapitalize="textCapitalization"
-          :enterkeyhint="textInputAction"
-          :autocorrect="autocorrect ? 'on' : 'off'"
-          @input="handleInput"
-          @change="handleChange"
-          @focus="handleFocus"
-          @blur="handleBlur"
-        />
+        <!-- Input Element Wrapper -->
+        <div :style="inputWrapperStyle">
+          <!-- Custom Placeholder -->
+          <div v-if="!modelValue && placeholderText" :style="placeholderStyle">
+            {{ placeholderText }}
+          </div>
+
+          <!-- Input Element -->
+          <component
+            :is="isMultiline ? 'textarea' : 'input'"
+            ref="inputRef"
+            :value="modelValue"
+            :disabled="!enabled"
+            :readonly="readOnly"
+            :type="inputType"
+            :rows="minLines || 1"
+            :style="finalInputStyle"
+            :maxlength="maxLength"
+            :autocapitalize="textCapitalization"
+            :enterkeyhint="textInputAction"
+            :autocorrect="autocorrect ? 'on' : 'off'"
+            @input="handleInput"
+            @change="handleChange"
+            @focus="handleFocus"
+            @blur="handleBlur"
+          />
+        </div>
 
         <!-- Suffix (Text/Widget) -->
-        <div v-if="$slots.suffix || decoration?.suffixText" class="fluekit-input-suffix">
+        <div v-if="$slots.suffix || decoration?.suffixText">
           <slot name="suffix">{{ decoration?.suffixText }}</slot>
         </div>
 
         <!-- Suffix Icon (Inside Right) -->
-        <div v-if="$slots.suffixIcon || decoration?.suffixIcon" class="fluekit-input-suffix-icon">
+        <div v-if="$slots.suffixIcon || decoration?.suffixIcon" :style="suffixIconStyle">
           <slot name="suffixIcon">
             <Icon
               :icon="decoration?.suffixIcon"
@@ -92,24 +80,19 @@
       </div>
 
       <!-- Helper/Error Text -->
-      <div v-if="shouldShowFooter" class="fluekit-input-footer">
-        <div
-          v-if="decoration?.errorText || decoration?.alwaysShowError"
-          class="fluekit-input-helper is-error"
-          :style="errorStyle"
-          :class="{ 'is-invisible': !decoration?.errorText }"
-        >
+      <div v-if="shouldShowFooter" :style="footerStyle">
+        <div v-if="decoration?.errorText || decoration?.alwaysShowError" :style="errorStyle">
           {{ decoration?.errorText || "&nbsp;" }}
         </div>
-        <div v-else-if="decoration?.helperText" class="fluekit-input-helper" :style="helperStyle">
+        <div v-else-if="decoration?.helperText" :style="helperStyle">
           {{ decoration.helperText }}
         </div>
 
         <!-- Spacer if helper exists but we want counter on the right -->
-        <div v-else class="fluekit-input-helper-spacer"></div>
+        <div v-else :style="{ flex: 1 }"></div>
 
         <!-- Character Counter -->
-        <div v-if="shouldShowCounter" class="fluekit-input-counter" :style="counterStyle">
+        <div v-if="shouldShowCounter" :style="counterStyle">
           {{ decoration?.counterText || `${String(modelValue).length} / ${maxLength}` }}
         </div>
       </div>
@@ -412,8 +395,66 @@ const containerStyle = computed<CSSProperties>(() => {
   return css;
 });
 
-const inputStyle = computed<CSSProperties>(() => {
+const wrapperStyle = computed<CSSProperties>(() => ({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "flex-start",
+  position: "relative",
+  marginTop: "16px",
+  fontFamily: "inherit",
+  width: "100%",
+}));
+
+const iconStyle = computed<CSSProperties>(() => ({
+  marginRight: "16px",
+  marginTop: "12px",
+  display: "flex",
+  alignItems: "center",
+  color: resolveColor(props.decoration?.iconColor) || "inherit",
+}));
+
+const contentWrapperStyle: CSSProperties = {
+  flex: 1,
+  position: "relative",
+  display: "flex",
+  flexDirection: "column",
+};
+
+const prefixIconStyle = computed<CSSProperties>(() => ({
+  display: "flex",
+  alignItems: "center",
+  padding: "0 8px",
+  color: resolveColor(props.decoration?.prefixIconColor) || "#666",
+  paddingLeft: 0,
+}));
+
+const suffixIconStyle = computed<CSSProperties>(() => ({
+  display: "flex",
+  alignItems: "center",
+  padding: "0 8px",
+  color: resolveColor(props.decoration?.suffixIconColor) || "#666",
+  paddingRight: 0,
+}));
+
+const inputWrapperStyle: CSSProperties = {
+  flex: 1,
+  position: "relative",
+  display: "flex",
+};
+
+const finalInputStyle = computed<CSSProperties>(() => {
   const css: CSSProperties = {
+    flex: 1,
+    border: "none",
+    outline: "none",
+    background: "transparent",
+    padding: 0,
+    margin: 0,
+    width: "100%",
+    fontFamily: "inherit",
+    fontSize: "16px",
+    color: "inherit",
+    resize: "none",
     ...textStyleToCSS(props.style),
   };
   if (props.cursorColor) {
@@ -425,24 +466,33 @@ const inputStyle = computed<CSSProperties>(() => {
   return css;
 });
 
+const placeholderStyle = computed<CSSProperties>(() => ({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  pointerEvents: "none",
+  color: hintColor.value,
+  fontSize: hintFontStyle.value,
+  textAlign: props.textAlign || "start",
+  whiteSpace: isMultiline.value ? "pre-wrap" : "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  ...textStyleToCSS(props.decoration?.hintStyle),
+}));
+
+const footerStyle: CSSProperties = {
+  display: "flex",
+  justifyContent: "space-between",
+  marginTop: "4px",
+};
+
 const labelStyle = computed<CSSProperties>(() => {
   const css: CSSProperties = {
     position: "absolute",
+    zIndex: 1,
     // Adjust left based on prefixIcon presence
-    // If prefixIcon exists, label should start after it?
-    // In Material, label starts at start of content area (including prefixIcon?) No, normally it overlays content.
-    // If isOutline, label is usually inside the border padding.
-    // If prefixIcon is present, label should probably be offset?
-    // This is complex in CSS. For now, we assume standard behavior where label is left-aligned.
-    // Ideally we'd measure prefixIcon width too.
-    // If prefixIcon is present, we need to add its width (usually 48px if using standard icon size + padding)
-    // Or we can rely on `prefixWidth` if we measure it?
-    // But prefixWidth only measures .fluekit-input-prefix (text).
-    // Let's assume standard behavior: if prefixIcon is present, label is offset.
-    // However, in Flutter, label floats *above* the prefixIcon usually?
-    // Actually, in Flutter, floating label is aligned with the *input content*.
-    // So if prefixIcon exists, the label (when inline) is after it.
-    // When floating, it stays aligned with the start of the input.
     left: `${(currentBorder.value?.isOutline ? 12 : 0) + (prefixWidth.value || 0) + (props.decoration?.prefixIcon || slots.prefixIcon ? 40 : 0)}px`,
     top: currentBorder.value?.isOutline ? "50%" : "0", // Center vertically initially
     transform: "translateY(-50%)",
@@ -471,6 +521,8 @@ const labelStyle = computed<CSSProperties>(() => {
 const helperStyle = computed<CSSProperties>(() => {
   const css: CSSProperties = {
     flex: 1, // Allow text to take available space for alignment
+    fontSize: "12px",
+    color: "#666",
     ...textStyleToCSS(props.decoration?.helperStyle),
   };
   if (props.decoration?.helperTextAlign) {
@@ -491,6 +543,8 @@ const helperStyle = computed<CSSProperties>(() => {
 const errorStyle = computed<CSSProperties>(() => {
   const css: CSSProperties = {
     flex: 1, // Allow text to take available space for alignment
+    fontSize: "12px",
+    color: "#f44336",
     ...textStyleToCSS(props.decoration?.errorStyle),
   };
   if (props.decoration?.errorTextAlign) {
@@ -509,7 +563,12 @@ const errorStyle = computed<CSSProperties>(() => {
 });
 
 const counterStyle = computed<CSSProperties>(() => {
-  return textStyleToCSS(props.decoration?.counterStyle);
+  return {
+    fontSize: "12px",
+    color: "#666",
+    marginLeft: "auto",
+    ...textStyleToCSS(props.decoration?.counterStyle),
+  };
 });
 
 const hintColor = computed(() => {
@@ -581,108 +640,3 @@ const handleBlur = (e: FocusEvent) => {
   emit("blur", e);
 };
 </script>
-
-<style scoped>
-.fluekit-text-field-wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  position: relative;
-  margin-top: 16px; /* Space for floating label */
-  font-family: inherit;
-  width: 100%;
-}
-
-.fluekit-input-icon {
-  margin-right: 16px;
-  margin-top: 12px; /* Align with input roughly */
-  display: flex;
-  align-items: center;
-  color: v-bind("resolveColor(decoration?.iconColor) || 'inherit'");
-}
-
-.fluekit-text-field-content {
-  flex: 1;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
-.fluekit-input-container {
-  /* Defined in dynamic style */
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.fluekit-input-prefix-icon,
-.fluekit-input-suffix-icon {
-  display: flex;
-  align-items: center;
-  padding: 0 8px;
-  color: #666;
-}
-
-.fluekit-input-prefix-icon {
-  color: v-bind("resolveColor(decoration?.prefixIconColor) || '#666'");
-  padding-left: 0;
-}
-
-.fluekit-input-suffix-icon {
-  color: v-bind("resolveColor(decoration?.suffixIconColor) || '#666'");
-  padding-right: 0;
-}
-
-.fluekit-input-element {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  font-family: inherit;
-  font-size: 16px;
-  color: inherit;
-  resize: none; /* Handle via auto-grow or maxLines */
-}
-
-.fluekit-input-element::placeholder {
-  color: v-bind("hintColor");
-  font-size: v-bind("hintFontStyle");
-  opacity: 1; /* Firefox default is lower */
-}
-
-.fluekit-input-label {
-  /* Defined in dynamic style */
-  z-index: 1;
-}
-
-.fluekit-input-footer {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 4px;
-}
-
-.fluekit-input-helper {
-  font-size: 12px;
-  color: #666;
-}
-
-.fluekit-input-helper-spacer {
-  flex: 1;
-}
-
-.fluekit-input-counter {
-  font-size: 12px;
-  color: #666;
-  margin-left: auto; /* Push to right */
-}
-
-.fluekit-input-helper.is-error {
-  color: #f44336;
-}
-
-.is-invisible {
-  visibility: hidden;
-}
-</style>

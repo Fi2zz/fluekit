@@ -1,7 +1,7 @@
 <template>
   <div
-    class="fluekit-refresh-indicator"
     ref="containerRef"
+    :style="containerStyle"
     @touchstart="handleStart"
     @touchmove="handleMove"
     @touchend="handleEnd"
@@ -11,11 +11,11 @@
     @mouseleave="handleEnd"
   >
     <!-- Refresh Spinner -->
-    <div class="fluekit-refresh-spinner" :style="spinnerStyle">
+    <div :style="spinnerStyle">
       <CupertinoActivityIndicator :radius="12" :color="color" :animating="isRefreshing" />
     </div>
 
-    <div class="fluekit-refresh-content" :style="contentStyle">
+    <div :style="contentStyle">
       <slot />
     </div>
   </div>
@@ -49,12 +49,29 @@ const dragOffset = ref(0);
 const startY = ref(0);
 const isDragging = ref(false);
 
+const containerStyle: CSSProperties = {
+  position: "relative",
+  height: "100%",
+  overflow: "hidden",
+};
+
 const spinnerStyle = computed<CSSProperties>(() => {
   const top = isRefreshing.value
     ? 20 // Fixed position when refreshing
     : Math.min(dragOffset.value, props.triggerDistance * 1.5) - 40; // Parallax effect or similar
 
   return {
+    position: "absolute",
+    left: "50%",
+    marginLeft: "-20px",
+    width: "40px",
+    height: "40px",
+    borderRadius: "50%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 10,
+    transition: "top 0.2s, opacity 0.2s",
     top: `${top}px`,
     opacity: isDragging.value || isRefreshing.value || dragOffset.value > 0 ? 1 : 0,
     backgroundColor: typeof props.backgroundColor === "string" ? props.backgroundColor : undefined, // Simplify for now
@@ -63,6 +80,7 @@ const spinnerStyle = computed<CSSProperties>(() => {
 
 const contentStyle = computed<CSSProperties>(() => {
   return {
+    height: "100%",
     transform: `translateY(${Math.min(dragOffset.value, props.triggerDistance)}px)`,
     transition: isDragging.value ? "none" : "transform 0.2s",
   };
@@ -124,30 +142,3 @@ const handleEnd = async () => {
   }
 };
 </script>
-
-<style scoped>
-.fluekit-refresh-indicator {
-  position: relative;
-  height: 100%;
-  overflow: hidden;
-}
-.fluekit-refresh-spinner {
-  position: absolute;
-  left: 50%;
-  margin-left: -20px; /* Half of width */
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  transition:
-    top 0.2s,
-    opacity 0.2s;
-}
-
-.fluekit-refresh-content {
-  height: 100%;
-}
-</style>

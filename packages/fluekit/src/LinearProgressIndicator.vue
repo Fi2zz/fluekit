@@ -1,11 +1,11 @@
 <template>
-  <div class="flue-linear-progress-indicator" :style="containerStyle">
-    <div class="flue-linear-progress-bar" :style="barStyle"></div>
+  <div :style="containerStyle">
+    <div :style="barStyle" ref="barRef"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, type CSSProperties } from "vue";
+import { computed, type CSSProperties, onMounted, ref, watch, onBeforeUnmount } from "vue";
 import { Colors } from "./Colors";
 import { Color, resolveColor } from "./Color";
 import { BorderRadius, borderRadiusToStyle, isBorderRadius } from "./BorderRadius";
@@ -41,6 +41,9 @@ const props = withDefaults(defineProps<Props>(), {
   backgroundColor: () => Colors.blue.withOpacity(0.2),
   minHeight: 4,
 });
+
+const barRef = ref<HTMLElement | null>(null);
+let animation: Animation | null = null;
 
 const containerStyle = computed<CSSProperties>(() => {
   const style: CSSProperties = {
@@ -80,31 +83,55 @@ const barStyle = computed<CSSProperties>(() => {
     return {
       backgroundColor: colorStr,
       height: "100%",
-      width: "100%", // Animation handles visual width
-      animation: "flue-linear-indeterminate 1.8s infinite linear",
+      width: "100%",
       transformOrigin: "0% 50%",
     };
   }
 });
+
+const startIndeterminateAnimation = () => {
+  if (barRef.value && !animation) {
+    animation = barRef.value.animate(
+      [
+        { transform: "translateX(0) scaleX(0)" },
+        { transform: "translateX(0) scaleX(0.4)", offset: 0.4 },
+        { transform: "translateX(100%) scaleX(0.5)" },
+      ],
+      {
+        duration: 1800,
+        iterations: Infinity,
+        easing: "linear",
+      },
+    );
+  } else if (animation) {
+    animation.play();
+  }
+};
+
+const stopIndeterminateAnimation = () => {
+  animation?.cancel();
+  animation = null;
+};
+
+watch(
+  () => props.value,
+  (val) => {
+    if (val === null) {
+      startIndeterminateAnimation();
+    } else {
+      stopIndeterminateAnimation();
+    }
+  },
+  { immediate: true, flush: "post" },
+);
+
+onMounted(() => {
+  if (props.value === null) {
+    startIndeterminateAnimation();
+  }
+});
+
+onBeforeUnmount(() => {
+  stopIndeterminateAnimation();
+});
 </script>
-
-<style scoped>
-.flue-linear-progress-indicator {
-  border-radius: 0;
-  /* Material design is rectangular usually, but could be rounded */
-}
-
-@keyframes flue-linear-indeterminate {
-  0% {
-    transform: translateX(0) scaleX(0);
-  }
-
-  40% {
-    transform: translateX(0) scaleX(0.4);
-  }
-
-  100% {
-    transform: translateX(100%) scaleX(0.5);
-  }
-}
-</style>

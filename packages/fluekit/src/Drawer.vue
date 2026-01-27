@@ -1,7 +1,7 @@
 <template>
-  <div class="fluekit-drawer-root">
+  <div :style="rootStyle">
     <Stack :fit="StackFit.expand">
-      <transition :name="edge === 'end' ? 'fluekit-drawer-slide-end' : 'fluekit-drawer-slide'">
+      <transition :css="false" @enter="onEnter" @leave="onLeave">
         <template v-if="open">
           <Positioned v-bind="positionStyle">
             <Container :width="width" height="100%" :decoration="decoration">
@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, type CSSProperties } from "vue";
 import { Positioned, StackFit } from ".";
 import { BoxDecoration } from "./BoxDecoration";
 import { BoxShadow } from "./BoxShadow";
@@ -99,31 +99,38 @@ const positionStyle = computed(() => {
   css.zIndex = props.elevation;
   return css;
 });
+
+const onEnter = (el: Element, done: () => void) => {
+  const element = el as HTMLElement;
+  const targetTransform = element.style.transform || "translateX(0%)";
+  const startTransform = props.edge === "end" ? "translateX(100%)" : "translateX(-100%)";
+
+  element.animate(
+    [
+      { transform: startTransform },
+      { transform: "translateX(0%)" }, // target is 0 for both as we position with left/right: 0
+    ],
+    {
+      duration: 300,
+      easing: "ease",
+    },
+  ).onfinish = done;
+};
+
+const onLeave = (el: Element, done: () => void) => {
+  const element = el as HTMLElement;
+  const endTransform = props.edge === "end" ? "translateX(100%)" : "translateX(-100%)";
+
+  element.animate([{ transform: "translateX(0%)" }, { transform: endTransform }], {
+    duration: 300,
+    easing: "ease",
+  }).onfinish = done;
+};
+
+const rootStyle: CSSProperties = {
+  position: "absolute",
+  inset: 0,
+  pointerEvents: "none",
+  zIndex: 1000,
+};
 </script>
-<style scoped>
-.fluekit-drawer-root {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1000;
-}
-.fluekit-drawer-slide-enter-active,
-.fluekit-drawer-slide-leave-active {
-  transition: transform 0.3s ease;
-}
-
-.fluekit-drawer-slide-enter-from,
-.fluekit-drawer-slide-leave-to {
-  transform: translateX(-100%);
-}
-
-.fluekit-drawer-slide-end-enter-active,
-.fluekit-drawer-slide-end-leave-active {
-  transition: transform 0.3s ease;
-}
-
-.fluekit-drawer-slide-end-enter-from,
-.fluekit-drawer-slide-end-leave-to {
-  transform: translateX(100%);
-}
-</style>

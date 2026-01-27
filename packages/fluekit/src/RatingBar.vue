@@ -1,9 +1,9 @@
 <template>
-  <div class="fluekit-rating-bar" :style="style" @mouseleave="handleMouseLeave">
+  <div :style="style" @mouseleave="handleMouseLeave">
     <div
       v-for="index in max"
       :key="index"
-      class="fluekit-rating-item"
+      :style="itemStyle"
       @click="handleClick(index, $event)"
       @mousemove="handleMouseMove(index, $event)"
     >
@@ -48,8 +48,15 @@ const style = computed<CSSProperties>(() => {
     display: "inline-flex",
     alignItems: "center",
     cursor: props.readonly ? "default" : "pointer",
+    userSelect: "none",
   };
 });
+
+const itemStyle: CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
 
 const getIcon = (index: number) => {
   const value = hoverValue.value !== null ? hoverValue.value : props.modelValue;
@@ -104,14 +111,3 @@ const calculateRatingValue = (index: number, event: MouseEvent): number => {
   }
 };
 </script>
-
-<style scoped>
-.fluekit-rating-bar {
-  user-select: none;
-}
-.fluekit-rating-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flutter-fixed" :style="style">
+  <div :style="style">
     <slot />
   </div>
 </template>
@@ -14,7 +14,3 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const style = usePositionStyle(props, "fixed");
 </script>
-
-<style scoped>
-/* Fixed 元素默认不参与文档流布局 */
-</style>

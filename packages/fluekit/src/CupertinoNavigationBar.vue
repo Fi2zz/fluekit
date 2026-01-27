@@ -1,5 +1,5 @@
 <template>
-  <div class="flue-cupertino-navigation-bar">
+  <div :style="wrapperStyle">
     <Container
       :height="44"
       width="100%"
@@ -11,14 +11,14 @@
         <!-- Leading -->
         <Positioned :left="0" top="0" bottom="0">
           <Row cross-axis-alignment="center" expanded>
-            <div v-if="$slots.leading" class="flue-nav-bar-leading">
+            <div v-if="$slots.leading">
               <slot name="leading" />
             </div>
           </Row>
         </Positioned>
 
         <!-- Middle (Title) -->
-        <div class="flue-nav-bar-middle">
+        <div :style="middleContainerStyle">
           <slot name="middle">
             <Text
               v-if="middle"
@@ -34,7 +34,7 @@
         <!-- Trailing -->
         <Positioned :right="0" top="0" bottom="0">
           <Row cross-axis-alignment="center" expanded>
-            <div v-if="$slots.trailing" class="flue-nav-bar-trailing">
+            <div v-if="$slots.trailing">
               <slot name="trailing" />
             </div>
           </Row>
@@ -95,21 +95,18 @@ const middleStyle = TextStyle({
   color: "#000000",
   fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
 });
+
+const wrapperStyle = {
+  backdropFilter: "blur(20px)",
+  WebkitBackdropFilter: "blur(20px)",
+  zIndex: 100,
+  width: "100%",
+};
+
+const middleContainerStyle = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  maxWidth: "60%",
+};
 </script>
-
-<style scoped>
-.flue-cupertino-navigation-bar {
-  /* iOS blur effect */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  z-index: 100;
-  width: 100%;
-}
-
-.flue-nav-bar-middle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 60%;
-}
-</style>

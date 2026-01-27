@@ -1,11 +1,13 @@
 <template>
-  <div class="flutter-stack" :style="stackStyle">
-    <slot />
+  <div :style="stackStyle">
+    <div v-for="(child, index) in children" :key="index" :style="{ gridArea: '1 / 1 / 2 / 2' }">
+      <component :is="child" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, type CSSProperties } from "vue";
+import { computed, type CSSProperties, useSlots } from "vue";
 import { provideStackContext } from "./useStack";
 import { Alignment, alignmentToGrid } from "./Alignment";
 import { StackFit } from "./FlexProps";
@@ -28,6 +30,12 @@ const props = withDefaults(defineProps<StackProps>(), {
   clipBehavior: "none",
   textDirection: "ltr",
   fit: StackFit.loose,
+});
+
+const slots = useSlots();
+const children = computed(() => {
+  const defaultSlot = (slots as any).default;
+  return defaultSlot ? defaultSlot() : [];
 });
 
 const clipBehaviorMap = {
@@ -60,12 +68,3 @@ const stackStyle = computed((): CSSProperties => {
 
 provideStackContext();
 </script>
-
-<style scoped>
-/* Ensure all direct children (non-positioned and positioned) occupy the same grid area */
-/* Positioned children will be absolute, so they ignore this or position relative to the grid box */
-/* Non-positioned children will overlap in the single grid cell */
-.flutter-stack > * {
-  grid-area: 1 / 1 / 2 / 2;
-}
-</style>

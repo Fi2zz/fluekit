@@ -1,5 +1,5 @@
 <template>
-  <div :style="style" class="flue-aspect-ratio">
+  <div :style="style">
     <slot />
   </div>
 </template>
@@ -21,15 +21,9 @@ const props = defineProps<Props>();
 const style = computed<CSSProperties>(() => {
   return {
     aspectRatio: `${props.aspectRatio}`,
+    display: "grid",
+    gridTemplateColumns: "100%",
+    gridTemplateRows: "100%",
   };
 });
 </script>
-
-<style scoped>
-.flue-aspect-ratio {
-  display: grid;
-  /* 确保子元素填满容器，模拟 Flutter AspectRatio 的 tight constraint 行为 */
-  grid-template-columns: 100%;
-  grid-template-rows: 100%;
-}
-</style>

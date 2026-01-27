@@ -8,13 +8,19 @@
       :alignment="alignment"
     >
       <Row expanded crossAxisAlignment="center" :gap="8" mainAxisAlignment="start">
-        <div v-if="avatar || $slots.avatar" class="fluekit-chip-avatar" :style="avatarStyle">
+        <div v-if="avatar || $slots.avatar" :style="avatarStyle">
           <slot name="avatar">
             <component :is="avatar" v-if="avatar" />
           </slot>
         </div>
         <Text :style="labelStyle">{{ label }}</Text>
-        <div v-if="deletable" class="fluekit-chip-delete-icon" @click.stop="onDeleted">
+        <div
+          v-if="deletable"
+          :style="deleteIconStyle"
+          @click.stop="onDeleted"
+          @mouseenter="isDeleteHovered = true"
+          @mouseleave="isDeleteHovered = false"
+        >
           <slot name="deleteIcon">
             <Icon :icon="Icons.cancel" :size="iconSize" />
           </slot>
@@ -25,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useSlots, type Component } from "vue";
+import { computed, useSlots, type Component, ref, type CSSProperties } from "vue";
 import { BorderRadius } from "./BorderRadius";
 import { BoxDecoration } from "./BoxDecoration";
 import { Color } from "./Color";
@@ -97,9 +103,15 @@ const avatarSize = computed(() => {
 });
 
 const avatarStyle = computed(() => {
-  const base = {
+  const base: CSSProperties = {
     width: px2vw(avatarSize.value),
     height: px2vw(avatarSize.value),
+    borderRadius: "50%",
+    overflow: "hidden",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0,
   };
   if (typeof props.avatar != "string") return base;
   const avatar = props.avatar as unknown as string;
@@ -122,30 +134,15 @@ const avatarStyle = computed(() => {
   }
   return base;
 });
+
+const isDeleteHovered = ref(false);
+
+const deleteIconStyle = computed<CSSProperties>(() => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
+  opacity: isDeleteHovered.value ? 0.87 : 0.54,
+  marginLeft: "4px",
+}));
 </script>
-
-<style scoped>
-/* Chip styles moved to Container or handled by GestureDetector logic if needed */
-
-.fluekit-chip-avatar {
-  border-radius: 50%;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.fluekit-chip-delete-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  opacity: 0.54;
-  margin-left: 4px;
-}
-
-.fluekit-chip-delete-icon:hover {
-  opacity: 0.87;
-}
-</style>

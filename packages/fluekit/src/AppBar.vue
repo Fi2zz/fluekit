@@ -1,10 +1,10 @@
 <template>
   <Container :height="height" :decoration="decoration" :padding="padding" width="100%">
     <Row cross-axis-alignment="center" :gap="0" expanded>
-      <div v-if="$slots.leading" class="flue-app-bar-leading">
+      <div v-if="$slots.leading" :style="leadingStyle">
         <slot name="leading" />
       </div>
-      <div v-else-if="scaffoldHasDrawer" class="flue-app-bar-leading">
+      <div v-else-if="scaffoldHasDrawer" :style="leadingStyle">
         <IconButton :icon="Icons.menu" color="blue" @pressed="scaffoldOpenDrawer" />
       </div>
       <Expanded>
@@ -18,7 +18,7 @@
           />
         </slot>
       </Expanded>
-      <div v-if="$slots.actions" class="flue-app-bar-actions">
+      <div v-if="$slots.actions" :style="actionsStyle">
         <Row main-axis-size="min" :gap="8">
           <slot name="actions" />
         </Row>
@@ -81,18 +81,16 @@ const padding = computed(() => {
   return props.padding || EdgeInsets.symmetric({ horizontal: 16 });
 });
 const titleStyle = TextStyle({ fontSize: 20, fontWeight: FontWeight.w500, color: "white" });
+
+const leadingStyle = {
+  marginRight: "16px",
+  display: "flex",
+  alignItems: "center",
+};
+
+const actionsStyle = {
+  marginLeft: "16px",
+  display: "flex",
+  alignItems: "center",
+};
 </script>
-
-<style scoped>
-.flue-app-bar-leading {
-  margin-right: 16px;
-  display: flex;
-  align-items: center;
-}
-
-.flue-app-bar-actions {
-  margin-left: 16px;
-  display: flex;
-  align-items: center;
-}
-</style>

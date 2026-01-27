@@ -105,6 +105,7 @@ const decoration = computed(() => {
           style: "solid",
         },
       }),
+      backdropFilter: "blur(20px)",
     });
   } else {
     return BoxDecoration({
@@ -159,11 +160,3 @@ const getLabelStyle = (index: number) => {
   });
 };
 </script>
-
-<style scoped>
-/* iOS blur effect */
-.fluekit-bottom-navigation-bar-ios {
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="range-slider-container" ref="trackRef">
+  <div :style="containerStyle" ref="trackRef">
     <GestureDetector @pan-start="onPanStart" @pan-update="onPanUpdate">
       <Container :height="40" alignment="centerLeft">
         <!-- Track -->
@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, type CSSProperties } from "vue";
 import Container from "./Container.vue";
 import Stack from "./Stack.vue";
 import Positioned from "./Positioned.vue";
@@ -216,11 +216,9 @@ const onPanUpdate = (e: Required<GestureDetail>) => {
 
   updateValue(draggingThumb.value, val);
 };
-</script>
 
-<style scoped>
-.range-slider-container {
-  width: 100%;
-  position: relative;
-}
-</style>
+const containerStyle: CSSProperties = {
+  width: "100%",
+  position: "relative",
+};
+</script>

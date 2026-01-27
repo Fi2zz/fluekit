@@ -1,22 +1,13 @@
 <template>
-  <div
-    v-if="visible"
-    class="bottom-sheet-overlay"
-    @click.self="barrierDismissible ? close() : null"
-  >
-    <Container
-      class="bottom-sheet-content"
-      :decoration="decoration"
-      width="100%"
-      :padding="padding"
-    >
+  <div v-if="visible" :style="overlayStyle" @click.self="barrierDismissible ? close() : null">
+    <Container :decoration="decoration" width="100%" :padding="padding">
       <slot />
     </Container>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, type CSSProperties } from "vue";
 import Container from "./Container.vue";
 import { BoxDecoration } from "./BoxDecoration";
 import { BorderRadius } from "./BorderRadius";
@@ -64,21 +55,17 @@ const decoration = computed(() => {
         : undefined,
   });
 });
+
+const overlayStyle: CSSProperties = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: "rgba(0, 0, 0, 0.54)",
+  display: "flex",
+  alignItems: "flex-end",
+  justifyContent: "center",
+  zIndex: 9999,
+};
 </script>
-
-<style scoped>
-.bottom-sheet-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.54);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  z-index: 9999;
-}
-
-/* Optional: Add transition/animation here if needed */
-</style>

@@ -44,6 +44,7 @@ const style = computed<CSSProperties>(() => {
     display: "flex", // 保持子元素布局上下文，或者 inline-block
     flexDirection: "column", // 默认行为
     flexShrink: 0,
+    boxSizing: "border-box",
   };
 
   if (props.origin) {
@@ -53,9 +54,3 @@ const style = computed<CSSProperties>(() => {
   return css;
 });
 </script>
-
-<style scoped>
-.flutter-transform {
-  box-sizing: border-box;
-}
-</style>

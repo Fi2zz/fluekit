@@ -1,11 +1,5 @@
 <template>
-  <div
-    class="fluekit-icon"
-    :style="iconStyle"
-    role="img"
-    :aria-label="semanticLabel"
-    v-bind="$attrs"
-  >
+  <div :style="iconStyle" role="img" :aria-label="semanticLabel" v-bind="$attrs">
     <!-- 1. Slot: Allow direct SVG injection -->
     <slot>
       <!-- 2. Component: Render Vue component (e.g. imported SVG) -->
@@ -15,7 +9,7 @@
         :width="size"
         :height="size"
         :fill="resolveColor(color)"
-        class="icon-svg"
+        :style="svgStyle"
       />
 
       <!-- 3. Path String: Render simple path -->
@@ -26,7 +20,7 @@
         viewBox="0 0 24 24"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
-        class="icon-svg"
+        :style="svgStyle"
       >
         <path :d="icon as string" />
       </svg>
@@ -91,28 +85,16 @@ const iconStyle = computed(() => {
     color: resolveColor(props.color) || "inherit",
     lineHeight: 1,
     verticalAlign: "middle",
+    userSelect: "none",
+    pointerEvents: "none",
   };
   return style;
 });
+
+const svgStyle: CSSProperties = {
+  display: "block",
+  width: "100%",
+  height: "100%",
+  fill: "currentColor",
+};
 </script>
-
-<style scoped>
-.fluekit-icon {
-  user-select: none;
-  pointer-events: none; /* Icons typically don't capture events themselves, wrap in GestureDetector if needed */
-}
-
-.icon-svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  fill: currentColor; /* Ensure SVG uses the color set on parent */
-}
-
-/* Ensure direct SVGs in slots also behave */
-:deep(svg) {
-  fill: currentColor;
-  width: 100%;
-  height: 100%;
-}
-</style>
