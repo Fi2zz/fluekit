@@ -1,36 +1,7 @@
 <template>
   <div :style="stackStyle">
-    <div
-      v-for="(child, index) in children"
-      :key="index"
-      :style="{
-        gridArea: '1 / 1 / 2 / 2',
-        // If stack alignment is set, we need to allow the child to override it if it wants to expand.
-        // But we can't know if the child wants to expand without inspecting it.
-        // However, we can set width/height to 100% on the wrapper and use flexbox for alignment?
-        // If we do that, we lose the grid alignment features.
-
-        // Flutter logic:
-        // Stack fits loose: Stack size = max child size.
-        // Aligned children are positioned within that size.
-        // If a child is width: 100%, it matches the Stack size.
-
-        // In CSS Grid:
-        // If we have justify-items: center (from Stack alignment), the grid item (wrapper) is centered and shrinks.
-        // Child width: 100% means 100% of the shrunk wrapper -> 0 if empty.
-
-        // FIX: We need to set the wrapper to fill the cell, but apply the alignment to the child inside the wrapper.
-        // So the wrapper is ALWAYS width: 100%; height: 100%; grid-area: 1/1/2/2.
-        // And the wrapper itself is a Flex/Grid container that implements the alignment.
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        pointerEvents: 'none', // Allow clicks to pass through empty areas
-        ...wrapperAlignmentStyle,
-      }"
-    >
-      <div :style="{ pointerEvents: 'auto', display: 'flex', flexDirection: 'column' }">
+    <div v-for="(child, index) in children" :key="index" :style="gridItemStyle">
+      <div :style="childStyle">
         <component :is="child" />
       </div>
     </div>
@@ -77,8 +48,6 @@ const clipBehaviorMap = {
 };
 
 const stackStyle = computed((): CSSProperties => {
-  const gridAlignment = alignmentToGrid(props.alignment);
-
   const style: CSSProperties = {
     position: "relative",
     display: "grid",
@@ -121,6 +90,28 @@ const wrapperAlignmentStyle = computed((): CSSProperties => {
     justifyContent: mapAlign(grid.alignItems), // Vertical
   };
 });
+
+const gridItemStyle = computed(() => {
+  return Object.assign(
+    {
+      gridArea: "1 / 1 / 2 / 2",
+      width: "100%",
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+      pointerEvents: "none", // Allow clicks to pass through empty areas
+    },
+    wrapperAlignmentStyle.value,
+  ) as CSSProperties;
+});
+
+const childStyle: CSSProperties = {
+  pointerEvents: "auto",
+  display: "flex",
+  flexDirection: "column",
+  // Note: We do not set width/height 100% here because it would break alignment for non-expanded children.
+  // Children that want to fill the stack should use Positioned or be explicit.
+};
 
 provideStackContext();
 </script>
