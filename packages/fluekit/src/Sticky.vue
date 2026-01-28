@@ -8,8 +8,6 @@
 import { usePositionStyle, type Props } from "./usePosition";
 defineOptions({ inheritAttrs: false });
 // Sticky 也可以支持 width/height，虽然不如 absolute 常用
-const props = withDefaults(defineProps<Props>(), {
-  zIndex: 10, // Sticky 元素通常需要高于普通内容
-});
+const props = defineProps<Props>();
 const style = usePositionStyle(props, "sticky");
 </script>
