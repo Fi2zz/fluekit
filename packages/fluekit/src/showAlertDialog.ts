@@ -10,13 +10,11 @@ export interface AlertDialogOptions extends Omit<AlertDialogProps, "visible"> {
 export const showAlertDialog = (options: AlertDialogOptions) => {
   const container = document.createElement("div");
   document.body.appendChild(container);
-
   const close = () => {
     render(null, container);
     document.body.removeChild(container);
     options.onClose?.();
   };
-
   const handleOk = () => {
     options.onOk?.();
     close();

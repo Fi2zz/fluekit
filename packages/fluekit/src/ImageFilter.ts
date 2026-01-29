@@ -52,7 +52,7 @@ export class ImageFilter {
     return new ImageFilter(`opacity(${amount})`);
   }
 
-  static saturate(amount: number): ImageFilter {
+  static saturate(amount: number | string): ImageFilter {
     return new ImageFilter(`saturate(${amount})`);
   }
 

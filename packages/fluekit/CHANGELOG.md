@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.7] - 2026-01-29
+
+### Features
+
+- **LiquidGlassDialog**: Added new iOS-style glassmorphism dialog component with imperative `showLiquidGlassDialog` API.
+- **Table**: Added `Table` component for displaying tabular data.
+- **Core**:
+  - `TextStyle`: `fontSize`, `letterSpacing`, `wordSpacing`, `height`, `decorationThickness` now support string values.
+  - `FlexBox` & `FlexProps`: `gap` now supports string values.
+  - `BorderRadius`: `topLeft` etc. now support string values.
+  - `ImageFilter`: `saturate` now supports string values.
+
+### Refactor
+
+- **usePosition**: Added `useZIndex` helper for global z-index management.
+- **FlexBox**: Integrated with `StyleProvider` using `useStyles`.
+- **px2vw**: Refactored mobile check logic to `device.ts`.
+
+### Documentation
+
+- **AlertDialog**: Updated docs to include `LiquidGlassDialog` usage.
+- **Table**: Added documentation for `Table` component.
+
 ## [2.5.5] - 2026-01-26
 
 ### Features

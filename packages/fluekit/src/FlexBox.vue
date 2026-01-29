@@ -7,32 +7,21 @@
 <script setup lang="ts">
 import { computed, CSSProperties } from "vue";
 import { boxConstraintsToStyle } from "./BoxConstraints";
-import {
-  CrossAxisAlignment,
-  FlexBoxAlignMap,
-  FlexBoxJustifyMap,
-  FlexBoxProps,
-  MainAxisAlignment,
-  MainAxisSize,
-} from "./FlexProps";
+import { FlexBoxAlignMap, FlexBoxJustifyMap, FlexBoxProps, MainAxisSize } from "./FlexProps";
 import { px2vw } from "./px2vw";
 import { useSafeAttrs } from "./useSafeAttrs";
-
-defineOptions({
-  name: "FlexBox",
-  inheritAttrs: false,
-});
-
+import { useStyles } from "./StyleProvider";
+defineOptions({ name: "FlexBox", inheritAttrs: false });
 const props = withDefaults(defineProps<FlexBoxProps>(), {
   direction: "row",
-  mainAxisAlignment: MainAxisAlignment.start,
   mainAxisSize: MainAxisSize.max,
-  crossAxisAlignment: CrossAxisAlignment.start,
   wrap: false,
   gap: 0,
   expanded: false,
   as: "div",
 });
+
+const _styles = useStyles();
 const safeAttrs = useSafeAttrs();
 // 计算 CSS 类名
 const flexClasses = computed(() => {
@@ -76,6 +65,8 @@ const flexStyles = computed(() => {
   }
 
   if (props.constraints) Object.assign(styles, boxConstraintsToStyle(props.constraints));
+  if (_styles) Object.assign(styles, _styles.value);
+
   return styles;
 });
 </script>

@@ -111,11 +111,11 @@ export interface TextStyleProps {
   inherit?: boolean;
   color?: string | Color;
   backgroundColor?: string | Color;
-  fontSize?: number;
+  fontSize?: number | string;
   fontWeight?: FontWeight | number;
   fontStyle?: FontStyle;
-  letterSpacing?: number;
-  wordSpacing?: number;
+  letterSpacing?: number | string;
+  wordSpacing?: number | string;
   textBaseline?: TextBaseline;
   height?: number | string; // 对应 CSS lineHeight
   leadingDistribution?: any; // Web 暂无直接对应，保留占位
@@ -128,7 +128,7 @@ export interface TextStyleProps {
   decoration?: TextDecoration;
   decorationColor?: string | Color;
   decorationStyle?: TextDecorationStyle;
-  decorationThickness?: number;
+  decorationThickness?: number | string;
   debugLabel?: string;
   fontFamily?: string;
   fontFamilyFallback?: string[];

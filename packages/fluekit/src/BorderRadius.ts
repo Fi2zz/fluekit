@@ -1,7 +1,7 @@
 import { px2vw } from "./px2vw";
 
 import { CSSProperties } from "vue";
-export type BorderRadiusValue = number;
+export type BorderRadiusValue = number | string;
 
 export interface BorderRadiusProps {
   topLeft?: BorderRadiusValue;

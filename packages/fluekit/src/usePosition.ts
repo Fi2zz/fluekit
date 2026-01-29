@@ -9,6 +9,10 @@ const zIndexManager = {
   },
 };
 
+export function useZIndex() {
+  return zIndexManager.next();
+}
+
 export interface Props {
   /** 距离顶部的距离 */
   top?: number | string;

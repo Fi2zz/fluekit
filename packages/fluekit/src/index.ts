@@ -30,6 +30,14 @@ export { default as Stack } from "./Stack.vue";
 export { default as Sticky } from "./Sticky.vue";
 export { default as Text } from "./Text.vue";
 export { default as TextArea } from "./TextArea.vue";
+export {
+  default as LiquidGlassDialog,
+  type LiquidGlassDialogAction,
+  type LiquidGlassDialogProps,
+  type LiquidGlassDialogActionPayload,
+  type LiquidGlassDialogActionStyle,
+} from "./LiquidGlassDialog.vue";
+export * from "./showLiquidGlassDialog";
 export { default as TextField } from "./TextField.vue";
 export { Toast } from "./Toast";
 export type { ToastType, ToastOptions, ToastPosition } from "./Toast.vue";
@@ -86,6 +94,7 @@ export { default as TabBar } from "./TabBar.vue";
 export { default as TabBarView } from "./TabBarView.vue";
 export { default as RefreshIndicator } from "./RefreshIndicator.vue";
 export { default as RatingBar } from "./RatingBar.vue";
+export { default as Table } from "./Table.vue";
 export { default as FlueConfigProvider } from "./FlueConfigProvider.vue";
 export { default as AnimationWidget } from "./Animation.vue";
 export { StyleProvider } from "./StyleProvider";
@@ -115,6 +124,7 @@ export * from "./ImageFilter";
 export * from "./Icons";
 export * from "./BoxFit";
 export * from "./TextStyle";
+
 export { keep } from "./px2vw";
 export { createAssetImageProvider, MemoryImage, createNetworkImageProvider } from "./ImageProvider";
 export function setAssetBaseURL() {

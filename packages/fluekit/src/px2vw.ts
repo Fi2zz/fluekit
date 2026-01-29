@@ -1,12 +1,8 @@
+import { isMobile } from "./device";
 import { isNumberPx, isPureNumber } from "./utils";
 
 let DEFAULT_VW = 750;
-
-const checkMobile = () => {
-  if (typeof navigator === "undefined") return false;
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-};
-let shouldTransform = checkMobile();
+let shouldTransform = isMobile;
 export function setTransform(value: boolean) {
   shouldTransform = value;
 }

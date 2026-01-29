@@ -1,6 +1,6 @@
-# AlertDialog
+# AlertDialog & LiquidGlassDialog
 
-Alerts are urgent interruptions, requiring acknowledgement, that inform the user about a situation.
+Alerts are urgent interruptions, requiring acknowledgement, that inform the user about a situation. This page documents both the standard `AlertDialog` and the modern `LiquidGlassDialog`.
 
 ## Usage
 
@@ -8,9 +8,7 @@ Alerts are urgent interruptions, requiring acknowledgement, that inform the user
 import AlertDialogDemo from '@example/demos/new_components/AlertDialogDemo.vue'
 </script>
 
-<div class="demo-box">
   <AlertDialogDemo />
-</div>
 
 <<< ../demos/new_components/AlertDialogDemo.vue
 
@@ -74,3 +72,64 @@ showAlertDialog({
 | `onOk`    | `() => void` | -       | Callback triggered when OK button is clicked |
 | `onClose` | `() => void` | -       | Callback triggered when dialog is closed     |
 | `...`     | `Props`      | -       | All other props from AlertDialog component   |
+
+# LiquidGlassDialog
+
+A modern, glassmorphism-style dialog component designed for high-end UI experiences. It features a blur effect and smooth animations.
+
+## API
+
+### Props
+
+| Name         | Type                        | Default | Description                              |
+| :----------- | :-------------------------- | :------ | :--------------------------------------- |
+| `modelValue` | `boolean`                   | -       | Whether the dialog is visible (v-model). |
+| `title`      | `string`                    | `""`    | The title of the dialog.                 |
+| `message`    | `string`                    | `""`    | The message content of the dialog.       |
+| `actions`    | `LiquidGlassDialogAction[]` | `[]`    | Array of action buttons to display.      |
+
+### Events
+
+| Name                | Payload                          | Description                                                                    |
+| :------------------ | :------------------------------- | :----------------------------------------------------------------------------- |
+| `update:modelValue` | `boolean`                        | Emitted when the visibility changes.                                           |
+| `action`            | `LiquidGlassDialogActionPayload` | Emitted when an action button is clicked (if no `onPressed` handler provided). |
+| `close`             | -                                | Emitted when the dialog is closed.                                             |
+
+### Types
+
+#### LiquidGlassDialogAction
+
+```typescript
+interface LiquidGlassDialogAction {
+  title: string;
+  style?: "default" | "primary"; // Default: "default"
+  keepOpen?: boolean; // If true, dialog won't close automatically after action
+  onPressed?: (action: LiquidGlassDialogAction) => Promise<void>; // Async handler
+  [key: string]: unknown;
+}
+```
+
+#### LiquidGlassDialogActionPayload
+
+```typescript
+interface LiquidGlassDialogActionPayload {
+  action: LiquidGlassDialogAction;
+  index: number;
+}
+```
+
+### Imperative API
+
+You can use the `showLiquidGlassDialog` function to display a dialog programmatically.
+
+```typescript
+import { showLiquidGlassDialog } from "fluekit";
+
+showLiquidGlassDialog({
+  title: "Note",
+  message: "Hello",
+  actions: [{ title: "OK", style: "default" }],
+  onClose: () => console.log("Closed"),
+});
+```

@@ -79,6 +79,7 @@ export default defineConfig({
           { text: "Stack, Positioned & Sticky", link: "/components/stack" },
           { text: "StyleProvider", link: "/components/style-provider" },
           { text: "Switch", link: "/components/switch" },
+          { text: "Table", link: "/components/table" },
           { text: "Tabs", link: "/components/tabs" },
           { text: "Text", link: "/components/text" },
           { text: "TextButtonWithIcon", link: "/components/text-button-with-icon" },

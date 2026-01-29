@@ -5,7 +5,7 @@ import { BorderRadius, borderRadiusToStyle } from "./BorderRadius";
 import { EdgeInsets, paddingToStyle } from "./EdgeInsets";
 import { SizeType, sizeToStyle } from "./Size";
 import { px2vw } from "./px2vw";
-import { TextStyle, toCSSStyle as textStyleToCSS } from "./TextStyle";
+import { TextAlign, TextStyle, toCSSStyle as textStyleToCSS } from "./TextStyle";
 import { Color, resolveColor } from "./Color";
 
 export interface ButtonStyle {
@@ -23,6 +23,8 @@ export interface ButtonStyle {
   shape?: BorderRadius; // 简化 shape 为圆角
   alignment?: Alignment;
   opacity?: number;
+  flex?: number | string;
+  textAlign?: TextAlign;
 }
 
 export const ButtonStyle = (style: ButtonStyle): ButtonStyle => style;
@@ -35,6 +37,7 @@ export function buttonStyleToStyle(style?: ButtonStyle): CSSProperties {
   if (style.opacity !== undefined) css.opacity = style.opacity;
 
   if (style.textStyle) Object.assign(css, textStyleToCSS(style.textStyle));
+  if (style.textAlign) css.textAlign = style.textAlign;
 
   if (style.backgroundColor) css.backgroundColor = resolveColor(style.backgroundColor);
   if (style.foregroundColor) css.color = resolveColor(style.foregroundColor);
@@ -74,12 +77,17 @@ export function buttonStyleToStyle(style?: ButtonStyle): CSSProperties {
     css.boxShadow = `0px ${px2vw(style.elevation)} ${px2vw(style.elevation * 2)} ${resolveColor(style.shadowColor) || "rgba(0,0,0,0.2)"}`;
   }
 
-  if (style.alignment) {
+  if (typeof style.flex == "undefined") {
+    if (style.alignment) {
+      css.display = "flex";
+      css.flexDirection = "column"; // 默认垂直，但 Button 内部通常是单行，这里为了对齐需要谨慎
+      // Button 内部默认是 flex 居中
+      Object.assign(css, alignmentToFlex(style.alignment, "column"));
+    }
+  } else {
     css.display = "flex";
-    css.flexDirection = "column"; // 默认垂直，但 Button 内部通常是单行，这里为了对齐需要谨慎
-    // Button 内部默认是 flex 居中
-    Object.assign(css, alignmentToFlex(style.alignment, "column"));
+    Object.assign(css, alignmentToFlex(style.alignment!, "row"));
+    css.flex = style.flex;
   }
-
   return css;
 }
