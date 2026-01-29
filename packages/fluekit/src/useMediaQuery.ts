@@ -39,27 +39,56 @@ const updateGlobalState = () => {
   // Size & Ratio
   const width = window.innerWidth;
   const height = window.innerHeight;
-  globalState.size = { width, height };
-  globalState.devicePixelRatio = window.devicePixelRatio || 1;
 
-  // Orientation (Derived from size matches Flutter behavior)
-  globalState.orientation = width > height ? Orientation.landscape : Orientation.portrait;
+  // Deduplicate size update
+  if (globalState.size.width !== width || globalState.size.height !== height) {
+    globalState.size = { width, height };
+    // Orientation (Derived from size matches Flutter behavior)
+    const newOrientation = width > height ? Orientation.landscape : Orientation.portrait;
+    if (globalState.orientation !== newOrientation) {
+      globalState.orientation = newOrientation;
+    }
+  }
+
+  const dpr = window.devicePixelRatio || 1;
+  if (globalState.devicePixelRatio !== dpr) {
+    globalState.devicePixelRatio = dpr;
+  }
 
   // Media Queries
   const isDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
-  globalState.platformBrightness = isDark ? "dark" : "light";
+  const newBrightness = isDark ? "dark" : "light";
+  if (globalState.platformBrightness !== newBrightness) {
+    globalState.platformBrightness = newBrightness;
+  }
 
   const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-  globalState.disableAnimations = !!reduceMotion;
+  const newDisableAnimations = !!reduceMotion;
+  if (globalState.disableAnimations !== newDisableAnimations) {
+    globalState.disableAnimations = newDisableAnimations;
+  }
 
   const highContrast = window.matchMedia?.("(prefers-contrast: more)").matches;
-  globalState.highContrast = !!highContrast;
+  const newHighContrast = !!highContrast;
+  if (globalState.highContrast !== newHighContrast) {
+    globalState.highContrast = newHighContrast;
+  }
 };
+
+function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  return (...args: Parameters<T>) => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), delay);
+  };
+}
+
+const debouncedUpdateGlobalState = debounce(updateGlobalState, 100);
 
 const attachListeners = () => {
   if (typeof window === "undefined" || listenersAttached) return;
 
-  window.addEventListener("resize", updateGlobalState);
+  window.addEventListener("resize", debouncedUpdateGlobalState);
 
   const queries = [
     "(prefers-color-scheme: dark)",
@@ -70,9 +99,9 @@ const attachListeners = () => {
   queries.forEach((q) => {
     const mq = window.matchMedia?.(q);
     if (mq?.addEventListener) {
-      mq.addEventListener("change", updateGlobalState);
+      mq.addEventListener("change", debouncedUpdateGlobalState);
     } else if (mq?.addListener) {
-      mq.addListener(updateGlobalState);
+      mq.addListener(debouncedUpdateGlobalState);
     }
   });
 

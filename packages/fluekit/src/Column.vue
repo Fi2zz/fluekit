@@ -11,12 +11,9 @@
     <slot />
   </FlexBox>
 </template>
-
 <script setup lang="ts">
 import { FlexBoxProps, MainAxisSize } from "./FlexProps";
 import FlexBox from "./FlexBox.vue";
 defineOptions({ inheritAttrs: false });
-withDefaults(defineProps<FlexBoxProps>(), {
-  mainAxisSize: MainAxisSize.max,
-});
+withDefaults(defineProps<FlexBoxProps>(), { mainAxisSize: MainAxisSize.max });
 </script>

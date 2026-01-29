@@ -1,5 +1,5 @@
 <template>
-  <component :is="as" :class="flexClasses" :style="flexStyles" v-bind="safeAttrs">
+  <component :is="as" :class="flexClasses" :style="flexStyles">
     <slot />
   </component>
 </template>
@@ -9,20 +9,16 @@ import { computed, CSSProperties } from "vue";
 import { boxConstraintsToStyle } from "./BoxConstraints";
 import { FlexBoxAlignMap, FlexBoxJustifyMap, FlexBoxProps, MainAxisSize } from "./FlexProps";
 import { px2vw } from "./px2vw";
-import { useSafeAttrs } from "./useSafeAttrs";
 import { useStyles } from "./StyleProvider";
 defineOptions({ name: "FlexBox", inheritAttrs: false });
 const props = withDefaults(defineProps<FlexBoxProps>(), {
   direction: "row",
   mainAxisSize: MainAxisSize.max,
   wrap: false,
-  gap: 0,
   expanded: false,
   as: "div",
 });
-
 const _styles = useStyles();
-const safeAttrs = useSafeAttrs();
 // 计算 CSS 类名
 const flexClasses = computed(() => {
   const classes = ["flex-box", `flex-box-${props.direction}`];
@@ -43,11 +39,9 @@ const flexStyles = computed(() => {
 
   styles.justifyContent = FlexBoxJustifyMap[mainAxisAlignment] || mainAxisAlignment;
   styles.alignItems = FlexBoxAlignMap[crossAxisAlignment] || crossAxisAlignment;
-  styles.gap = px2vw(props.gap);
-
+  if (typeof props.gap !== "undefined" && props.gap != null) styles.gap = px2vw(props.gap);
   const isRow = props.direction?.includes("row");
   const isCol = props.direction?.includes("column");
-
   // Handle MainAxisSize
   if (props.mainAxisSize === MainAxisSize.min) {
     if (isRow) styles.width = "fit-content";
@@ -57,7 +51,6 @@ const flexStyles = computed(() => {
     if (isRow) styles.width = "100%";
     if (isCol) styles.height = "100%";
   }
-
   if (props.expanded) {
     styles.flex = "1";
     styles.width = "100%";

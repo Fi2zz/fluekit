@@ -47,7 +47,6 @@ export const MainAxisSize = {
 } as const;
 
 export type MainAxisSize = Valueof<typeof MainAxisSize> | string;
-
 export type FlexBoxProps = {
   // 主轴方向 (类似 Flutter 的 Axis)
   direction?: "row" | "column" | "row-reverse" | "column-reverse" | string;

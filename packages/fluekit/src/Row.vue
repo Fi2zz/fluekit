@@ -15,13 +15,11 @@
 
 <script setup lang="ts">
 import FlexBox from "./FlexBox.vue";
-import { FlexBoxProps, MainAxisSize } from "./FlexProps";
+import { CrossAxisAlignment, FlexBoxProps, MainAxisAlignment, MainAxisSize } from "./FlexProps";
 defineOptions({ inheritAttrs: false });
 withDefaults(defineProps<FlexBoxProps>(), {
-  mainAxisAlignment: "start",
+  mainAxisAlignment: MainAxisAlignment.start,
   mainAxisSize: MainAxisSize.max,
-  crossAxisAlignment: "center",
-  wrap: false,
-  expanded: false,
+  crossAxisAlignment: CrossAxisAlignment.center,
 });
 </script>
