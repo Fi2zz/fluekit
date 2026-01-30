@@ -1,5 +1,5 @@
 <template>
-  <div class="flutter-safe-area" :style="style">
+  <div class="fluekit-safe-area" :style="style">
     <slot />
   </div>
 </template>

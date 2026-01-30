@@ -1,5 +1,5 @@
 <template>
-  <div class="flutter-wrap" :style="wrapStyle">
+  <div class="fluekit-wrap" :style="wrapStyle">
     <slot />
   </div>
 </template>

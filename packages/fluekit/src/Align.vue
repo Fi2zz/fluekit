@@ -1,6 +1,6 @@
 <template>
-  <div class="flutter-align" :style="containerStyle">
-    <div class="flutter-align-child" :style="childWrapperStyle">
+  <div class="fluekit-align" :style="containerStyle">
+    <div class="fluekit-align-child" :style="childWrapperStyle">
       <slot />
     </div>
   </div>

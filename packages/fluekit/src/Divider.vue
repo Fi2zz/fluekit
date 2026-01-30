@@ -20,7 +20,6 @@ import { EdgeInsets } from "./EdgeInsets";
 import { Color } from "./Color";
 
 interface Props {
-  height?: number; // Total height of the divider widget (including empty space) for horizontal divider
   thickness?: number; // Thickness of the line
   indent?: number; // Empty space before the line
   endIndent?: number; // Empty space after the line
@@ -29,7 +28,6 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  height: 16, // Flutter default is 16
   thickness: 1, // Flutter default is 0 or 1 depending on theme, using 1 here
   indent: 0,
   endIndent: 0,
@@ -38,9 +36,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const margin = computed(() => {
-  if (props.vertical) {
-    return EdgeInsets.only({ top: props.indent, bottom: props.endIndent });
-  }
+  if (props.vertical) return EdgeInsets.only({ top: props.indent, bottom: props.endIndent });
   return EdgeInsets.only({ left: props.indent, right: props.endIndent });
 });
 </script>

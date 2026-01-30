@@ -39,8 +39,8 @@ export {
 } from "./LiquidGlassDialog.vue";
 export * from "./showLiquidGlassDialog";
 export { default as TextField } from "./TextField.vue";
-export { Toast } from "./Toast";
-export type { ToastType, ToastOptions, ToastPosition } from "./Toast.vue";
+export { Toast, toast, showToast, hideToast } from "./Toast";
+export type { ToastType, ToastOptions, ToastPosition } from "./ToastComponent.vue";
 export { default as Transform } from "./Transform.vue";
 export { default as Wrap } from "./Wrap.vue";
 export { default as Divider } from "./Divider.vue";

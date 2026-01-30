@@ -8,7 +8,7 @@
       :scroll-direction="scrollDirection"
       :padding="padding"
       :physics="physics"
-      :clip-behavior="clipBehavior"
+      :clip-behavior="clipBehavior!"
       :shrink-wrap="shrinkWrap"
     >
       <div class="list-view-content" :style="contentStyle">
@@ -28,29 +28,16 @@
 
 <script setup lang="ts">
 import { computed, type CSSProperties } from "vue";
-import type { EdgeInsets } from "./EdgeInsets";
-import ScrollView from "./ScrollView.vue";
 import RefreshIndicator from "./RefreshIndicator.vue";
-
+import { ListViewProps } from "./Scrollable";
+import ScrollView from "./ScrollView.vue";
 defineOptions({ inheritAttrs: false });
-
-interface Props {
-  scrollDirection?: "vertical" | "horizontal";
-  padding?: EdgeInsets;
-  physics?: "bouncing" | "clamping" | "never" | "always";
-  shrinkWrap?: boolean;
-  itemCount?: number;
-  itemExtent?: number;
-  separator?: boolean; // 是否启用分隔符
-  clipBehavior?: "none" | "hardEdge" | "antiAlias";
-  onRefresh?: () => Promise<void>;
-}
-
-const props = withDefaults(defineProps<Props>(), {
+import { Clip } from "./Clip";
+const props = withDefaults(defineProps<ListViewProps>(), {
   scrollDirection: "vertical",
   physics: "bouncing",
   shrinkWrap: false,
-  clipBehavior: "hardEdge",
+  clipBehavior: Clip.hardEdge,
   separator: false,
 });
 

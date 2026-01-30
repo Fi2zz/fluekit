@@ -144,14 +144,9 @@ Matrix4.skewY = (beta: number): Matrix4 => {
 };
 
 export function matrix4ToCSSStyle(transform?: Matrix4, alignment?: Alignment): CSSProperties {
-  if (!transform) return {};
-  const style: CSSProperties = {
-    transform: transform.toString(),
-  };
-
-  if (alignment) {
-    style.transformOrigin = alignmentToOrigin(alignment);
-  }
+  const style: CSSProperties = {};
+  if (transform) style.transform = transform.toString();
+  if (alignment) style.transformOrigin = alignmentToOrigin(alignment);
 
   return style;
 }

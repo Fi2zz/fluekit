@@ -21,13 +21,12 @@ Toast.show("Success!", {
 
 ## Examples
 
-### Interactive Demo
-
 <script setup>
 import BasicDemo from '../demos/toast/BasicDemo.vue';
 </script>
 
 <BasicDemo />
+<<< ../demos/toast/BasicDemo.vue
 
 ## API
 

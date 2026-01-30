@@ -7,7 +7,7 @@
     @tap-up="handleTapUp"
     @tap-cancel="handleTapCancel"
   >
-    <button :style="computedStyle" :disabled="disabled" v-bind="safeAttrs">
+    <button :style="computedStyle" :disabled="disabled" :type="type" v-bind="gestureEvents">
       <slot>{{ props.text }}</slot>
     </button>
   </GestureDetector>
@@ -21,11 +21,8 @@ import { Color, resolveColor } from "./Color";
 import { EdgeInsets } from "./EdgeInsets";
 import GestureDetector from "./GestureDetector.vue";
 import { useStyles } from "./StyleProvider";
-import { useGestureStyle, type Behavior } from "./useGesture";
-import { useSafeAttrs } from "./useSafeAttrs";
-
+import { useGestureStyle, type Behavior, useGestureEvents } from "./useGesture";
 defineOptions({ inheritAttrs: false });
-
 interface Props {
   // 交互属性
   disabled?: boolean;
@@ -40,8 +37,8 @@ interface Props {
   pressedOpacity?: number;
   padding?: EdgeInsets;
   borderRadius?: BorderRadius;
+  type?: HTMLButtonElement["type"];
 }
-
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   behavior: "opaque",
@@ -51,16 +48,16 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   (e: "pressed"): void;
+  (e: "click", payload: Event): void;
   (e: "long-press"): void;
   (e: "tap-down", payload: any): void;
   (e: "tap-up", payload: any): void;
   (e: "tap-cancel", payload: any): void;
 }>();
 const _styles = useStyles();
-const safeAttrs = useSafeAttrs();
 const isPressed = ref(false);
 const gestureStyle = useGestureStyle(props.behavior);
-
+const gestureEvents = useGestureEvents();
 // 样式计算逻辑
 const computedStyle = computed(() => {
   const css: CSSProperties = {
@@ -107,8 +104,8 @@ const computedStyle = computed(() => {
   return css;
 });
 
-function withDisabled(handler: (e: unknown) => void) {
-  return (e: unknown) => {
+function withDisabled(handler: (e: Event) => void) {
+  return (e: Event) => {
     if (props.disabled) return;
     handler(e);
   };
@@ -127,6 +124,9 @@ const handleTapCancel = (e: any) => {
   isPressed.value = false;
   emit("tap-cancel", e);
 };
-const handleTap = withDisabled(() => emit("pressed"));
+const handleTap = withDisabled((e: Event) => {
+  emit("pressed");
+  emit("click", e);
+});
 const handleLongPress = withDisabled(() => emit("long-press"));
 </script>

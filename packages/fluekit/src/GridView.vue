@@ -9,7 +9,6 @@
     <div class="grid-view-content" :style="gridStyle">
       <!-- 模式1: 静态子元素 -->
       <slot v-if="!itemCount" />
-
       <!-- 模式2: 构建器模式 -->
       <template v-else>
         <template v-for="index in itemCount" :key="index - 1">
@@ -23,27 +22,11 @@
 <script setup lang="ts">
 import { computed, type CSSProperties } from "vue";
 import ScrollView from "./ScrollView.vue";
-import type { EdgeInsets } from "./EdgeInsets";
 import { px2vw } from "./px2vw";
-
+import { GridViewProps } from "./Scrollable";
 defineOptions({ inheritAttrs: false });
 
-interface Props {
-  scrollDirection?: "vertical" | "horizontal";
-  padding?: EdgeInsets;
-  physics?: "bouncing" | "clamping" | "never" | "always";
-  shrinkWrap?: boolean;
-  clipBehavior?: "none" | "hardEdge" | "antiAlias";
-
-  // Grid 专有属性
-  crossAxisCount?: number; // 列数 (垂直滚动时)
-  mainAxisSpacing?: number; // 主轴间距
-  crossAxisSpacing?: number; // 交叉轴间距
-  childAspectRatio?: number; // 子元素宽高比
-  itemCount?: number;
-}
-
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<GridViewProps>(), {
   scrollDirection: "vertical",
   physics: "bouncing",
   shrinkWrap: false,

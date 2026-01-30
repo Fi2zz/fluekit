@@ -1,5 +1,5 @@
 <template>
-  <div class="flutter-sticky" :style="style">
+  <div class="fluekit-sticky" :style="style">
     <slot />
   </div>
 </template>

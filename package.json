@@ -9,11 +9,10 @@
   },
   "packageManager": "pnpm@10.6.2",
   "scripts": {
-    "build:fluekit": "pnpm -C packages/fluekit build",
+    "build:fluekit": "pnpm --filter packages/fluekit build",
     "lint": "eslint .",
     "format": "prettier --write .",
     "prepare": "husky",
-    "build:flue": "pnpm --filter fluekit run build",
     "docs:dev": "pnpm --filter fluekit-docs run docs:dev",
     "docs:build": "pnpm --filter fluekit-docs run docs:build",
     "bump": "node scripts/bump-version.js"

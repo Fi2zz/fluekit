@@ -1,5 +1,5 @@
 <template>
-  <div class="flutter-transform" :style="style">
+  <div class="fluekit-transform" :style="style">
     <slot />
   </div>
 </template>
@@ -8,9 +8,7 @@
 import { computed, type CSSProperties } from "vue";
 import { type Alignment } from "./FlexProps";
 import { Matrix4, matrix4ToCSSStyle } from "./Matrix4";
-
 defineOptions({ inheritAttrs: false });
-
 interface Props {
   /**
    * CSS 变换字符串
@@ -24,12 +22,6 @@ interface Props {
    * 对应 Flutter 的 alignment
    */
   alignment?: Alignment;
-
-  /**
-   * 具体的原点偏移 (CSS transform-origin)
-   * 如果提供了 alignment，origin 会被忽略或合并（取决于实现，这里优先 alignment）
-   */
-  origin?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -37,7 +29,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const style = computed<CSSProperties>(() => {
-  const css: CSSProperties = {
+  return {
     ...matrix4ToCSSStyle(props.transform, props.alignment),
     // 为了不影响布局流，通常 Transform 应该是一个盒子
     // 但 CSS transform 不会改变元素占用的布局空间（layout），只会改变视觉位置（paint）
@@ -46,11 +38,5 @@ const style = computed<CSSProperties>(() => {
     flexShrink: 0,
     boxSizing: "border-box",
   };
-
-  if (props.origin) {
-    css.transformOrigin = props.origin;
-  }
-
-  return css;
 });
 </script>

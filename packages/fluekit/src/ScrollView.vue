@@ -8,27 +8,11 @@
 
 <script setup lang="ts">
 import { ref, computed, type CSSProperties, onUnmounted } from "vue";
-import type { EdgeInsets } from "./EdgeInsets";
 import { paddingToStyle } from "./EdgeInsets";
+import { ScrollableProps } from "./Scrollable";
 
 defineOptions({ inheritAttrs: false });
-
-interface Props {
-  /** 滚动方向 */
-  scrollDirection?: "vertical" | "horizontal";
-  /** 内边距 */
-  padding?: EdgeInsets;
-  /** 物理滚动效果模拟（主要影响 CSS overflow 行为） */
-  physics?: "bouncing" | "clamping" | "never" | "always";
-  /** 裁剪行为 */
-  clipBehavior?: "none" | "hardEdge" | "antiAlias";
-  /** 是否反向滚动 (暂未完全实现，预留接口) */
-  reverse?: boolean;
-  /** 是否根据内容收缩 */
-  shrinkWrap?: boolean;
-}
-
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<ScrollableProps>(), {
   scrollDirection: "vertical",
   physics: "bouncing",
   clipBehavior: "hardEdge",
