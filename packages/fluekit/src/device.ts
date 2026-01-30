@@ -14,6 +14,11 @@ export const isIOS = /iPhone|iPod/i.test(userAgent) || isIPad;
 
 export const isMacOS = /Macintosh/i.test(userAgent) && !isIPad;
 
+const uaHasMobile = /Mobile/i.test(userAgent);
+const isIPhone = /iPhone|iPod/i.test(userAgent);
+const isAndroidPhone = isAndroid && uaHasMobile;
+const isAndroidTablet = isAndroid && !uaHasMobile;
+
 export const checkMobile = () => {
   if (!isBrowser) return false;
   return (
@@ -26,3 +31,20 @@ export const checkMobile = () => {
 };
 
 export const isMobile = checkMobile();
+
+export type DeviceType = "phone" | "tablet" | "desktop";
+
+export function getDeviceType(): DeviceType {
+  if (!isBrowser) return "desktop";
+  if (isIPhone || isAndroidPhone || (/Edg/i.test(userAgent) && /Mobile/i.test(userAgent)))
+    return "phone";
+  if (isIPad || isAndroidTablet) return "tablet";
+  const w = typeof window !== "undefined" ? window.innerWidth : 0;
+  if (w >= 1024) return "desktop";
+  if (w >= 600) return "tablet";
+  return "phone";
+}
+
+export const isPhone = getDeviceType() === "phone";
+export const isTablet = getDeviceType() === "tablet";
+export const isDesktop = getDeviceType() === "desktop";
