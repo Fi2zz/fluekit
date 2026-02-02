@@ -13,7 +13,7 @@ export function useZIndex() {
   return zIndexManager.next();
 }
 
-export interface Props {
+export interface PositionProps {
   /** 距离顶部的距离 */
   top?: number | string;
   /** 距离底部的距离 */
@@ -33,7 +33,7 @@ export interface Props {
   size?: SizeType;
 }
 export function usePositionStyle(
-  props: Props,
+  props: PositionProps,
   position: "absolute" | "fixed" | "sticky" | "relative" = "absolute",
 ) {
   const autoZIndex = ref<number>();

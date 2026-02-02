@@ -6,9 +6,9 @@
 
 <script setup lang="ts">
 import { onMounted, warn } from "vue";
-import { usePositionStyle, type Props } from "./usePosition";
+import { usePositionStyle, type PositionProps } from "./usePosition";
 import { useStackContext } from "./useStack";
-const props = defineProps<Props>();
+const props = defineProps<PositionProps>();
 defineOptions({ inheritAttrs: false });
 const stackContext = useStackContext();
 onMounted(() => {

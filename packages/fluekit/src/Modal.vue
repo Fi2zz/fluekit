@@ -20,37 +20,28 @@ import { useZIndex } from "./usePosition";
 defineOptions({ inheritAttrs: false });
 
 interface Props {
-  visible: boolean;
   barrierDismissible?: boolean;
   barrierColor?: string;
   alignment?: Alignment;
   zIndex?: number;
 }
-
+const visible = defineModel("visible", { type: Boolean, default: false });
 const props = withDefaults(defineProps<Props>(), {
-  visible: false,
   barrierDismissible: true,
   barrierColor: "rgba(0, 0, 0, 0.5)",
   alignment: Alignment.center,
   zIndex: () => useZIndex(),
 });
-
-const emit = defineEmits<{
-  (e: "update:visible", value: boolean): void;
-  (e: "close"): void;
-}>();
-
+const emit = defineEmits<{ (e: "close"): void }>();
 const close = () => {
-  emit("update:visible", false);
+  visible.value = false;
   emit("close");
 };
 
 const onBarrierDismiss = () => {
-  if (props.barrierDismissible) {
-    close();
-  }
+  if (!props.barrierDismissible) return;
+  close();
 };
-
 const onEnter = (el: Element, done: () => void) => {
   const element = el as HTMLElement;
   const animation = element.animate([{ opacity: 0 }, { opacity: 1 }], {

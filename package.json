@@ -9,7 +9,7 @@
   },
   "packageManager": "pnpm@10.6.2",
   "scripts": {
-    "build:fluekit": "pnpm --filter packages/fluekit build",
+    "build:fluekit": "pnpm --filter fluekit run build",
     "lint": "eslint .",
     "format": "prettier --write .",
     "prepare": "husky",
