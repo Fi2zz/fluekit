@@ -16,6 +16,7 @@ import Container from "./Container.vue";
 import Fixed from "./Fixed.vue";
 
 import Overlay from "./Overlay.vue";
+import { useZIndex } from "./usePosition";
 defineOptions({ inheritAttrs: false });
 
 interface Props {
@@ -24,7 +25,6 @@ interface Props {
   barrierColor?: string;
   alignment?: Alignment;
   zIndex?: number;
-  transition?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -32,8 +32,7 @@ const props = withDefaults(defineProps<Props>(), {
   barrierDismissible: true,
   barrierColor: "rgba(0, 0, 0, 0.5)",
   alignment: Alignment.center,
-  zIndex: 1000,
-  transition: "fluekit-modal-fade",
+  zIndex: () => useZIndex(),
 });
 
 const emit = defineEmits<{
@@ -54,17 +53,19 @@ const onBarrierDismiss = () => {
 
 const onEnter = (el: Element, done: () => void) => {
   const element = el as HTMLElement;
-  element.animate([{ opacity: 0 }, { opacity: 1 }], {
+  const animation = element.animate([{ opacity: 0 }, { opacity: 1 }], {
     duration: 300,
     easing: "ease",
-  }).onfinish = done;
+  });
+  animation.onfinish = done;
 };
 
 const onLeave = (el: Element, done: () => void) => {
   const element = el as HTMLElement;
-  element.animate([{ opacity: 1 }, { opacity: 0 }], {
+  const animation = element.animate([{ opacity: 1 }, { opacity: 0 }], {
     duration: 300,
     easing: "ease",
-  }).onfinish = done;
+  });
+  animation.onfinish = done;
 };
 </script>
