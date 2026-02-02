@@ -31,6 +31,7 @@ import { ref, type CSSProperties } from "vue";
 import CupertinoActivityIndicator from "./CupertinoActivityIndicator.vue";
 import Icon from "./Icon.vue";
 import { Icons } from "./Icons";
+import { useZIndex } from "./usePosition";
 
 export type ToastPosition =
   | "center"
@@ -186,7 +187,7 @@ const getToastStyle = (item: ActiveToast): CSSProperties => {
   return {
     ...baseToastStyle,
     ...positionStyles[pos],
-    zIndex: item.options.zIndex || 2000,
+    zIndex: item.options.zIndex || useZIndex() * 10,
     backgroundColor: item.options.backgroundColor || "rgba(0, 0, 0, 0.8)",
     color: item.options.textColor || "#ffffff",
   };
