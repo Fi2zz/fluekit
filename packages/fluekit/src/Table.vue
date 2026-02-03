@@ -53,6 +53,7 @@
             :key="col.key"
             :style="{
               textAlign: col.align || 'left',
+              width: col.width ? px2vw(col.width) : undefined,
               padding: px2vw(cellPadding),
               ...cellStyle,
             }"

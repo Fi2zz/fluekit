@@ -6,8 +6,13 @@
       </Container>
     </Fixed>
   </Transition>
-  <Overlay :visible="visible" position="fixed" @tap="onBarrierDismiss" :z-index="zIndex - 1">
-  </Overlay>
+  <Overlay
+    :visible="visible"
+    position="fixed"
+    @tap="onBarrierDismiss"
+    :z-index="zIndex - 1"
+    :color="barrierColor"
+  />
 </template>
 
 <script setup lang="ts">
@@ -18,15 +23,14 @@ import Fixed from "./Fixed.vue";
 import Overlay from "./Overlay.vue";
 import { useZIndex } from "./usePosition";
 defineOptions({ inheritAttrs: false });
-
-interface Props {
+interface ModalProps {
   barrierDismissible?: boolean;
   barrierColor?: string;
   alignment?: Alignment;
   zIndex?: number;
 }
 const visible = defineModel("visible", { type: Boolean, default: false });
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<ModalProps>(), {
   barrierDismissible: true,
   barrierColor: "rgba(0, 0, 0, 0.5)",
   alignment: Alignment.center,

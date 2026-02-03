@@ -79,7 +79,7 @@ const computedStyle = computed(() => {
     boxSizing: "border-box",
   };
   // 1. 基础样式 (来自 variant)
-  let variantStyle: ButtonStyle = {};
+  let variantStyle: ButtonStyle = ButtonStyle({});
   if (props.variant === "ios") {
     variantStyle = ButtonStyle({
       padding: props.padding || EdgeInsets.symmetric({ vertical: 14, horizontal: 16 }),

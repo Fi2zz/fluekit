@@ -6,6 +6,7 @@ import { EdgeInsetsProps } from "./EdgeInsets";
 import { TextStyle } from "./TextStyle";
 
 import { BoxConstraints } from "./BoxConstraints";
+import { CopyWith, createCopyWith, PropsWithCopyWith } from "./utils";
 
 export interface InputBorder {
   borderSide?: BorderSide;
@@ -58,7 +59,9 @@ export const FloatingLabelBehavior = {
   never: "never",
 } as const;
 
-export interface InputDecoration {
+const INPUI_DECORATION_SYMBOL = Symbol("InputDecoration");
+
+interface InputDecorationProps extends PropsWithCopyWith<InputDecorationProps> {
   // --- Content ---
   labelText?: string;
   hintText?: string;
@@ -134,7 +137,16 @@ export interface InputDecoration {
   alwaysShowError?: boolean;
 }
 
-export function InputDecoration(options: InputDecoration = {}): InputDecoration {
-  options.floatingLabelBehavior = options.floatingLabelBehavior || FloatingLabelBehavior.never;
-  return options;
+export interface InputDecoration extends InputDecorationProps {
+  [INPUI_DECORATION_SYMBOL]: true;
+}
+export function InputDecoration(props: InputDecorationProps): InputDecoration {
+  props = props || {};
+  props.floatingLabelBehavior = props.floatingLabelBehavior || FloatingLabelBehavior.never;
+  const copyWith = createCopyWith<InputDecorationProps>(props) as CopyWith<InputDecoration>;
+  return {
+    ...props,
+    [INPUI_DECORATION_SYMBOL]: true,
+    copyWith,
+  };
 }

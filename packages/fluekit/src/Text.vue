@@ -11,8 +11,8 @@ import {
   TextDirection,
   TextOverflow,
   TextStyle,
-  toCSSStyle,
   isTextStyle,
+  textStyleToStyle,
 } from "./TextStyle";
 import { isUndefined, validateInDev } from "./utils";
 
@@ -82,7 +82,7 @@ const gestureStyle = useGestureStyle();
 
 const computedStyle = computed(() => {
   // 1. Convert TextStyle to CSS
-  const css: CSSProperties = props.style ? toCSSStyle(props.style) : {};
+  const css: CSSProperties = props.style ? textStyleToStyle(props.style) : {};
 
   // 2. Apply Text Props (Override TextStyle)
 

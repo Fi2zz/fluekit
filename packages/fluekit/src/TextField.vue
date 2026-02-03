@@ -40,7 +40,6 @@
           <div v-if="!modelValue && placeholderText" :style="placeholderStyle">
             {{ placeholderText }}
           </div>
-
           <!-- Input Element -->
           <component
             :is="isMultiline ? 'textarea' : 'input'"
@@ -102,13 +101,13 @@
 
 <script setup lang="ts">
 import {
-  useSlots,
   computed,
   type CSSProperties,
   nextTick,
   onBeforeUnmount,
   onMounted,
   ref,
+  useSlots,
   watch,
 } from "vue";
 import { BorderSide, borderSideToStyle } from "./Border";
@@ -121,15 +120,11 @@ import {
   type InputDecoration,
   UnderlineInputBorder,
 } from "./InputDecoration";
-import { type TextStyle, toCSSStyle as textStyleToCSS } from "./TextStyle";
-
+import { type TextStyle, textStyleToStyle } from "./TextStyle";
 import { boxConstraintsToStyle } from "./BoxConstraints";
-
 import Icon from "./Icon.vue";
-
 defineOptions({ inheritAttrs: false });
-
-interface Props {
+interface TextFieldProps {
   modelValue?: string | number;
   decoration?: InputDecoration;
   enabled?: boolean;
@@ -150,7 +145,7 @@ interface Props {
   modelModifiers?: Record<string, boolean>;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<TextFieldProps>(), {
   modelValue: "",
   enabled: true,
   readOnly: false,
@@ -170,10 +165,6 @@ const emit = defineEmits<{
   (e: "blur", event: FocusEvent): void;
   (e: "submit", value: string): void;
 }>();
-
-const isComponent = (icon: InputDecoration["icon"]) => {
-  return typeof icon === "object" || typeof icon === "function";
-};
 
 const inputRef = ref<HTMLInputElement | HTMLTextAreaElement | null>(null);
 const isFocused = ref(false);
@@ -277,23 +268,14 @@ const placeholderText = computed(() => {
   return props.decoration?.hintText || "";
 });
 
-watch(
-  () => props.modelValue,
-  () => nextTick(_autoGrow),
-);
+function doAutoGrow() {
+  nextTick(_autoGrow);
+}
+watch(() => props.modelValue, doAutoGrow);
 watch(isMultiline, (v) => v && nextTick(_autoGrow));
-watch(
-  () => props.maxLines,
-  () => nextTick(_autoGrow),
-);
-watch(
-  () => props.minLines,
-  () => nextTick(_autoGrow),
-);
-watch(
-  () => props.autoGrow,
-  () => nextTick(_autoGrow),
-);
+watch(() => props.maxLines, doAutoGrow);
+watch(() => props.minLines, doAutoGrow);
+watch(() => props.autoGrow, doAutoGrow);
 
 // Styles
 const currentBorder = computed<InputBorder | undefined>(() => {
@@ -455,7 +437,7 @@ const finalInputStyle = computed<CSSProperties>(() => {
     fontSize: "16px",
     color: "inherit",
     resize: "none",
-    ...textStyleToCSS(props.style),
+    ...textStyleToStyle(props.style),
   };
   if (props.cursorColor) {
     css.caretColor = resolveColor(props.cursorColor);
@@ -479,7 +461,9 @@ const placeholderStyle = computed<CSSProperties>(() => ({
   whiteSpace: isMultiline.value ? "pre-wrap" : "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
-  ...textStyleToCSS(props.decoration?.hintStyle),
+  display: "flex",
+  alignItems: "center",
+  ...textStyleToStyle(props.decoration?.hintStyle),
 }));
 
 const footerStyle: CSSProperties = {
@@ -499,7 +483,7 @@ const labelStyle = computed<CSSProperties>(() => {
     pointerEvents: "none",
     transition: "all 0.2s ease",
     color: "#666",
-    ...textStyleToCSS(props.decoration?.labelStyle),
+    ...textStyleToStyle(props.decoration?.labelStyle),
   };
 
   if (isFloating.value) {
@@ -511,7 +495,7 @@ const labelStyle = computed<CSSProperties>(() => {
     }
     // Apply floatingLabelStyle if available
     if (props.decoration?.floatingLabelStyle) {
-      Object.assign(css, textStyleToCSS(props.decoration.floatingLabelStyle));
+      Object.assign(css, textStyleToStyle(props.decoration.floatingLabelStyle));
     }
   }
 
@@ -523,7 +507,7 @@ const helperStyle = computed<CSSProperties>(() => {
     flex: 1, // Allow text to take available space for alignment
     fontSize: "12px",
     color: "#666",
-    ...textStyleToCSS(props.decoration?.helperStyle),
+    ...textStyleToStyle(props.decoration?.helperStyle),
   };
   if (props.decoration?.helperTextAlign) {
     css.textAlign = props.decoration.helperTextAlign;
@@ -545,7 +529,7 @@ const errorStyle = computed<CSSProperties>(() => {
     flex: 1, // Allow text to take available space for alignment
     fontSize: "12px",
     color: "#f44336",
-    ...textStyleToCSS(props.decoration?.errorStyle),
+    ...textStyleToStyle(props.decoration?.errorStyle),
   };
   if (props.decoration?.errorTextAlign) {
     css.textAlign = props.decoration.errorTextAlign;
@@ -567,7 +551,7 @@ const counterStyle = computed<CSSProperties>(() => {
     fontSize: "12px",
     color: "#666",
     marginLeft: "auto",
-    ...textStyleToCSS(props.decoration?.counterStyle),
+    ...textStyleToStyle(props.decoration?.counterStyle),
   };
 });
 

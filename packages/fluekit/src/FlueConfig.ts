@@ -5,6 +5,7 @@ export interface FlueConfigsProps {
   designWidth?: number;
   assetBaseURL?: string;
   toastCount?: number;
+  lineHeight?: number | string;
 }
 export const FlueConfigInjectionKey: InjectionKey<FlueConfigsProps> = Symbol("FlueConfig");
 export const useFlueConfig = () => inject(FlueConfigInjectionKey);

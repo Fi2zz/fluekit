@@ -6,7 +6,7 @@ import { BoxShadowProps, boxShadowToCSS, isBoxShadow } from "./BoxShadow";
 import { Color, resolveColor } from "./Color";
 import { ImageFilter } from "./ImageFilter";
 import { px2vw } from "./px2vw";
-import { isPlainObject, validateInDev } from "./utils";
+import { createCopyWith, isPlainObject, PropsWithCopyWith, validateInDev } from "./utils";
 import { BoxFit } from "./BoxFit";
 import { ImageProvider } from "./ImageProvider";
 export * from "./Gradient";
@@ -96,7 +96,7 @@ export function DecorationImage(props: DecorationImageProps): DecorationImagePro
 // 定义唯一符号标记
 const BOX_DECORATION_SYMBOL = Symbol("boxDecoration");
 
-export type BoxDecorationProps = {
+export interface BoxDecorationProps extends PropsWithCopyWith<BoxDecorationProps> {
   color?: string | Color;
   border?: Borders;
   borderRadius?: BorderRadius;
@@ -107,7 +107,7 @@ export type BoxDecorationProps = {
   opacity?: number;
   shape?: BoxShape;
   backdropFilter?: ImageFilter | string;
-};
+}
 
 export type BoxDecoration = BoxDecorationProps & {
   [BOX_DECORATION_SYMBOL]?: true;
@@ -237,11 +237,11 @@ export function boxDecorationToStyle(decoration?: BoxDecorationProps): CSSProper
 
   return style;
 }
-
 export function BoxDecoration(props?: BoxDecorationProps): BoxDecoration {
   return {
-    ...(props as BoxDecorationProps),
+    ...((props || {}) as BoxDecorationProps),
     [BOX_DECORATION_SYMBOL]: true as const,
+    copyWith: createCopyWith<BoxDecorationProps>((props || {}) as unknown as BoxDecorationProps),
   };
 }
 
@@ -250,6 +250,5 @@ export function BoxDecoration(props?: BoxDecorationProps): BoxDecoration {
  */
 export function isBoxDecoration(value: any): value is BoxDecoration {
   if (!isPlainObject(value)) return false;
-
   return BOX_DECORATION_SYMBOL in value;
 }

@@ -1,9 +1,11 @@
 <template>
-  <slot />
+  <div :style="providerStyle">
+    <slot />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { watchEffect } from "vue";
+import { computed, watchEffect, type CSSProperties } from "vue";
 import { FlueConfigsProps, provideFlueConfig } from "./FlueConfig";
 import { setAssetBaseURL } from "./ImageProvider";
 import { setDefaultVW, setTransform } from "./px2vw";
@@ -26,4 +28,14 @@ watchEffect(() => {
 // Provide a key if we want to access config in children, though px2vw uses module state currently.
 // For now, module state is enough as it's a global config.
 provideFlueConfig(props);
+
+const providerStyle = computed<CSSProperties>(() => {
+  const lineHeight = props.lineHeight ?? "normal";
+  const style: CSSProperties & Record<string, any> = {
+    "--flue-line-height": lineHeight,
+    lineHeight,
+    display: "contents",
+  };
+  return style;
+});
 </script>

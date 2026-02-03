@@ -56,3 +56,15 @@ export function isComponent(vnode: VNode): boolean {
   const type = vnode.type;
   return typeof type === "object" || typeof type === "function";
 }
+
+export type CopyWith<T> = (props: Partial<T>) => T;
+
+export function createCopyWith<T>(obj: T): CopyWith<T> {
+  return function <T>(props: Partial<T>): T {
+    return { ...obj, ...props } as T;
+  };
+}
+
+export interface PropsWithCopyWith<T> {
+  copyWith: CopyWith<T>;
+}

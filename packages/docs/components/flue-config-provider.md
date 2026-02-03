@@ -16,11 +16,12 @@ Wrap your application or a part of it with `FlueConfigProvider` to set global co
 
 ## Props
 
-| Prop           | Type      | Default | Description                                          |
-| -------------- | --------- | ------- | ---------------------------------------------------- |
-| `transform`    | `boolean` | `true`  | Whether to enable automatic px-to-vw transformation. |
-| `designWidth`  | `number`  | `750`   | The design width in pixels for px-to-vw calculation. |
-| `assetBaseURL` | `string`  | `/`     | The base URL for `AssetImage`.                       |
+| Prop           | Type      | Default  | Description                                          |
+| -------------- | --------- | -------- | ---------------------------------------------------- |
+| `transform`    | `boolean` | `true`   | Whether to enable automatic px-to-vw transformation. |
+| `designWidth`  | `number`  | `750`    | The design width in pixels for px-to-vw calculation. |
+| `assetBaseURL` | `string`  | `/`      | The base URL for `AssetImage`.                       |
+| `lineHeight`   | `string`  | `normal` | The line height for FlueKit components.              |
 
 ## Notes
 

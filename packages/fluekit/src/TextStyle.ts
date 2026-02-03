@@ -5,7 +5,13 @@
 
 import { CSSProperties } from "vue";
 import { px2vw } from "./px2vw";
-import { isPlainObject, validateInDev } from "./utils";
+import {
+  isPlainObject,
+  validateInDev,
+  createCopyWith,
+  type CopyWith,
+  PropsWithCopyWith,
+} from "./utils";
 import { Color, resolveColor } from "./Color";
 // import { build } from "vite";
 /**
@@ -107,7 +113,7 @@ export interface TextShadow {
   blurRadius?: number;
 }
 
-export interface TextStyleProps {
+export interface TextStyleProps extends PropsWithCopyWith<TextStyleProps> {
   inherit?: boolean;
   color?: string | Color;
   backgroundColor?: string | Color;
@@ -166,28 +172,21 @@ function validateTextStyle(style: TextStyleProps) {
 /**
  * 辅助函数：构建 fontFamily
  */
-function buildFontFamily(
-  fontFamily?: string,
-  pkg?: string,
-  fontFamilyFallback?: string[],
-): string | undefined {
-  let family = fontFamily;
-  if (pkg && family) {
-    // 模拟 Flutter 的 package 字体路径逻辑，Web 中可能需要调整
-    // 这里暂时保留原样，但在 Web 中通常直接使用 fontFamily 名称
-    family = `packages/${pkg}/${family}`;
-  }
-  if (fontFamilyFallback && fontFamilyFallback.length > 0) {
+function buildFontFamily(fontFamily?: string, fontFamilyFallback?: string[]): string | undefined {
+  const family = fontFamily;
+  if (fontFamilyFallback && fontFamilyFallback.length > 0)
     return [family, ...fontFamilyFallback].filter(Boolean).join(", ");
-  }
   return family;
 }
 
-export function toCSSStyle(props: TextStyleProps = {}): CSSProperties {
-  validateInDev(validateTextStyle, props);
+const defaults: TextStyleProps = {
+  copyWith: () => ({}) as TextStyleProps,
+};
 
-  const cssStyle: CSSProperties = {};
-
+export function textStyleToStyle(props: TextStyleProps = defaults): CSSProperties {
+  const cssStyle: CSSProperties = {
+    lineHeight: `var(--flue-line-height, normal)`,
+  };
   // 基础重置
   cssStyle.margin = 0;
   cssStyle.padding = 0;
@@ -230,7 +229,7 @@ export function toCSSStyle(props: TextStyleProps = {}): CSSProperties {
   }
 
   // 4. FontFamily & Fallback & Package
-  const fontFamily = buildFontFamily(props.fontFamily, props.package, props.fontFamilyFallback);
+  const fontFamily = buildFontFamily(props.fontFamily, props.fontFamilyFallback);
   if (fontFamily) {
     cssStyle.fontFamily = fontFamily;
   }
@@ -248,7 +247,7 @@ export function toCSSStyle(props: TextStyleProps = {}): CSSProperties {
   if (props.height) {
     // Flutter's height is a multiplier, Web's lineHeight can be unitless (multiplier) or length
     // Assume number is multiplier (unitless)
-    cssStyle.lineHeight = props.height.toString();
+    cssStyle.lineHeight = `${props.height}`;
   }
 
   // 7. Decoration
@@ -310,23 +309,16 @@ export function toCSSStyle(props: TextStyleProps = {}): CSSProperties {
 
   return cssStyle;
 }
-
-export { toCSSStyle as textStyleToCSSStyle };
-
-export function TextStyle(initial: TextStyleProps = {}, cloned: TextStyleProps = {}): TextStyle {
-  const merged = {
-    ...cloned,
-    ...initial,
-    [TEXT_STYLE_SYMBOL]: true as const,
+export function TextStyle(props: TextStyleProps): TextStyle {
+  props = props || {};
+  validateInDev(validateTextStyle, props);
+  const copyWith = createCopyWith<TextStyleProps>(props) as CopyWith<TextStyle>;
+  return {
+    ...props,
+    [TEXT_STYLE_SYMBOL]: true,
+    copyWith: copyWith,
   };
-
-  // 模拟构造函数中的初始化逻辑
-  // 注意：这里只是构建数据对象，真正的样式转换在 toCSSStyle 中
-
-  validateInDev(validateTextStyle, merged);
-  return merged;
 }
-
 /**
  * 类型守卫：检查对象是否通过 TextStyle 构造函数创建
  */
