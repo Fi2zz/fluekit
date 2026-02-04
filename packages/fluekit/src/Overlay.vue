@@ -9,6 +9,7 @@
 <script setup lang="ts">
 import { computed, type CSSProperties } from "vue";
 import { Color, resolveColor } from "./Color";
+import { usePositionStyle } from "./usePosition";
 defineOptions({ inheritAttrs: false });
 interface Props {
   visible?: boolean;
@@ -42,13 +43,13 @@ const onLeave = (el: Element, done: () => void) => {
   });
   animation.onfinish = done;
 };
-
+const position = usePositionStyle(
+  computed(() => ({ inset: 0, zIndex: props.zIndex, position: props.position })),
+);
 const style = computed<CSSProperties>(() => {
   return {
     backgroundColor: resolveColor(props.color),
-    zIndex: props.zIndex,
-    position: props.position,
-    inset: 0,
+    ...position.value,
     pointerEvents: "auto",
     cursor: "auto",
   };

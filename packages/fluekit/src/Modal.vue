@@ -1,10 +1,8 @@
 <template>
   <Transition :css="false" @enter="onEnter" @leave="onLeave">
-    <Fixed v-if="visible" :z-index="zIndex" v-bind="positioning">
-      <Container width="100%" height="100%">
-        <slot></slot>
-      </Container>
-    </Fixed>
+    <div :style="coreStyle" class="modal-core" v-if="visible" @click="onCoreClick">
+      <slot></slot>
+    </div>
   </Transition>
   <Overlay
     :visible="visible"
@@ -16,15 +14,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from "vue";
-import { Alignment } from "./Alignment";
-import Container from "./Container.vue";
-import Fixed from "./Fixed.vue";
-import Overlay from "./Overlay.vue";
-import { useZIndex } from "./usePosition";
+import { computed, ComputedRef, CSSProperties, watch } from "vue";
+import { Alignment, alignmentToFlex } from "./Alignment";
 import { isBrowser } from "./device";
+import Overlay from "./Overlay.vue";
+import { usePositionStyle, useZIndex } from "./usePosition";
+import { withFlexDirection } from "./FlexProps";
 defineOptions({ inheritAttrs: false });
-interface ModalProps {
+export interface ModalProps {
   barrierDismissible?: boolean;
   barrierColor?: string;
   alignment?: Alignment;
@@ -37,11 +34,28 @@ const props = withDefaults(defineProps<ModalProps>(), {
   alignment: Alignment.center,
   zIndex: () => useZIndex(),
 });
-const emit = defineEmits<{ (e: "close"): void }>();
+const emit = defineEmits<{ (e: "close"): void; (e: "afterClose"): void }>();
 const close = () => {
   visible.value = false;
   emit("close");
 };
+
+const style = usePositionStyle(
+  computed(() => ({
+    inset: "0",
+    zIndex: props.zIndex,
+    position: "fixed",
+    width: "100%",
+    height: "100%",
+  })),
+);
+
+const coreStyle: ComputedRef<CSSProperties> = computed(() =>
+  withFlexDirection("column", {
+    ...style.value,
+    ...alignmentToFlex(props.alignment, "column"),
+  }),
+);
 
 function toggleBodyScroll(enabled: boolean) {
   if (!isBrowser) return;
@@ -55,51 +69,75 @@ watch(
   () => visible.value,
   (newValue) => toggleBodyScroll(newValue),
 );
-const positioning = computed(() => {
-  switch (props.alignment) {
-    case Alignment.topLeft:
-      return { top: "0", left: "0" };
-    case Alignment.centerLeft:
-      return { top: "50%", left: "0", transform: "translate(0%,-50%)" };
-    case Alignment.bottomLeft:
-      return { bottom: "0%", left: "0%" };
-    case Alignment.topCenter:
-      return { top: "0%", left: "50%", transform: "translate(-50%,0%)" };
-    case Alignment.bottomCenter:
-      return { bottom: "0%", left: "50%", transform: "translate(-50%,0%)" };
-    case Alignment.center:
-      // case Alignment.bottomCenter:
-      return { top: "50%", left: "50%", transform: "translate(-50%,-50%)" };
-    case Alignment.topRight:
-      return { top: "0", right: "0" };
-    case Alignment.centerRight:
-      return { top: "50%", right: "0", transform: "translate(0%,-50%)" };
-    case Alignment.bottomRight:
-      return { bottom: "0%", right: "0%" };
-    default:
-      return { top: "50%", left: "50%", transform: "translate(-50%,-50%)" };
-  }
-});
 
 const onBarrierDismiss = () => {
   if (!props.barrierDismissible) return;
   close();
 };
+const onCoreClick = (e: MouseEvent) => {
+  if (e.target === e.currentTarget) {
+    onBarrierDismiss();
+  }
+};
+
+const getTransform = (alignment: Alignment) => {
+  switch (alignment) {
+    case Alignment.topCenter:
+      return "translateY(-100%)";
+    case Alignment.bottomCenter:
+      return "translateY(100%)";
+    case Alignment.topLeft:
+      return "translate(-100%, -100%)";
+    case Alignment.topRight:
+      return "translate(100%, -100%)";
+    case Alignment.bottomLeft:
+      return "translate(-100%, 100%)";
+    case Alignment.bottomRight:
+      return "translate(100%, 100%)";
+    case Alignment.centerLeft:
+      return "translateX(-100%)";
+    case Alignment.centerRight:
+      return "translateX(100%)";
+    case Alignment.center:
+    default:
+      return "scale(0)";
+  }
+};
+
 const onEnter = (el: Element, done: () => void) => {
   const element = el as HTMLElement;
-  const animation = element.animate([{ opacity: 0 }, { opacity: 1 }], {
-    duration: 300,
-    easing: "ease",
-  });
-  animation.onfinish = done;
+  const transform = getTransform(props.alignment);
+  const animation = element.animate(
+    [
+      { opacity: 0, transform },
+      { opacity: 1, transform: "none" },
+    ],
+    {
+      duration: 300,
+      easing: "ease",
+    },
+  );
+  animation.onfinish = () => {
+    done();
+  };
 };
 
 const onLeave = (el: Element, done: () => void) => {
   const element = el as HTMLElement;
-  const animation = element.animate([{ opacity: 1 }, { opacity: 0 }], {
-    duration: 300,
-    easing: "ease",
-  });
-  animation.onfinish = done;
+  const transform = getTransform(props.alignment);
+  const animation = element.animate(
+    [
+      { opacity: 1, transform: "none" },
+      { opacity: 0, transform },
+    ],
+    {
+      duration: 300,
+      easing: "ease",
+    },
+  );
+  animation.onfinish = () => {
+    done();
+    emit("afterClose");
+  };
 };
 </script>

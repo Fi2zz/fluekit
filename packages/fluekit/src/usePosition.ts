@@ -1,7 +1,6 @@
-import { CSSProperties, computed, onMounted, ref } from "vue";
+import { CSSProperties, ComputedRef, computed, onMounted, ref, unref } from "vue";
 import { px2vw } from "./px2vw";
 import { sizeToStyle, SizeType } from "./Size";
-
 const zIndexManager = {
   current: 2000,
   next() {
@@ -33,28 +32,36 @@ export interface PositionProps {
   size?: SizeType;
   transform?: string;
 }
+
+type CSSPositionType = "absolute" | "fixed" | "sticky" | "relative";
+type CSSPositionProps = PositionProps & {
+  position?: CSSPositionType;
+};
+
 export function usePositionStyle(
-  props: PositionProps,
-  position: "absolute" | "fixed" | "sticky" | "relative" = "absolute",
+  props: CSSPositionProps | ComputedRef<CSSPositionProps>,
+  position: CSSPositionType | ComputedRef<CSSPositionType> = "absolute",
 ) {
   const autoZIndex = ref<number>();
   onMounted(() => (autoZIndex.value = zIndexManager.next()));
   return computed(() => {
+    const _props = unref(props);
+    const _position = _props.position ?? unref(position);
     const style: CSSProperties = {
-      position,
+      position: _position,
       boxSizing: "border-box",
-      zIndex: props.zIndex ?? autoZIndex.value,
+      zIndex: _props.zIndex ?? autoZIndex.value,
       pointerEvents: "auto",
-      transform: props.transform,
+      transform: _props.transform,
     };
 
-    if (props.size !== undefined) {
-      Object.assign(style, sizeToStyle(props.size));
+    if (_props.size !== undefined) {
+      Object.assign(style, sizeToStyle(_props.size));
     } else {
-      style.width = px2vw(props.width);
-      style.height = px2vw(props.height);
+      style.width = px2vw(_props.width);
+      style.height = px2vw(_props.height);
     }
-    const inset = props.inset;
+    const inset = _props.inset;
     if (typeof inset !== "undefined" && inset !== null) {
       if (typeof inset == "number") {
         style.top = px2vw(inset);
@@ -67,10 +74,10 @@ export function usePositionStyle(
         Object.assign(style, insetToStyle(inset));
       }
     } else {
-      style.top = px2vw(props.top);
-      style.bottom = px2vw(props.bottom);
-      style.left = px2vw(props.left);
-      style.right = px2vw(props.right);
+      style.top = px2vw(_props.top);
+      style.bottom = px2vw(_props.bottom);
+      style.left = px2vw(_props.left);
+      style.right = px2vw(_props.right);
     }
     return style;
   });

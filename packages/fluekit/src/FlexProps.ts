@@ -113,3 +113,14 @@ export function flexBoxToStyle(props: FlexBoxProps) {
   if (typeof props.gap !== "undefined" && props.gap != null) style.gap = px2vw(props.gap);
   return style;
 }
+
+export function withFlexDirection(
+  flexDirection: CSSProperties["flexDirection"],
+  props: CSSProperties,
+): CSSProperties {
+  return {
+    display: "flex",
+    flexDirection,
+    ...props,
+  };
+}

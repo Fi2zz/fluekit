@@ -19,6 +19,7 @@ export { default as Image } from "./Image.vue";
 export { default as Icon } from "./Icon.vue";
 export { default as ListView } from "./ListView.vue";
 export { default as Modal } from "./Modal.vue";
+export * from "./showModal";
 export { default as Padding } from "./Padding.vue";
 export { default as Positioned } from "./Positioned.vue";
 export { default as Row } from "./Row.vue";
