@@ -1,6 +1,6 @@
-<script lang="ts">
 import { computed, defineComponent, h } from "vue";
 import { StyleProvider } from "./StyleProvider";
+import { injectTransition } from "./Animated";
 
 export default defineComponent({
   name: "Opacity",
@@ -18,13 +18,13 @@ export default defineComponent({
     },
   },
   setup(props, { slots }) {
+    const transition = injectTransition();
     // 限制 opacity 在 0-1 之间
     const style = computed(() => {
       if (typeof props.opacity == "undefined") return {};
       const opacity = Math.max(0, Math.min(1, props.opacity));
-      return { opacity };
+      return { opacity, ...transition.value };
     });
     return () => h(StyleProvider, { style: style.value }, slots);
   },
 });
-</script>

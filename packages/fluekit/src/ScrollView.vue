@@ -10,12 +10,13 @@
 import { ref, computed, type CSSProperties, onUnmounted } from "vue";
 import { paddingToStyle } from "./EdgeInsets";
 import { ScrollableProps } from "./Scrollable";
+import { Clip } from "./Clip";
 
 defineOptions({ inheritAttrs: false });
 const props = withDefaults(defineProps<ScrollableProps>(), {
   scrollDirection: "vertical",
   physics: "bouncing",
-  clipBehavior: "hardEdge",
+  clipBehavior: Clip.hardEdge,
   reverse: false,
   shrinkWrap: false,
 });
@@ -74,12 +75,9 @@ const containerStyle = computed<CSSProperties>(() => {
   }
 
   // 处理 Clip Behavior (裁剪行为)
-  if (props.clipBehavior === "none") {
-    if (props.physics === "never") {
-      style.overflow = "visible";
-    }
+  if (props.clipBehavior === Clip.none) {
+    if (props.physics === "never") style.overflow = "visible";
   }
-
   return style;
 });
 

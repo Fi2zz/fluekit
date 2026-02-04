@@ -49,14 +49,14 @@ const emit = defineEmits<{
 }>();
 
 const computedStyle = computed<ButtonStyle>(() => {
-  const baseStyle: ButtonStyle = {
+  const baseStyle = ButtonStyle({
     backgroundColor: "transparent",
     foregroundColor: props.disabled ? "rgba(0,0,0,0.38)" : "rgba(0,0,0,0.54)", // Standard icon color
     elevation: 0,
     padding: props.padding,
     shape: BorderRadius.circular(100), // Circle
     minimumSize: { width: 0, height: 0 }, // Allow shrinking
-  };
+  });
   return ButtonStyle({ ...baseStyle, ...props.style });
 });
 </script>

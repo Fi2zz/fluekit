@@ -1,9 +1,9 @@
 <template>
-  <transition :css="false" @enter="onEnter" @leave="onLeave">
+  <Transition :css="false" @enter="onEnter" @leave="onLeave">
     <div v-if="visible" :style="style" @click="handleClick">
       <slot />
     </div>
-  </transition>
+  </Transition>
 </template>
 
 <script setup lang="ts">
@@ -25,21 +25,22 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const emit = defineEmits<{ (e: "tap"): void }>();
 const handleClick = () => emit("tap");
-
 const onEnter = (el: Element, done: () => void) => {
   const element = el as HTMLElement;
-  element.animate([{ opacity: 0 }, { opacity: 1 }], {
+  const animation = element.animate([{ opacity: 0 }, { opacity: 1 }], {
     duration: 250,
-    easing: "ease",
-  }).onfinish = done;
+    easing: "ease-in",
+  });
+  animation.onfinish = done;
 };
 
 const onLeave = (el: Element, done: () => void) => {
   const element = el as HTMLElement;
-  element.animate([{ opacity: 1 }, { opacity: 0 }], {
+  const animation = element.animate([{ opacity: 1 }, { opacity: 0 }], {
     duration: 250,
-    easing: "ease",
-  }).onfinish = done;
+    easing: "ease-out",
+  });
+  animation.onfinish = done;
 };
 
 const style = computed<CSSProperties>(() => {

@@ -8,15 +8,14 @@
 import { computed } from "vue";
 import Container from "./Container.vue";
 import { BorderRadius } from "./BorderRadius";
-import { BoxDecoration } from "./BoxDecoration";
-
+import { BoxDecoration, Clip } from "./BoxDecoration";
 interface Props {
   borderRadius?: BorderRadius;
-  clipBehavior?: "none" | "hardEdge" | "antiAlias" | "antiAliasWithSaveLayer";
+  clipBehavior?: Clip;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  clipBehavior: "antiAlias",
+  clipBehavior: Clip.antiAlias,
 });
 
 const decoration = computed(() => {

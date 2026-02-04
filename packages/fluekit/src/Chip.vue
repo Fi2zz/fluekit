@@ -55,8 +55,8 @@ const props = withDefaults(defineProps<ChilpProps>(), {
   backgroundColor: "#E0E0E0", // Colors.grey[300] approx
   labelColor: "rgba(0, 0, 0, 0.87)",
   size: "medium",
-  labelStyle: () => ({}),
-  decoration: () => ({}),
+  labelStyle: () => TextStyle({}),
+  decoration: () => BoxDecoration({}),
 });
 
 const emit = defineEmits<ChipEmits>();

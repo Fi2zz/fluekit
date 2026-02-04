@@ -69,14 +69,14 @@ const emit = defineEmits<{
 }>();
 
 const computedStyle = computed<ButtonStyle>(() => {
-  const baseStyle: ButtonStyle = {
+  const baseStyle = ButtonStyle({
     backgroundColor: "transparent",
     foregroundColor: props.disabled ? "rgba(0,0,0,0.38)" : "rgba(0,0,0,0.54)",
     elevation: 0,
     padding: props.padding,
     shape: BorderRadius.circular(4), // Standard rounded corners for text buttons
     minimumSize: { width: 64, height: 36 },
-  };
+  });
   return ButtonStyle({ ...baseStyle, ...props.style });
 });
 </script>

@@ -20,6 +20,7 @@ import Button from "./Button.vue";
 import { ButtonStyle } from "./ButtonStyle";
 import { Colors } from "./Colors";
 import { EdgeInsets } from "./EdgeInsets";
+import { TextStyle } from "./TextStyle";
 
 defineOptions({ inheritAttrs: false });
 
@@ -45,18 +46,18 @@ const slots = useSlots();
 const childText = computed(() => (slots.default ? undefined : props.child?.toString()));
 
 const computedStyle = computed<ButtonStyle>(() => {
-  const baseStyle: ButtonStyle = {
+  const baseStyle = ButtonStyle({
     backgroundColor: props.disabled ? "rgba(0,0,0,0.12)" : Colors.blue,
     foregroundColor: props.disabled ? "rgba(0,0,0,0.38)" : Colors.white,
     elevation: props.disabled ? 0 : 2,
     padding: EdgeInsets.symmetric({ horizontal: 16, vertical: 8 }),
     shape: BorderRadius.all(4),
-    textStyle: {
+    textStyle: TextStyle({
       fontWeight: 500,
       fontSize: 14,
       color: props.disabled ? "rgba(0,0,0,0.38)" : Colors.white,
-    },
-  };
+    }),
+  });
 
   return { ...baseStyle, ...props.style };
 });

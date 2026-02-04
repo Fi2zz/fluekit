@@ -7,16 +7,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import Container from "./Container.vue";
-import { BoxShape, BoxDecoration } from "./BoxDecoration";
-
+import { BoxShape, BoxDecoration, Clip } from "./BoxDecoration";
 interface Props {
-  clipBehavior?: "none" | "hardEdge" | "antiAlias" | "antiAliasWithSaveLayer";
+  clipBehavior?: Clip;
 }
-
-withDefaults(defineProps<Props>(), {
-  clipBehavior: "antiAlias",
-});
-
+withDefaults(defineProps<Props>(), { clipBehavior: Clip.antiAlias });
 const decoration = computed(() => {
   return BoxDecoration({ shape: BoxShape.circle });
 });

@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { computed, provide, ref, useSlots } from "vue";
-import { BoxDecoration } from "./BoxDecoration";
+import { BoxDecoration, Clip } from "./BoxDecoration";
 import { Color } from "./Color";
 import Column from "./Column.vue";
 import Container from "./Container.vue";
@@ -76,7 +76,7 @@ const calculateBodyHeight = (maxHeight: number | string | undefined) => {
 const root = computed(() => {
   return {
     decoration: BoxDecoration({ color: props.backgroundColor }),
-    clipBehavior: "hardEdge",
+    clipBehavior: Clip.hardEdge,
     width: "100%",
     height: "100%",
   };

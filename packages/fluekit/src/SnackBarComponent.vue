@@ -9,15 +9,17 @@
         :constraints="BoxConstraints({ maxWidth: 600 })"
       >
         <Row main-axis-alignment="spaceBetween" cross-axis-alignment="center">
-          <Text :style="{ color: 'white', fontSize: 14 }">{{ content }}</Text>
+          <Text :style="TextStyle({ color: 'white', fontSize: 14 })">{{ content }}</Text>
           <GestureDetector v-if="actionLabel" @tap="handleAction">
             <Container :margin="EdgeInsets.only({ left: 16 })">
               <Text
-                :style="{
-                  color: '#2196F3',
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                }"
+                :style="
+                  TextStyle({
+                    color: '#2196F3',
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  })
+                "
               >
                 {{ actionLabel.toUpperCase() }}
               </Text>
@@ -32,7 +34,7 @@
 <script setup lang="ts">
 import { onMounted, computed, type CSSProperties } from "vue";
 import Container from "./Container.vue";
-import { FontWeight } from "./TextStyle";
+import { FontWeight, TextStyle } from "./TextStyle";
 import Row from "./Row.vue";
 import Text from "./Text.vue";
 import GestureDetector from "./GestureDetector.vue";

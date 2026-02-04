@@ -7,7 +7,13 @@
 <script setup lang="ts">
 import { computed, CSSProperties } from "vue";
 import { boxConstraintsToStyle } from "./BoxConstraints";
-import { FlexBoxAlignMap, FlexBoxJustifyMap, FlexBoxProps, MainAxisSize } from "./FlexProps";
+import {
+  FlexBoxAlignMap,
+  FlexBoxJustifyMap,
+  FlexBoxProps,
+  flexBoxToStyle,
+  MainAxisSize,
+} from "./FlexProps";
 import { px2vw } from "./px2vw";
 import { useStyles } from "./StyleProvider";
 defineOptions({ name: "FlexBox", inheritAttrs: false });
@@ -29,17 +35,7 @@ const flexClasses = computed(() => {
 
 // 计算 CSS 样式
 const flexStyles = computed(() => {
-  const mainAxisAlignment = props.mainAxisAlignment as unknown as string;
-  const crossAxisAlignment = props.crossAxisAlignment as unknown as string;
-  const styles: CSSProperties = {
-    display: "flex",
-    flexDirection: props.direction as CSSProperties["flexDirection"],
-    flexWrap: props.wrap ? "wrap" : "nowrap",
-  };
-
-  styles.justifyContent = FlexBoxJustifyMap[mainAxisAlignment] || mainAxisAlignment;
-  styles.alignItems = FlexBoxAlignMap[crossAxisAlignment] || crossAxisAlignment;
-  if (typeof props.gap !== "undefined" && props.gap != null) styles.gap = px2vw(props.gap);
+  const styles = flexBoxToStyle(props);
   const isRow = props.direction?.includes("row");
   const isCol = props.direction?.includes("column");
   // Handle MainAxisSize

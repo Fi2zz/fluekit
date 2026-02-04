@@ -9,7 +9,6 @@ Use `PopupMenuButton` to show a list of options in a popup menu.
 <script setup>
 import PopupMenuButtonDemo from '../demos/new_components/PopupMenuButtonDemo.vue'
 </script>
-
 <div class="demo-container">
   <PopupMenuButtonDemo />
 </div>
@@ -28,6 +27,7 @@ import PopupMenuButtonDemo from '../demos/new_components/PopupMenuButtonDemo.vue
 | color     | `string \| Color`        | `Colors.white` | The background color of the menu.             |
 | elevation | `number`                 | `8`            | The z-coordinate at which to place this menu. |
 | offset    | `{x: number, y: number}` | `{x: 0, y: 0}` | The offset applied to the menu position.      |
+| variant   | `'material' \| 'ios'`    | `'ios'`        | The visual style of the popup menu.           |
 
 ## Slots
 

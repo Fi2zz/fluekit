@@ -31,6 +31,7 @@ export interface PositionProps {
   /** 距离四周的距离 */
   inset?: number | string;
   size?: SizeType;
+  transform?: string;
 }
 export function usePositionStyle(
   props: PositionProps,
@@ -43,6 +44,8 @@ export function usePositionStyle(
       position,
       boxSizing: "border-box",
       zIndex: props.zIndex ?? autoZIndex.value,
+      pointerEvents: "auto",
+      transform: props.transform,
     };
 
     if (props.size !== undefined) {

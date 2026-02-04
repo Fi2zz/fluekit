@@ -23,13 +23,20 @@ const visible = ref(false);
 
 ## Examples
 
-### Interactive Demo
+### Basic Usage
 
 <script setup>
 import BasicDemo from '../demos/modal/BasicDemo.vue';
+import AlignmentDemo from '../demos/modal/AlignmentDemo.vue';
 </script>
 
 <BasicDemo />
+
+### Alignment
+
+The `alignment` prop allows you to position the modal content in 9 different positions on the screen.
+
+<AlignmentDemo />
 
 ## Props
 
@@ -39,8 +46,7 @@ import BasicDemo from '../demos/modal/BasicDemo.vue';
 | `barrierDismissible` | `boolean`   | `true`                 | Whether tapping the barrier closes the modal.             |
 | `barrierColor`       | `string`    | `'rgba(0, 0, 0, 0.5)'` | Color of the background barrier.                          |
 | `alignment`          | `Alignment` | `Alignment.center`     | Alignment of the content within the modal.                |
-| `zIndex`             | `number`    | `1000`                 | Z-index of the modal.                                     |
-| `transition`         | `string`    | `'fluekit-modal-fade'` | Transition name for animation.                            |
+| `zIndex`             | `number`    | `useZIndex()`          | Z-index of the modal.                                     |
 
 ## Events
 
@@ -48,3 +54,9 @@ import BasicDemo from '../demos/modal/BasicDemo.vue';
 | ---------------- | --------- | ---------------------------------------------------- |
 | `update:visible` | `boolean` | Emitted when visibility changes (e.g., barrier tap). |
 | `close`          | -         | Emitted when the modal is closed via barrier tap.    |
+
+## Slots
+
+| Name      | Description               |
+| :-------- | :------------------------ |
+| `default` | The content of the modal. |

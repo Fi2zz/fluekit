@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import Container from "./Container.vue";
-import { BoxDecoration, BoxShape } from "./BoxDecoration";
+import { BoxDecoration, BoxShape, Clip } from "./BoxDecoration";
 import type { BoxConstraints } from "./BoxConstraints";
 import type { Alignment } from "./Alignment";
 import type { EdgeInsets } from "./EdgeInsets";
@@ -36,7 +36,7 @@ interface Props {
   transform?: string;
   transformAlignment?: Alignment;
   constraints?: BoxConstraints;
-  clipBehavior?: "none" | "hardEdge" | "antiAlias" | string;
+  clipBehavior?: Clip;
 
   // Style props that would normally go into BoxDecoration
   color?: string | Color;
@@ -49,7 +49,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  clipBehavior: "none",
+  clipBehavior: Clip.none,
   shape: BoxShape.rectangle,
 });
 
@@ -69,7 +69,6 @@ const computedDecoration = computed(() => {
   ) {
     return undefined;
   }
-
   return BoxDecoration({
     color: props.color,
     border: props.border,

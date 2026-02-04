@@ -10,7 +10,6 @@
         />
       </slot>
     </div>
-
     <div :style="contentWrapperStyle">
       <!-- Input Container -->
       <div :style="containerStyle">
@@ -28,12 +27,10 @@
             />
           </slot>
         </div>
-
         <!-- Prefix (Text/Widget) -->
-        <div v-if="$slots.prefix || decoration?.prefixText" ref="prefixRef">
-          <slot name="prefix">{{ decoration?.prefixText }}</slot>
+        <div v-if="$slots.prefix || prefixText" ref="prefixRef">
+          <slot name="prefix">{{ prefixText }}</slot>
         </div>
-
         <!-- Input Element Wrapper -->
         <div :style="inputWrapperStyle">
           <!-- Custom Placeholder -->
@@ -54,6 +51,7 @@
             :autocapitalize="textCapitalization"
             :enterkeyhint="textInputAction"
             :autocorrect="autocorrect ? 'on' : 'off'"
+            :autocomplete="autocomplete"
             @input="handleInput"
             @change="handleChange"
             @focus="handleFocus"
@@ -73,27 +71,15 @@
               :icon="decoration?.suffixIcon"
               :size="decoration?.suffixIconSize"
               :color="decoration?.suffixIconColor"
-            ></Icon>
+            />
           </slot>
         </div>
       </div>
-
-      <!-- Helper/Error Text -->
       <div v-if="shouldShowFooter" :style="footerStyle">
-        <div v-if="decoration?.errorText || decoration?.alwaysShowError" :style="errorStyle">
-          {{ decoration?.errorText || "&nbsp;" }}
-        </div>
-        <div v-else-if="decoration?.helperText" :style="helperStyle">
-          {{ decoration.helperText }}
-        </div>
-
-        <!-- Spacer if helper exists but we want counter on the right -->
+        <div v-if="showError" :style="errorStyle">{{ errorText || "&nbsp;" }}</div>
+        <div v-else-if="helperText" :style="helperStyle">{{ helperText }}</div>
         <div v-else :style="{ flex: 1 }"></div>
-
-        <!-- Character Counter -->
-        <div v-if="shouldShowCounter" :style="counterStyle">
-          {{ decoration?.counterText || `${String(modelValue).length} / ${maxLength}` }}
-        </div>
+        <div v-if="shouldShowCounter" :style="counterStyle">{{ counterText }}</div>
       </div>
     </div>
   </div>
@@ -113,16 +99,18 @@ import {
 import { BorderSide, borderSideToStyle } from "./Border";
 import { BorderRadius, borderRadiusToStyle } from "./BorderRadius";
 import { Color, resolveColor } from "./Color";
-import { paddingToStyle } from "./EdgeInsets";
+import { isEdgeInsets, paddingToStyle } from "./EdgeInsets";
 import {
   FloatingLabelBehavior,
   type InputBorder,
   type InputDecoration,
+  isInputDecoration,
   UnderlineInputBorder,
 } from "./InputDecoration";
 import { type TextStyle, textStyleToStyle } from "./TextStyle";
 import { boxConstraintsToStyle } from "./BoxConstraints";
 import Icon from "./Icon.vue";
+import { validateInDev } from "./utils";
 defineOptions({ inheritAttrs: false });
 interface TextFieldProps {
   modelValue?: string | number;
@@ -143,6 +131,7 @@ interface TextFieldProps {
   textCapitalization?: "none" | "sentences" | "words" | "characters";
   autocorrect?: boolean;
   modelModifiers?: Record<string, boolean>;
+  autocomplete?: string;
 }
 
 const props = withDefaults(defineProps<TextFieldProps>(), {
@@ -155,9 +144,16 @@ const props = withDefaults(defineProps<TextFieldProps>(), {
   textAlign: "start",
   autocorrect: true,
   modelModifiers: () => ({}),
+  autocomplete: "off",
 });
 
 const slots = useSlots();
+
+validateInDev(() => {
+  if (!isInputDecoration(props.decoration)) {
+    console.warn("TextField: decoration must be an instance of InputDecoration");
+  }
+});
 
 const emit = defineEmits<{
   (e: "update:modelValue", value: string | number): void;
@@ -294,6 +290,23 @@ const currentBorder = computed<InputBorder | undefined>(() => {
   return props.decoration?.border; // Default fallback
 });
 
+const prefixText = computed(() => {
+  return props.decoration?.prefixText;
+});
+const errorText = computed(() => {
+  return props.decoration?.errorText;
+});
+const helperText = computed(() => {
+  return props.decoration?.helperText;
+});
+const counterText = computed(() => {
+  return props.decoration?.counterText || `${String(props.modelValue).length} / ${props.maxLength}`;
+});
+
+const showError = computed(() => {
+  return errorText.value || props.decoration?.alwaysShowError;
+});
+
 const containerStyle = computed<CSSProperties>(() => {
   if (props.decoration?.isCollapsed) {
     return {
@@ -334,15 +347,8 @@ const containerStyle = computed<CSSProperties>(() => {
     const py = isDense ? 8 : 16;
     const px = isDense ? 8 : 12;
 
-    if (props.decoration?.contentPadding) {
-      if (Array.isArray(props.decoration.contentPadding)) {
-        css.padding = props.decoration.contentPadding.map((v) => `${v}px`).join(" ");
-      } else if (typeof props.decoration.contentPadding === "number") {
-        css.padding = `${props.decoration.contentPadding}px`;
-      } else {
-        // EdgeInsets
-        Object.assign(css, paddingToStyle(props.decoration.contentPadding));
-      }
+    if (isEdgeInsets(props.decoration?.contentPadding)) {
+      Object.assign(css, paddingToStyle(props.decoration.contentPadding));
     } else {
       css.padding = `${py}px ${px}px`;
     }
@@ -355,15 +361,8 @@ const containerStyle = computed<CSSProperties>(() => {
     const isDense = props.decoration?.isDense;
     const py = isDense ? 8 : 12; // Underline usually has less vertical padding?
 
-    if (props.decoration?.contentPadding) {
-      if (Array.isArray(props.decoration.contentPadding)) {
-        css.padding = props.decoration.contentPadding.map((v) => `${v}px`).join(" ");
-      } else if (typeof props.decoration.contentPadding === "number") {
-        css.padding = `${props.decoration.contentPadding}px`;
-      } else {
-        // EdgeInsets
-        Object.assign(css, paddingToStyle(props.decoration.contentPadding));
-      }
+    if (isEdgeInsets(props.decoration?.contentPadding)) {
+      Object.assign(css, paddingToStyle(props.decoration.contentPadding));
     } else {
       css.padding = `${py}px 0`;
     }
@@ -380,9 +379,7 @@ const containerStyle = computed<CSSProperties>(() => {
 const wrapperStyle = computed<CSSProperties>(() => ({
   display: "flex",
   flexDirection: "row",
-  alignItems: "flex-start",
   position: "relative",
-  marginTop: "16px",
   fontFamily: "inherit",
   width: "100%",
 }));
@@ -439,32 +436,36 @@ const finalInputStyle = computed<CSSProperties>(() => {
     resize: "none",
     ...textStyleToStyle(props.style),
   };
-  if (props.cursorColor) {
-    css.caretColor = resolveColor(props.cursorColor);
-  }
-  if (props.textAlign) {
-    css.textAlign = props.textAlign;
-  }
+  if (props.cursorColor) css.caretColor = resolveColor(props.cursorColor);
+  if (props.textAlign) css.textAlign = props.textAlign;
   return css;
 });
 
-const placeholderStyle = computed<CSSProperties>(() => ({
-  position: "absolute",
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  pointerEvents: "none",
-  color: hintColor.value,
-  fontSize: hintFontStyle.value,
-  textAlign: props.textAlign || "start",
-  whiteSpace: isMultiline.value ? "pre-wrap" : "nowrap",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  display: "flex",
-  alignItems: "center",
-  ...textStyleToStyle(props.decoration?.hintStyle),
-}));
+const placeholderStyle = computed<CSSProperties>(() => {
+  const css: CSSProperties = {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    pointerEvents: "none",
+    color: hintColor.value,
+    fontSize: hintFontStyle.value,
+    textAlign: props.textAlign || "start",
+    whiteSpace: isMultiline.value ? "pre-wrap" : "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    ...textStyleToStyle(props.decoration?.hintStyle),
+  };
+
+  if (isMultiline.value) {
+    css.top = "0";
+  } else {
+    // Center vertically for single line
+    css.top = "50%";
+    css.transform = "translateY(-50%)";
+  }
+
+  return css;
+});
 
 const footerStyle: CSSProperties = {
   display: "flex",
@@ -496,6 +497,15 @@ const labelStyle = computed<CSSProperties>(() => {
     // Apply floatingLabelStyle if available
     if (props.decoration?.floatingLabelStyle) {
       Object.assign(css, textStyleToStyle(props.decoration.floatingLabelStyle));
+    }
+
+    if (currentBorder.value?.isOutline) {
+      css.transform = "translateY(-50%) scale(0.75)";
+      css.backgroundColor = props.decoration?.fillColor
+        ? resolveColor(props.decoration.fillColor)
+        : "#fff";
+      css.padding = "0 4px";
+      css.marginLeft = "-4px";
     }
   }
 
@@ -563,12 +573,15 @@ const hintColor = computed(() => {
 });
 
 const hintFontStyle = computed(() => {
-  // We can pass font size, weight, etc. via a serialized string or individual vars
-  // For simplicity, we just use color for placeholder for now, as full style injection is complex via v-bind in scoped styles
-  // But let's try to support font size at least if provided
-  return props.decoration?.hintStyle?.fontSize
-    ? `${props.decoration.hintStyle.fontSize}px`
-    : "inherit";
+  if (props.decoration?.hintStyle?.fontSize) {
+    return `${props.decoration.hintStyle.fontSize}px`;
+  }
+  if (props.style?.fontSize) {
+    return typeof props.style.fontSize === "number"
+      ? `${props.style.fontSize}px`
+      : props.style.fontSize;
+  }
+  return "16px";
 });
 
 const shouldShowCounter = computed(() => {

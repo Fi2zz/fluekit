@@ -5,22 +5,27 @@
     >
     <TextField
       v-model="email"
-      :decoration="{
-        labelText: 'Email',
-        hintText: 'example',
-        prefixText: 'mailto:',
-        suffixText: '@gmail.com',
-        border: OutlineInputBorder(),
-      }"
+      :decoration="
+        InputDecoration({
+          labelText: 'Email',
+          hintText: 'example',
+          prefixText: 'mailto:',
+          suffixText: '@gmail.com',
+          border: OutlineInputBorder(),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+        })
+      "
     />
 
     <Text :style="TextStyle({ fontSize: 18, fontWeight: FontWeight.bold })">With Icons</Text>
     <TextField
       v-model="username"
-      :decoration="{
-        labelText: 'Username',
-        border: OutlineInputBorder(),
-      }"
+      :decoration="
+        InputDecoration({
+          labelText: 'Username',
+          border: OutlineInputBorder(),
+        })
+      "
     >
       <template #prefixIcon>
         <Icon :icon="Icons.person" :size="20" color="#666" />
@@ -33,10 +38,12 @@
     <Text :style="TextStyle({ fontSize: 18, fontWeight: FontWeight.bold })">Outside Icon</Text>
     <TextField
       v-model="search"
-      :decoration="{
-        labelText: 'Search',
-        hintText: 'Type to search...',
-      }"
+      :decoration="
+        InputDecoration({
+          labelText: 'Search',
+          hintText: 'Type to search...',
+        })
+      "
     >
       <template #icon>
         <Icon :icon="Icons.search" :size="24" color="#666" />
@@ -56,6 +63,8 @@ import {
   Icons,
   TextStyle,
   FontWeight,
+  InputDecoration,
+  FloatingLabelBehavior,
 } from "fluekit";
 
 const email = ref("");

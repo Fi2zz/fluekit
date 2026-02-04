@@ -21,16 +21,17 @@
 
 <script setup lang="ts">
 import { computed, type CSSProperties } from "vue";
-import ScrollView from "./ScrollView.vue";
+import { Clip } from "./Clip";
 import { px2vw } from "./px2vw";
 import { GridViewProps } from "./Scrollable";
+import ScrollView from "./ScrollView.vue";
 defineOptions({ inheritAttrs: false });
 
 const props = withDefaults(defineProps<GridViewProps>(), {
   scrollDirection: "vertical",
   physics: "bouncing",
   shrinkWrap: false,
-  clipBehavior: "hardEdge",
+  clipBehavior: Clip.hardEdge,
   crossAxisCount: 2,
   mainAxisSpacing: 0,
   crossAxisSpacing: 0,

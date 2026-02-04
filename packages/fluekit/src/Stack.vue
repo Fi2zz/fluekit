@@ -13,14 +13,15 @@ import { computed, type CSSProperties, useSlots } from "vue";
 import { provideStackContext } from "./useStack";
 import { Alignment, alignmentToGrid } from "./Alignment";
 import { StackFit } from "./FlexProps";
+import { Clip, clipBehaviorToStyle } from "./Clip";
 
 defineOptions({ inheritAttrs: false });
 
-interface StackProps {
+export interface StackProps {
   /** 对齐方式 */
   alignment?: Alignment;
   /** 裁剪行为 */
-  clipBehavior?: "none" | "hardEdge" | "antiAlias" | "clip";
+  clipBehavior?: Clip;
   /** 文本方向 */
   textDirection?: "ltr" | "rtl";
   /** 堆叠方式 */
@@ -29,7 +30,7 @@ interface StackProps {
 
 const props = withDefaults(defineProps<StackProps>(), {
   alignment: Alignment.topLeft,
-  clipBehavior: "none",
+  clipBehavior: () => Clip.none,
   textDirection: "ltr",
   fit: StackFit.loose,
 });
@@ -40,13 +41,6 @@ const children = computed(() => {
   return defaultSlot ? defaultSlot() : [];
 });
 
-const clipBehaviorMap = {
-  clip: "hidden",
-  hardEdge: "hidden",
-  antiAlias: "hidden",
-  none: "visible",
-};
-
 const stackStyle = computed((): CSSProperties => {
   const style: CSSProperties = {
     position: "relative",
@@ -55,7 +49,7 @@ const stackStyle = computed((): CSSProperties => {
     gridTemplateRows: "1fr",
     // We remove gridAlignment here because we are handling it in the wrapper
     // ...gridAlignment,
-    overflow: clipBehaviorMap[props.clipBehavior],
+    ...clipBehaviorToStyle(props.clipBehavior),
     direction: props.textDirection,
     boxSizing: "border-box",
   };

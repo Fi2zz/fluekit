@@ -7,41 +7,22 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import type { BoxConstraints } from "./BoxConstraints";
 import { boxConstraintsToStyle, isBoxConstraints } from "./BoxConstraints";
 import { useStyles } from "./StyleProvider";
 import { useSafeAttrs } from "./useSafeAttrs";
 import { isDefined, validateInDev } from "./utils";
 defineOptions({ inheritAttrs: false });
-// 引入 BoxDecoration 类型与背景图构造工具
 import { CSSProperties } from "vue";
-import { Alignment, alignmentToFlex, alignmentToOrigin } from "./Alignment";
-import type { BoxDecoration } from "./BoxDecoration";
-import { boxDecorationToStyle, isBoxDecoration } from "./BoxDecoration";
-import type { EdgeInsets } from "./EdgeInsets";
+import { alignmentToFlex, alignmentToOrigin } from "./Alignment";
+import { boxDecorationToStyle, Clip, isBoxDecoration } from "./BoxDecoration";
+import { clipBehaviorToStyle } from "./Clip";
+import { resolveColor } from "./Color";
+import { ContainerProps } from "./ContainerProps";
 import { isEdgeInsets, marginToStyle, paddingToStyle } from "./EdgeInsets";
 import { sizeToStyle } from "./Size";
 import { useGestureEvents, useGestureStyle } from "./useGesture";
-import { Color, resolveColor } from "./Color";
-interface Props {
-  width?: number | string;
-  height?: number | string;
-  padding?: EdgeInsets;
-  margin?: EdgeInsets;
-  decoration?: BoxDecoration;
-  foregroundDecoration?: BoxDecoration;
-  color?: string | Color;
-  alignment?: Alignment;
-  clipBehavior?: "none" | "hardEdge" | "antiAlias" | string;
-  transform?: string;
-  transformAlignment?: Alignment;
-  constraints?: BoxConstraints;
-  // Flex 布局属性
-  flex?: number | string;
-}
-
+import { injectTransition } from "./Animated";
 const _styles = useStyles();
-
 const safeAttrs = useSafeAttrs();
 const events = useGestureEvents();
 const mixedAttrs = computed(() => {
@@ -49,19 +30,17 @@ const mixedAttrs = computed(() => {
   if ((_styles.value as unknown as CSSProperties).pointerEvents == "none") {
     return safeAttrs.value;
   }
-
   return { ...safeAttrs.value, ...(events || {}) };
 });
 const gestureStyle = useGestureStyle();
-const props = withDefaults(defineProps<Props>(), {
-  clipBehavior: "none",
-});
-
+const props = withDefaults(defineProps<ContainerProps>(), { clipBehavior: Clip.none });
 const isNegative = (val?: string | number) => {
   if (typeof val === "number") return val < 0;
   if (typeof val === "string") return parseFloat(val) < 0;
   return false;
 };
+
+const transitionStyle = injectTransition();
 
 // Props 校验与约束逻辑
 // 对应 Flutter Container 的 assert 逻辑
@@ -82,7 +61,7 @@ const validateProps = () => {
   }
 
   // 4. assert(decoration != null || clipBehavior == Clip.none)
-  if (!props.decoration && props.clipBehavior !== "none") {
+  if (!props.decoration && props.clipBehavior !== Clip.none) {
     console.warn("[Container] clipBehavior has no effect when decoration is null");
   }
 
@@ -146,12 +125,10 @@ const computedStyle = computed(() => {
   const style: CSSProperties = {
     backgroundColor: resolveColor(effectiveColor),
     transform: props.transform,
-    transformOrigin: props.transformAlignment
-      ? alignmentToOrigin(props.transformAlignment)
-      : "center",
-    overflow: props.clipBehavior !== "none" ? "hidden" : undefined,
+    transformOrigin: alignmentToOrigin(props.transformAlignment!),
     position: "relative",
   };
+  Object.assign(style, clipBehaviorToStyle(props.clipBehavior));
 
   Object.assign(style, _styles.value);
 
@@ -181,7 +158,7 @@ const computedStyle = computed(() => {
   Object.assign(style, constraintsStyle);
   Object.assign(style, paddingToStyle(props.padding));
   Object.assign(style, marginToStyle(props.margin));
-  Object.assign(style, boxDecorationToStyle(props.decoration));
+  Object.assign(style, boxDecorationToStyle(props.decoration!));
   Object.assign(style, gestureStyle);
 
   if (props.flex !== undefined) {
@@ -192,11 +169,12 @@ const computedStyle = computed(() => {
     }
   }
 
-  if (props.clipBehavior === "antiAlias") {
+  if (props.clipBehavior === Clip.antiAlias) {
     // 简单的抗锯齿处理，实际可能需要 clip-path
     style.borderRadius = style.borderRadius || "inherit";
   }
 
+  Object.assign(style, transitionStyle.value);
   return style;
 });
 
@@ -207,7 +185,8 @@ const foregroundStyle = computed(() => {
     zIndex: 1, // 确保在内容之上
     inset: 0, // 填充父容器
   };
-  Object.assign(style, boxDecorationToStyle(props.foregroundDecoration));
+  Object.assign(style, boxDecorationToStyle(props.foregroundDecoration!));
+  Object.assign(style, transitionStyle.value);
   return style;
 });
 </script>

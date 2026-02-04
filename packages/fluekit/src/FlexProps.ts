@@ -1,3 +1,4 @@
+import { CSSProperties } from "vue";
 import { BoxConstraintsProps } from "./BoxConstraints";
 export { Alignment, alignmentToStyle, alignmentToOrigin, alignmentToFlex } from "./Alignment";
 
@@ -95,3 +96,20 @@ export const StackFit = {
 } as const;
 
 export type StackFit = Valueof<typeof StackFit>;
+
+import { px2vw } from "./px2vw";
+
+export function flexBoxToStyle(props: FlexBoxProps) {
+  const mainAxisAlignment = props.mainAxisAlignment as unknown as string;
+  const crossAxisAlignment = props.crossAxisAlignment as unknown as string;
+
+  const style: CSSProperties = {
+    display: "flex",
+    flexDirection: props.direction as CSSProperties["flexDirection"],
+    flexWrap: props.wrap ? "wrap" : "nowrap",
+    justifyContent: FlexBoxJustifyMap[mainAxisAlignment],
+    alignItems: FlexBoxAlignMap[crossAxisAlignment] || crossAxisAlignment,
+  };
+  if (typeof props.gap !== "undefined" && props.gap != null) style.gap = px2vw(props.gap);
+  return style;
+}

@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import Container from "./Container.vue";
-import { BoxDecoration } from "./BoxDecoration";
+import { BoxDecoration, Clip } from "./BoxDecoration";
 import { BorderRadius } from "./BorderRadius";
 import { BoxShadow } from "./BoxShadow";
 import { EdgeInsets } from "./EdgeInsets";
@@ -19,7 +19,7 @@ interface Props {
   elevation?: number;
   shape?: BorderRadius;
   margin?: EdgeInsets;
-  clipBehavior?: "none" | "hardEdge" | "antiAlias" | string;
+  clipBehavior?: Clip;
   borderOnForeground?: boolean; // Not fully implemented in Container yet, but keeping for API compatibility idea
   variant?: "material" | "ios";
 }
@@ -28,7 +28,7 @@ const props = withDefaults(defineProps<Props>(), {
   color: "#ffffff",
   shadowColor: "#000000",
   elevation: 1,
-  clipBehavior: "none",
+  clipBehavior: Clip.none,
   margin: () => EdgeInsets.all(4), // Default margin for Card
   variant: "ios",
 });

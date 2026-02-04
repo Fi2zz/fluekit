@@ -113,7 +113,7 @@ export interface TextShadow {
   blurRadius?: number;
 }
 
-export interface TextStyleProps extends PropsWithCopyWith<TextStyleProps> {
+export interface TextStyleProps {
   inherit?: boolean;
   color?: string | Color;
   backgroundColor?: string | Color;
@@ -145,9 +145,9 @@ export interface TextStyleProps extends PropsWithCopyWith<TextStyleProps> {
 // 定义唯一符号标记
 const TEXT_STYLE_SYMBOL = Symbol("textStyle");
 
-export type TextStyle = TextStyleProps & {
+export interface TextStyle extends PropsWithCopyWith<TextStyle>, TextStyleProps {
   [TEXT_STYLE_SYMBOL]?: true;
-};
+}
 
 const _kColorForegroundWarning =
   "Cannot provide both a color and a foreground\n" +
@@ -179,8 +179,8 @@ function buildFontFamily(fontFamily?: string, fontFamilyFallback?: string[]): st
   return family;
 }
 
-const defaults: TextStyleProps = {
-  copyWith: () => ({}) as TextStyleProps,
+const defaults: TextStyle = {
+  copyWith: () => ({}) as TextStyle,
 };
 
 export function textStyleToStyle(props: TextStyleProps = defaults): CSSProperties {

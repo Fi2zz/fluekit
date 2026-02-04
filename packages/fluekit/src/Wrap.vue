@@ -6,6 +6,7 @@
 
 <script setup lang="ts">
 import { computed, type CSSProperties } from "vue";
+import { Clip, clipBehaviorToStyle } from "./Clip";
 import { px2vw } from "./px2vw";
 
 defineOptions({ inheritAttrs: false });
@@ -18,9 +19,8 @@ interface Props {
   runSpacing?: number; // 纵轴方向间距 (行间距)
   crossAxisAlignment?: "start" | "end" | "center";
   verticalDirection?: "down" | "up";
-  clipBehavior?: "none" | "hardEdge" | "antiAlias";
+  clipBehavior?: Clip;
 }
-
 const props = withDefaults(defineProps<Props>(), {
   direction: "horizontal",
   alignment: "start",
@@ -29,7 +29,7 @@ const props = withDefaults(defineProps<Props>(), {
   runSpacing: 0,
   crossAxisAlignment: "start",
   verticalDirection: "down",
-  clipBehavior: "none",
+  clipBehavior: Clip.none,
 });
 
 const justifyMap = {
@@ -46,10 +46,8 @@ const alignMap = {
   end: "flex-end",
   center: "center",
 };
-
 const wrapStyle = computed<CSSProperties>(() => {
   const isHorizontal = props.direction === "horizontal";
-
   return {
     display: "flex",
     flexWrap: "wrap",
@@ -60,20 +58,11 @@ const wrapStyle = computed<CSSProperties>(() => {
       : props.verticalDirection === "down"
         ? "column"
         : "column-reverse",
-
-    // 主轴对齐
     justifyContent: justifyMap[props.alignment],
-
-    // 交叉轴对齐 (多行整体)
     alignContent: justifyMap[props.runAlignment],
-
-    // 交叉轴对齐 (单行内)
     alignItems: alignMap[props.crossAxisAlignment],
-
-    // 间距
     gap: `${px2vw(props.runSpacing)} ${px2vw(props.spacing)}`,
-
-    overflow: props.clipBehavior === "none" ? "visible" : "hidden",
+    ...clipBehaviorToStyle(props.clipBehavior),
   };
 });
 </script>

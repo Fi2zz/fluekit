@@ -1,92 +1,86 @@
 <template>
-  <Fixed v-if="visible" :z-index="9999" :top="0" :left="0" :right="0" :bottom="0">
-    <GestureDetector @tap="onBarrierDismiss">
-      <Container width="100%" height="100%" alignment="center" :color="barrierColor">
-        <Container v-bind="dialogProps">
-          <Container :alignment="titleAlignment" width="100%" v-if="title">
-            <Text :style="dialogTitleStyle" :data="title" :text-align="titleTextAlign" />
-          </Container>
-          <slot>
-            <Container
-              :padding="
-                isIOS
-                  ? EdgeInsets.symmetric({ vertical: 2, horizontal: 16 })
-                  : EdgeInsets.symmetric({ vertical: 16 })
-              "
-              :alignment="isIOS ? Alignment.center : Alignment.topLeft"
-              width="100%"
-            >
-              <Text
-                v-if="content"
-                :style="dialogContentStyle"
-                :data="content"
-                :text-align="isIOS ? TextAlign.center : undefined"
-              />
-            </Container>
-          </slot>
-          <Container
-            v-if="isIOS"
-            width="100%"
-            :decoration="iosActionsBorderDecoration"
-            :margin="EdgeInsets.only({ top: 16 })"
-          >
-            <slot name="actions">
-              <Row main-axis-alignment="center" expanded>
-                <Expanded>
-                  <GestureDetector @tap="close" behavior="opaque">
-                    <Container width="100%" height="44" alignment="center">
-                      <Text :style="iosActionTextStyle">{{ cancelText }}</Text>
-                    </Container>
-                  </GestureDetector>
-                </Expanded>
-                <Container width="0.5" height="44" color="rgba(60, 60, 67, 0.29)" />
-                <Expanded>
-                  <GestureDetector @tap="ok" behavior="opaque">
-                    <Container width="100%" height="44" alignment="center">
-                      <Text :style="iosActionTextStyleBold">{{ okText }}</Text>
-                    </Container>
-                  </GestureDetector>
-                </Expanded>
-              </Row>
-            </slot>
-          </Container>
-          <Row
-            v-else
-            main-axis-size="max"
-            :main-axis-alignment="actionsAlignment"
-            cross-axis-alignment="center"
-            :gap="8"
-          >
-            <slot name="actions">
-              <Button @pressed="close">{{ cancelText }}</Button>
-              <Button @pressed="ok">{{ okText }}</Button>
-            </slot>
-          </Row>
-        </Container>
+  <Modal
+    :barrier-dismissible="barrierDismissible"
+    :visible="visible"
+    @close="close"
+    :barrier-color="barrierColor"
+  >
+    <Container v-bind="dialogProps">
+      <Container :alignment="titleAlignment" width="100%" v-if="title">
+        <Text :style="dialogTitleStyle" :data="title" :text-align="titleTextAlign" />
       </Container>
-    </GestureDetector>
-  </Fixed>
+      <slot>
+        <Container
+          :padding="
+            isIOS
+              ? EdgeInsets.symmetric({ vertical: 2, horizontal: 16 })
+              : EdgeInsets.symmetric({ vertical: 16 })
+          "
+          :alignment="isIOS ? Alignment.center : Alignment.topLeft"
+          width="100%"
+        >
+          <Text
+            v-if="content"
+            :style="dialogContentStyle"
+            :data="content"
+            :text-align="isIOS ? TextAlign.center : undefined"
+          />
+        </Container>
+      </slot>
+      <Container
+        v-if="isIOS"
+        width="100%"
+        :decoration="iosActionsBorderDecoration"
+        :margin="EdgeInsets.only({ top: 16 })"
+      >
+        <slot name="actions">
+          <Row main-axis-alignment="center" expanded>
+            <Expanded>
+              <GestureDetector @tap="close" behavior="opaque">
+                <Container width="100%" height="44" alignment="center">
+                  <Text :style="iosActionTextStyle">{{ cancelText }}</Text>
+                </Container>
+              </GestureDetector>
+            </Expanded>
+            <Container width="0.5" height="44" color="rgba(60, 60, 67, 0.29)" />
+            <Expanded>
+              <GestureDetector @tap="ok" behavior="opaque">
+                <Container width="100%" height="44" alignment="center">
+                  <Text :style="iosActionTextStyleBold">{{ okText }}</Text>
+                </Container>
+              </GestureDetector>
+            </Expanded>
+          </Row>
+        </slot>
+      </Container>
+      <Row v-else main-axis-size="max" :main-axis-alignment="actionsAlignment" :gap="16">
+        <slot name="actions">
+          <Button @pressed="close">{{ cancelText }}</Button>
+          <Button @pressed="ok">{{ okText }}</Button>
+        </slot>
+      </Row>
+    </Container>
+  </Modal>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
-import Container from "./Container.vue";
-import Row from "./Row.vue";
-import Text from "./Text.vue";
-import Fixed from "./Fixed.vue";
 import { Alignment } from "./Alignment";
-import { FontWeight } from "./TextStyle";
-import { EdgeInsets } from "./EdgeInsets";
-import { BoxDecoration } from "./BoxDecoration";
-import { BorderRadius } from "./BorderRadius";
 import { Border } from "./Border";
+import { BorderRadius } from "./BorderRadius";
 import { BoxConstraints } from "./BoxConstraints";
-import { Size } from "./Size";
-import { TextStyle, TextAlign } from "./TextStyle";
+import { BoxDecoration } from "./BoxDecoration";
+import Button from "./Button.vue";
+import Container from "./Container.vue";
+import { EdgeInsets } from "./EdgeInsets";
+import Expanded from "./Expanded.vue";
 import { MainAxisAlignment } from "./FlexProps";
 import GestureDetector from "./GestureDetector.vue";
-import Button from "./Button.vue";
-import Expanded from "./Expanded.vue";
+import Modal from "./Modal.vue";
+import Row from "./Row.vue";
+import { Size } from "./Size";
+import Text from "./Text.vue";
+import { FontWeight, TextAlign, TextStyle } from "./TextStyle";
 interface Props {
   visible: boolean;
   title?: string;
@@ -114,7 +108,7 @@ export type AlertDialogProps = Props;
 
 const props = withDefaults(defineProps<Props>(), {
   visible: false,
-  barrierDismissible: true,
+  barrierDismissible: false,
   alignment: Alignment.center,
   barrierColor: "rgba(0, 0, 0, 0.54)",
   actionsAlignment: MainAxisAlignment.end,
@@ -133,11 +127,6 @@ const close = () => {
   emit("close");
 };
 const ok = () => emit("ok");
-const onBarrierDismiss = () => {
-  if (props.barrierDismissible) {
-    close();
-  }
-};
 
 const isIOS = computed(() => props.variant === "ios");
 

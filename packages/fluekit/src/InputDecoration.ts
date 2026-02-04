@@ -2,16 +2,24 @@ import { Component } from "vue";
 import { BorderSide } from "./Border";
 import { BorderRadius } from "./BorderRadius";
 import { Color } from "./Color";
-import { EdgeInsetsProps } from "./EdgeInsets";
+import { EdgeInsets, EdgeInsetsProps } from "./EdgeInsets";
 import { TextStyle } from "./TextStyle";
 
 import { BoxConstraints } from "./BoxConstraints";
-import { CopyWith, createCopyWith, PropsWithCopyWith } from "./utils";
+import { CopyWith, createCopyWith, isPlainObject, PropsWithCopyWith } from "./utils";
 
 export interface InputBorder {
   borderSide?: BorderSide;
   borderRadius?: BorderRadius;
   isOutline?: boolean; // Internal flag to distinguish outline vs underline
+}
+export const InputBorder = { none: NoInputBorder() };
+export function NoInputBorder() {
+  return {
+    borderSide: BorderSide({ width: 0, style: "none", color: "transparent" }),
+    borderRadius: BorderRadius.all(0),
+    isOutline: false,
+  } as InputBorder;
 }
 
 export function OutlineInputBorder(
@@ -61,7 +69,7 @@ export const FloatingLabelBehavior = {
 
 const INPUI_DECORATION_SYMBOL = Symbol("InputDecoration");
 
-interface InputDecorationProps extends PropsWithCopyWith<InputDecorationProps> {
+interface InputDecorationProps {
   // --- Content ---
   labelText?: string;
   hintText?: string;
@@ -99,7 +107,7 @@ interface InputDecorationProps extends PropsWithCopyWith<InputDecorationProps> {
   // --- Layout & Density ---
   filled?: boolean;
   fillColor?: string | Color;
-  contentPadding?: number | number[] | EdgeInsetsProps;
+  contentPadding?: EdgeInsets;
 
   isDense?: boolean; // Reduces vertical padding
   isCollapsed?: boolean; // Removes all padding and borders
@@ -137,16 +145,24 @@ interface InputDecorationProps extends PropsWithCopyWith<InputDecorationProps> {
   alwaysShowError?: boolean;
 }
 
-export interface InputDecoration extends InputDecorationProps {
+export interface InputDecoration extends PropsWithCopyWith<InputDecoration>, InputDecorationProps {
   [INPUI_DECORATION_SYMBOL]: true;
 }
 export function InputDecoration(props: InputDecorationProps): InputDecoration {
   props = props || {};
   props.floatingLabelBehavior = props.floatingLabelBehavior || FloatingLabelBehavior.never;
-  const copyWith = createCopyWith<InputDecorationProps>(props) as CopyWith<InputDecoration>;
   return {
     ...props,
+
     [INPUI_DECORATION_SYMBOL]: true,
-    copyWith,
+    copyWith: createCopyWith<InputDecorationProps>(props) as CopyWith<InputDecoration>,
   };
+}
+
+/**
+ * 类型守卫：检查对象是否通过 BoxDecoration 构造函数创建
+ */
+export function isInputDecoration(value: any): value is InputDecoration {
+  if (!isPlainObject(value)) return false;
+  return INPUI_DECORATION_SYMBOL in value;
 }

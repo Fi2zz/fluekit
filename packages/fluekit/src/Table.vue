@@ -86,6 +86,7 @@ import type { EdgeInsets } from "./EdgeInsets";
 import type { BoxDecoration } from "./BoxDecoration";
 import type { TextStyle } from "./TextStyle";
 import { Color, resolveColor } from "./Color";
+import { Clip } from "./Clip";
 
 defineOptions({ inheritAttrs: false });
 
@@ -121,7 +122,7 @@ interface Props {
   headerCellStyle?: CSSProperties;
   rowStyle?: CSSProperties;
   cellStyle?: CSSProperties;
-  clipBehavior?: "none" | "hardEdge" | "antiAlias";
+  clipBehavior?: Clip;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -133,7 +134,7 @@ const props = withDefaults(defineProps<Props>(), {
   cellPadding: 16,
   dividerColor: () => Colors.grey200,
   stripeColor: () => Colors.grey50,
-  clipBehavior: "hardEdge",
+  clipBehavior: () => Clip.hardEdge,
 });
 
 const emit = defineEmits<{

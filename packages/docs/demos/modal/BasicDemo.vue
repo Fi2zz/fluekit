@@ -13,7 +13,6 @@
 
     <h3>Custom Position</h3>
     <Button @pressed="showTopModal = true">Open Top Modal</Button>
-
     <Modal
       v-model:visible="showTopModal"
       :alignment="Alignment.topCenter"

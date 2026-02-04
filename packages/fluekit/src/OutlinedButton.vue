@@ -20,6 +20,7 @@ import { Colors } from "./Colors";
 import { BorderRadius } from "./BorderRadius";
 import { EdgeInsets } from "./EdgeInsets";
 import { BorderSide } from "./Border";
+import { FontWeight, TextStyle } from "./TextStyle";
 defineOptions({ inheritAttrs: false });
 interface Props {
   style?: ButtonStyle;
@@ -35,7 +36,7 @@ const emit = defineEmits<{
   (e: "tap-cancel", payload: any): void;
 }>();
 const computedStyle = computed<ButtonStyle>(() => {
-  const baseStyle: ButtonStyle = {
+  const baseStyle = {
     backgroundColor: "transparent",
     foregroundColor: props.disabled ? "rgba(0,0,0,0.38)" : Colors.blue,
     elevation: 0,
@@ -45,11 +46,11 @@ const computedStyle = computed<ButtonStyle>(() => {
       color: props.disabled ? "rgba(0,0,0,0.12)" : "rgba(0,0,0,0.12)", // Standard outline color
       width: 1,
     }),
-    textStyle: {
-      fontWeight: 500,
+    textStyle: TextStyle({
+      fontWeight: FontWeight.w500,
       fontSize: 14,
       color: props.disabled ? "rgba(0,0,0,0.38)" : Colors.blue,
-    },
+    }),
   };
   return ButtonStyle({ ...baseStyle, ...props.style });
 });

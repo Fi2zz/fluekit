@@ -1,7 +1,7 @@
 export { default as BackdropFilter } from "./BackdropFilter.vue";
 export { default as Align } from "./Align.vue";
 export { default as AnimatedContainer } from "./AnimatedContainer.vue";
-export { default as AnimatedOpacity } from "./AnimatedOpacity.vue";
+export { AnimatedOpacity, Opacity } from "./AnimatedOpacity.ts";
 export { default as Box } from "./Box.vue";
 export { default as Button } from "./Button.vue";
 export { default as Card } from "./Card.vue";
@@ -19,7 +19,6 @@ export { default as Image } from "./Image.vue";
 export { default as Icon } from "./Icon.vue";
 export { default as ListView } from "./ListView.vue";
 export { default as Modal } from "./Modal.vue";
-export { default as Opacity } from "./Opacity.vue";
 export { default as Padding } from "./Padding.vue";
 export { default as Positioned } from "./Positioned.vue";
 export { default as Row } from "./Row.vue";
@@ -38,6 +37,7 @@ export {
   type LiquidGlassDialogActionStyle,
 } from "./LiquidGlassDialog.vue";
 export * from "./showLiquidGlassDialog";
+export { Offset } from "./Offset.ts";
 export { default as TextField } from "./TextField.vue";
 export { Toast, toast, showToast, hideToast } from "./Toast";
 export type { ToastType, ToastOptions, ToastPosition } from "./ToastComponent.vue";
@@ -98,6 +98,7 @@ export { default as Table } from "./Table.vue";
 export { default as Upload } from "./Upload.vue";
 export * from "./UploadTypes";
 export { default as FlueConfigProvider } from "./FlueConfigProvider.vue";
+export { default as DropdownButton } from "./DropdownButton.vue";
 export { default as AnimationWidget } from "./Animation.vue";
 export { StyleProvider } from "./StyleProvider";
 export * from "./Animator";
